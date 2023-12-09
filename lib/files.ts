@@ -5,6 +5,7 @@ export interface Filesystem {
   read(path: string): File | null;
   write(path: string, file: File): void;
   exists(path: string): boolean;
+  outputToDirectory(directory: string): void;
 }
 
 type File = {
@@ -29,6 +30,15 @@ export function getRealFilesystem(directory: string): Filesystem {
     },
     exists(path: string): boolean {
       return this.files.some((file) => file.path === path);
+    },
+    outputToDirectory(directory: string): void {
+      this.files.forEach((file) => {
+        const path = `${directory}/${file.path}`;
+        fs.mkdirSync(path.split("/").slice(0, -1).join("/"), {
+          recursive: true,
+        });
+        fs.writeFileSync(path, file.content);
+      });
     },
   };
 
