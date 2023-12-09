@@ -2,7 +2,7 @@ import "@kitajs/html/register";
 
 export interface InkdocsConfig {
   baseHtmlPath: string; // path to the base html file. You should use this html file to build your <head> tag. The ${content} variable will be replaced with your generated html
-  layouts: Layout[]; // List of layouts to be used
+  layouts: Layout[]; // List of layouts to be used. The layout with the name "default" will be used if a content route does not specify a layout
   // components: Component[];
   staticFolder?: string; // path to a folder containing static assets. These will be copied to the output folder
   pagesFolder: string; // path to a folder containing markdown files. These will be converted to html and placed in the output folder
@@ -28,11 +28,10 @@ type ComponentProps = {
 
 export type Route = {
   href: string;
-  path: string;
   layout: string;
   content: JSX.Element;
   outline: OutlineNode[];
-  metadata: object;
+  metadata: any;
 };
 
 export type OutlineNode = {

@@ -3,9 +3,10 @@ import fs from "fs";
 export interface Filesystem {
   files: File[];
   read(path: string): File | null;
-  write(path: string, file: File): void;
+  write(file: File): void;
   exists(path: string): boolean;
   outputToDirectory(directory: string): void;
+  forFiles(callback: (file: File) => void): void;
 }
 
 type File = {
@@ -21,9 +22,9 @@ export function getRealFilesystem(directory: string): Filesystem {
       const file = this.files.find((file) => file.path === path);
       return file || null;
     },
-    write(path: string, file: File): void {
-      if (this.exists(path)) {
-        this.files = this.files.map((f) => (f.path === path ? file : f));
+    write(file: File): void {
+      if (this.exists(file.path)) {
+        this.files = this.files.map((f) => (f.path === file.path ? file : f));
       } else {
         this.files.push(file);
       }
@@ -39,6 +40,9 @@ export function getRealFilesystem(directory: string): Filesystem {
         });
         fs.writeFileSync(path, file.content);
       });
+    },
+    forFiles(callback: (file: File) => void): void {
+      this.files.forEach(callback);
     },
   };
 
