@@ -18,6 +18,14 @@ type TemplateProps = {
   routes: Route[];
 };
 
+export type Component = {
+  name: string;
+  template: (props: ComponentProps) => JSX.Element;
+};
+type ComponentProps = {
+  data: object;
+};
+
 export type Route = {
   href: string;
   path: string;
