@@ -1,5 +1,5 @@
 import { test, describe, expect } from "bun:test";
-import { filepathToHref } from "../lib/parser";
+import { filepathToHref, parseMarkdown } from "../lib/parser";
 
 describe("filepathToHref", () => {
   test("should return route", () => {
@@ -18,5 +18,37 @@ describe("filepathToHref", () => {
     expect(filepathToHref("content/long/path/test.md", "content")).toBe(
       "/long/path/test",
     );
+  });
+});
+
+describe("parseMarkdown", () => {
+  const testFile = `---
+layout: mySickLayout
+title: My Sick Title
+---
+this is the content in the file
+`;
+
+  test("parses a markdown file", () => {
+    const route = parseMarkdown(
+      {
+        path: "content/test/hello.md",
+        content: testFile,
+      },
+      {
+        pagesFolder: "content",
+        baseHtmlPath: "base.html",
+        layouts: [],
+      },
+    );
+    expect(route).toEqual({
+      href: "/test/hello",
+      layout: "mySickLayout",
+      metadata: {
+        layout: "mySickLayout",
+        title: "My Sick Title",
+      },
+      text: "this is the content in the file\n",
+    });
   });
 });

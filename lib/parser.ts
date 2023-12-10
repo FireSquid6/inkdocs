@@ -1,11 +1,12 @@
 // @file handles parsing a plain file into a Route, which can then be used to generate html
 // @author Jonathan Deiss
 import { File } from "./files";
-import { Route } from "./config";
+import { Route, InkdocsConfig } from "./config";
+import matter from "gray-matter";
 
 export type ParsedFile = {};
 
-type Parser = (file: File) => Route;
+type Parser = (file: File, config: InkdocsConfig) => Route;
 
 export const parsers = new Map<string, Parser>();
 parsers.set(".md", parseMarkdown);
@@ -26,11 +27,26 @@ export function filepathToHref(
   return filepath;
 }
 
-function parseMarkdown(file: File): Route {
+export function parseMarkdown(file: File, config: InkdocsConfig): Route {
+  const route: Route = {
+    href: filepathToHref(file.path, config.pagesFolder),
+    layout: "",
+    metadata: {},
+    text: "",
+  };
+
+  const parsedMatter = matter(file.content);
+  route.text = parsedMatter.content;
+  route.metadata = parsedMatter.data;
+  route.layout = parsedMatter.data.layout || "default";
+
+  return route;
+}
+
+export function parseHtml(file: File): Route {
   const route: Route = {
     href: "",
     layout: "",
-    outline: [],
     metadata: {},
     text: "",
   };
@@ -38,23 +54,10 @@ function parseMarkdown(file: File): Route {
   return route;
 }
 
-function parseHtml(file: File): Route {
+export function parseYaml(file: File): Route {
   const route: Route = {
     href: "",
     layout: "",
-    outline: [],
-    metadata: {},
-    text: "",
-  };
-
-  return route;
-}
-
-function parseYaml(file: File): Route {
-  const route: Route = {
-    href: "",
-    layout: "",
-    outline: [],
     metadata: {},
     text: "",
   };

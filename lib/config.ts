@@ -29,13 +29,6 @@ type ComponentProps = {
 export type Route = {
   href: string;
   layout: string;
-  outline: OutlineNode[];
   metadata: any;
   text: string;
-};
-
-export type OutlineNode = {
-  text: string;
-  id: string;
-  level: 1 | 2 | 3 | 4 | 5 | 6;
 };
