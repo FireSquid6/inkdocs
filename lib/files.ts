@@ -9,7 +9,7 @@ export interface Filesystem {
   forFiles(callback: (file: File) => void): void;
 }
 
-type File = {
+export type File = {
   path: string;
   content: string;
 };
@@ -84,4 +84,8 @@ export function copyAllFiles(source: string, target: string): void {
     });
     fs.copyFileSync(path, targetPath);
   }
+}
+
+export function readFile(filepath: string): string {
+  return fs.readFileSync(filepath, "utf-8");
 }
