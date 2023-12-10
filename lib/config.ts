@@ -38,4 +38,5 @@ export type Route = {
   layout: string;
   metadata: any;
   text: string;
+  extension: string;
 };

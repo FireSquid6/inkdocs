@@ -53,6 +53,7 @@ this is the content in the file
         layout: "mySickLayout",
         title: "My Sick Title",
       },
+      extension: "md",
       text: "this is the content in the file\n",
     });
   });

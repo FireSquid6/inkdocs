@@ -3,6 +3,7 @@
 import { File } from "./files";
 import { Route, InkdocsConfig, LayoutTree } from "./config";
 import matter from "gray-matter";
+import YAML from "yaml";
 
 export type ParsedFile = {};
 
@@ -61,6 +62,7 @@ export function getLayout(
 export function parseMarkdown(file: File, config: InkdocsConfig): Route {
   const route: Route = {
     href: filepathToHref(file.path, config.pagesFolder),
+    extension: "md",
     layout: "",
     metadata: {},
     text: "",
@@ -69,29 +71,39 @@ export function parseMarkdown(file: File, config: InkdocsConfig): Route {
   const parsedMatter = matter(file.content);
   route.text = parsedMatter.content;
   route.metadata = parsedMatter.data;
-  route.layout = parsedMatter.data.layout || "default";
+  route.layout = getLayout(route.href, config.layoutTree, route.metadata);
 
   return route;
 }
 
-export function parseHtml(file: File): Route {
+export function parseHtml(file: File, config: InkdocsConfig): Route {
   const route: Route = {
-    href: "",
+    href: filepathToHref(file.path, config.pagesFolder),
     layout: "",
     metadata: {},
     text: "",
+    extension: "html",
   };
+
+  const parsedMatter = matter(file.content);
+  route.text = parsedMatter.content;
+  route.metadata = parsedMatter.data;
+  route.layout = getLayout(route.href, config.layoutTree, route.metadata);
 
   return route;
 }
 
-export function parseYaml(file: File): Route {
+export function parseYaml(file: File, config: InkdocsConfig): Route {
   const route: Route = {
-    href: "",
+    href: filepathToHref(file.path, ""),
     layout: "",
     metadata: {},
     text: "",
+    extension: "yaml",
   };
+
+  route.metadata = YAML.parse(file.content);
+  route.layout = getLayout(route.href, config.layoutTree, route.metadata);
 
   return route;
 }
