@@ -1,5 +1,5 @@
 import { test, describe, expect } from "bun:test";
-import { filepathToHref, parseMarkdown } from "../lib/parser";
+import { filepathToHref, parseMarkdown, getLayout } from "../lib/parser";
 
 describe("filepathToHref", () => {
   test("should return route", () => {
@@ -39,6 +39,11 @@ this is the content in the file
         pagesFolder: "content",
         baseHtmlPath: "base.html",
         layouts: [],
+        layoutTree: {
+          path: "/",
+          layout: "default",
+          children: [],
+        },
       },
     );
     expect(route).toEqual({
@@ -50,5 +55,55 @@ this is the content in the file
       },
       text: "this is the content in the file\n",
     });
+  });
+});
+
+describe("getLayout", () => {
+  test("should return the layout from the metadata if it exists", () => {
+    expect(
+      getLayout(
+        "/test",
+        {
+          path: "/",
+          layout: "default",
+          children: [],
+        },
+        {
+          layout: "mySickLayout",
+        },
+      ),
+    ).toBe("mySickLayout");
+  });
+  test("should return the default layout if no layout is specified", () => {
+    expect(
+      getLayout(
+        "/test",
+        {
+          path: "/",
+          layout: "default",
+          children: [],
+        },
+        {},
+      ),
+    ).toBe("default");
+  });
+  test("should search down the tree", () => {
+    expect(
+      getLayout(
+        "/test",
+        {
+          path: "/",
+          layout: "default",
+          children: [
+            {
+              path: "test",
+              layout: "testLayout",
+              children: [],
+            },
+          ],
+        },
+        {},
+      ),
+    ).toBe("testLayout");
   });
 });
