@@ -11,7 +11,6 @@ export interface Filesystem {
 
 type File = {
   path: string;
-  name: string;
   content: string;
 };
 
@@ -50,7 +49,6 @@ export function getRealFilesystem(directory: string): Filesystem {
   for (const path of paths) {
     system.files.push({
       path: path,
-      name: path.split("/").pop() || "",
       content: fs.readFileSync(path, "utf-8"),
     });
   }
@@ -74,4 +72,16 @@ function recursivelyReadDir(directory: string): string[] {
   });
 
   return result;
+}
+
+export function copyAllFiles(source: string, target: string): void {
+  const paths = recursivelyReadDir(source);
+  for (const path of paths) {
+    const relativePath = path.replace(source, "");
+    const targetPath = `${target}/${relativePath}`;
+    fs.mkdirSync(targetPath.split("/").slice(0, -1).join("/"), {
+      recursive: true,
+    });
+    fs.copyFileSync(path, targetPath);
+  }
 }

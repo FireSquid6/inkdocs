@@ -9,16 +9,10 @@ export const config: InkdocsConfig = {
       name: "default",
       template: ({ currentRoute }) => {
         return (
-          <html>
-            <head>
-              <title>{currentRoute.metadata.title ?? ""}</title>
-            </head>
-
-            <body>
-              <h1>{currentRoute.metadata.title}</h1>
-              {currentRoute.content}
-            </body>
-          </html>
+          <main>
+            <h1>{currentRoute.metadata.title}</h1>
+            {currentRoute.content}
+          </main>
         );
       },
     },

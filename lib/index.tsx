@@ -2,9 +2,10 @@ import { InkdocsConfig } from "./config";
 import matter from "gray-matter";
 import { marked } from "marked";
 import "@kitajs/html/register";
+import fs from "fs";
 import { Layout } from "./config";
 import { getRealFilesystem } from "./files";
-import { OutputFileType } from "typescript";
+import { copyAllFiles } from "./files";
 
 export function build(config: InkdocsConfig) {
   console.log(config);
@@ -15,7 +16,12 @@ export function build(config: InkdocsConfig) {
   for (const layout of config.layouts) {
     layouts.set(layout.name, layout);
   }
-  // TODO: copy pubilc folder to the build folder
+
+  if (config.staticFolder) {
+    copyAllFiles(config.staticFolder, config.outputFolder ?? "build");
+  }
+
+  const baseHtml = fs.readFileSync(config.baseHtmlPath, "utf-8");
 
   inputFilesystem.forFiles((file) => {
     const { data, content } = matter(file.content);
@@ -46,13 +52,15 @@ export function build(config: InkdocsConfig) {
       return;
     }
 
+    const htmlOutput = baseHtml.replace("${content}", output as string);
+
     file.path = file.path
       .replace(/\.md$/, ".html")
       .replace(config.pagesFolder, "");
 
     outputFilesystem.write({
       path: file.path,
-      content: output as string,
+      content: htmlOutput,
     });
   });
 
