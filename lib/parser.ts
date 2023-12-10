@@ -1,7 +1,7 @@
 // @file handles parsing a plain file into a Route, which can then be used to generate html
 // @author Jonathan Deiss
-import { File } from "./files";
 import { Route, InkdocsConfig, LayoutTree } from "./config";
+import { getRealFilesystem, File } from "./files";
 import matter from "gray-matter";
 import YAML from "yaml";
 
@@ -106,4 +106,26 @@ export function parseYaml(file: File, config: InkdocsConfig): Route {
   route.layout = getLayout(route.href, config.layoutTree, route.metadata);
 
   return route;
+}
+
+export function getRoutes(config: InkdocsConfig): Route[] {
+  const inputFilesystem = getRealFilesystem(config.pagesFolder);
+  const routes: Route[] = [];
+
+  inputFilesystem.forFiles((file: File) => {
+    const ext = file.path.split(".").pop();
+    if (!ext) {
+      console.log(`File ${file.path} has no extension`);
+      return;
+    }
+    const parser = parsers.get(ext);
+    if (!parser) {
+      console.log(`No parser found for ${file.path}`);
+      return;
+    }
+
+    const route = parser(file, config);
+    routes.push(route);
+  });
+  return routes;
 }
