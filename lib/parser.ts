@@ -1,55 +1,63 @@
-import { Layout } from "./config";
+// @file handles parsing a plain file into a Route, which can then be used to generate html
+// @author Jonathan Deiss
 import { File } from "./files";
-import matter from "gray-matter";
-import { marked } from "marked";
+import { Route } from "./config";
 
-type Parser = (
-  file: File,
-  layouts: Map<string, Layout>,
-  baseHtml: string,
-) => string;
+export type ParsedFile = {};
+
+type Parser = (file: File) => Route;
 
 export const parsers = new Map<string, Parser>();
 parsers.set(".md", parseMarkdown);
 parsers.set(".html", parseHtml);
 parsers.set(".yaml", parseYaml);
 
-function parseMarkdown(
-  file: File,
-  layouts: Map<string, Layout>,
-  baseHtml: string,
+export function filepathToHref(
+  filepath: string,
+  contentFolder: string,
 ): string {
-  const { data, content } = matter(file.content);
-  const jsx = marked(content) as JSX.Element;
-  const layout = layouts.get(data.layout ?? "default");
-  if (!layout) {
-    console.log(`Layout ${data.layout} not found for ${file.path}`);
-    console.log(`Using default layout`);
+  filepath = filepath.slice(0, filepath.lastIndexOf("."));
+  filepath = filepath.replace(contentFolder, "");
+  filepath = filepath.replace("index", "");
+  if (filepath[0] !== "/") {
+    filepath = "/" + filepath;
   }
 
-  const templated = layout?.template({
-    currentRoute: {
-      metadata: data,
-      content: jsx,
-      href: "",
-      outline: [],
-      layout: layout?.name ?? "default",
-    },
-    routes: [],
-  });
-  if (templated === undefined) {
-    console.log(`Layout ${data.layout} did not return any output`);
-    throw new Error(`Layout ${data.layout} did not return any output`);
-  }
-
-  const htmlOutput = baseHtml.replace("${content}", templated as string);
-  return htmlOutput;
+  return filepath;
 }
 
-function parseHtml(file: File): string {
-  return "";
+function parseMarkdown(file: File): Route {
+  const route: Route = {
+    href: "",
+    layout: "",
+    outline: [],
+    metadata: {},
+    text: "",
+  };
+
+  return route;
 }
 
-function parseYaml(file: File): string {
-  return "";
+function parseHtml(file: File): Route {
+  const route: Route = {
+    href: "",
+    layout: "",
+    outline: [],
+    metadata: {},
+    text: "",
+  };
+
+  return route;
+}
+
+function parseYaml(file: File): Route {
+  const route: Route = {
+    href: "",
+    layout: "",
+    outline: [],
+    metadata: {},
+    text: "",
+  };
+
+  return route;
 }

@@ -29,9 +29,9 @@ type ComponentProps = {
 export type Route = {
   href: string;
   layout: string;
-  content: JSX.Element;
   outline: OutlineNode[];
   metadata: any;
+  text: string;
 };
 
 export type OutlineNode = {
