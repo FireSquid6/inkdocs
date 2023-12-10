@@ -15,6 +15,7 @@ export function build(config: InkdocsConfig) {
   for (const layout of config.layouts) {
     layouts.set(layout.name, layout);
   }
+  // TODO: copy pubilc folder to the build folder
 
   inputFilesystem.forFiles((file) => {
     const { data, content } = matter(file.content);
@@ -24,6 +25,11 @@ export function build(config: InkdocsConfig) {
       console.log(`Layout ${data.layout} not found for ${file.path}`);
       console.log(`Using default layout`);
     }
+
+    // TODO: make this change depending on the filetype:
+    // md - parse as normal
+    // html - read the file as a string and use that as the content
+    // yaml - treat as plain metadata
 
     const output = layout?.template({
       currentRoute: {
@@ -40,12 +46,13 @@ export function build(config: InkdocsConfig) {
       return;
     }
 
-    file.path = file.path.replace(/\.md$/, ".html");
+    file.path = file.path
+      .replace(/\.md$/, ".html")
+      .replace(config.pagesFolder, "");
 
     outputFilesystem.write({
       path: file.path,
       content: output as string,
-      name: file.name,
     });
   });
 
