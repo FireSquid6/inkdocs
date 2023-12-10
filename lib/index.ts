@@ -1,7 +1,6 @@
 import { InkdocsConfig } from "./config";
 import matter from "gray-matter";
 import { marked } from "marked";
-import "@kitajs/html/register";
 import fs from "fs";
 import { Layout } from "./config";
 import { getRealFilesystem } from "./files";
