@@ -17,6 +17,9 @@ This is an h3 header
 2. Step 2
 3. Step 3
 
+Here's an image:
+![Icon](/logo.svg)
+
 ```js
 function helloWorld() {
   console.log("hello world!");

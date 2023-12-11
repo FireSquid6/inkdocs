@@ -21,7 +21,7 @@ export type Layout = {
   template: (props: TemplateProps) => JSX.Element;
 };
 type TemplateProps = {
-  currentRoute: Route;
+  page: Page;
   routes: Route[];
 };
 
@@ -35,8 +35,15 @@ type ComponentProps = {
 
 export type Route = {
   href: string;
+  filepath: string;
   layout: string;
   metadata: any;
   text: string;
   extension: string;
+};
+
+export type Page = {
+  href: string;
+  children: JSX.Element;
+  metadata: any;
 };

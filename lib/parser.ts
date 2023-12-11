@@ -65,6 +65,7 @@ export function parseMarkdown(file: File, config: InkdocsConfig): Route {
     extension: "md",
     layout: "",
     metadata: {},
+    filepath: file.path,
     text: "",
   };
 
@@ -82,6 +83,7 @@ export function parseHtml(file: File, config: InkdocsConfig): Route {
     layout: "",
     metadata: {},
     text: "",
+    filepath: file.path,
     extension: "html",
   };
 
@@ -98,6 +100,7 @@ export function parseYaml(file: File, config: InkdocsConfig): Route {
     href: filepathToHref(file.path, ""),
     layout: "",
     metadata: {},
+    filepath: file.path,
     text: "",
     extension: "yaml",
   };

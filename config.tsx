@@ -23,10 +23,11 @@ export const config: InkdocsConfig = {
   layouts: [
     {
       name: "default",
-      template: ({ currentRoute }) => {
+      template: ({ page }) => {
         return (
           <main>
-            <h1>{currentRoute.metadata.title}</h1>
+            <h1>{page.metadata.title}</h1>
+            {page.children}
           </main>
         );
       },
