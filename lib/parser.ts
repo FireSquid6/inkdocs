@@ -10,9 +10,9 @@ export type ParsedFile = {};
 type Parser = (file: File, config: InkdocsConfig) => Route;
 
 export const parsers = new Map<string, Parser>();
-parsers.set(".md", parseMarkdown);
-parsers.set(".html", parseHtml);
-parsers.set(".yaml", parseYaml);
+parsers.set("md", parseMarkdown);
+parsers.set("html", parseHtml);
+parsers.set("yaml", parseYaml);
 
 export function filepathToHref(
   filepath: string,

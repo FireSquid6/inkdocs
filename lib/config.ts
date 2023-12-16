@@ -8,6 +8,12 @@ export interface InkdocsConfig {
   staticFolder?: string; // path to a folder containing static assets. These will be copied to the output folder
   pagesFolder: string; // path to a folder containing markdown files. These will be converted to html and placed in the output folder
   outputFolder?: string; // path to the output folder. Defaults to "build"
+  devOptions?: DevOptions; // options for the dev server
+}
+
+export type DevOptions = {
+  port: number;
+  watch: boolean;
 }
 
 export type LayoutTree = {

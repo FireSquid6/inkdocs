@@ -12,4 +12,12 @@ describe("getBuildFilepath", () => {
       "build/test/test.html",
     );
   });
+  test("deals with leading . or /", () => {
+    expect(getBuildFilepath("./content/test.md", "content", "build")).toBe(
+      "build/test.html",
+    );
+    expect(getBuildFilepath("/content/test.md", "content", "build")).toBe(
+      "build/test.html",
+    );
+  });
 });

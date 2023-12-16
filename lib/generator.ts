@@ -13,6 +13,25 @@ function getLayoutsMap(config: InkdocsConfig): Map<string, Layout> {
   return layouts;
 }
 
+export function generateHtmlForRoutes(
+  routes: Route[],
+  config: InkdocsConfig,
+): File[] {
+
+  const files: File[] = [];
+  for (const route of routes) {
+    try {
+      const file = generateHtml(route, routes, config);
+      files.push(file);
+    } catch (e) {
+      console.error(`Error generating html for ${route.filepath}`);
+      console.error(e);
+    }
+  }
+
+  return files;
+}
+
 export function generateHtml(
   currentRoute: Route,
   routes: Route[],
@@ -39,7 +58,7 @@ export function generateHtml(
   const output = layout.template({ page, routes });
 
   return {
-    path: currentRoute.filepath,
+    path: getBuildFilepath(currentRoute.filepath, config.pagesFolder, config.outputFolder ?? "build"),
     content: output as string,
   };
 }
@@ -51,7 +70,7 @@ export function getBuildFilepath(
 ): string {
   // TODO
   const split = filepath.split("/");
-  if (split[0] === "") {
+  if (split[0] === "" || split[0] === ".") {
     split.shift();
   }
   if (split[0] === contentFolder) {

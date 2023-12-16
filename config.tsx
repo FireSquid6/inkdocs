@@ -3,7 +3,7 @@ import "@kitajs/html/register";
 
 export const config: InkdocsConfig = {
   baseHtmlPath: "./base.html",
-  pagesFolder: "./content",
+  pagesFolder: "content",
   layoutTree: {
     path: "",
     layout: "default",
@@ -20,6 +20,11 @@ export const config: InkdocsConfig = {
       },
     ],
   },
+  devOptions: {
+    port: 3000,
+    watch: true,
+  },
+  outputFolder: "build",
   layouts: [
     {
       name: "default",
