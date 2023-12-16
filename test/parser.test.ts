@@ -55,6 +55,7 @@ this is the content in the file
       },
       extension: "md",
       text: "this is the content in the file\n",
+      filepath: "content/test/hello.md",
     });
   });
 });

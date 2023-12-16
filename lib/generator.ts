@@ -50,7 +50,15 @@ export function getBuildFilepath(
   buildFolder: string,
 ): string {
   // TODO
-  return "";
+  const split = filepath.split("/");
+  if (split[0] === "") {
+    split.shift();
+  }
+  if (split[0] === contentFolder) {
+    split[0] = buildFolder;
+  }
+
+  return split.join("/").replace(/\.[^/.]+$/, ".html");
 }
 
 type JSXParser = (text: string) => JSX.Element;
