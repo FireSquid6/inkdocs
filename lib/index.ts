@@ -1,14 +1,11 @@
 import { InkdocsConfig } from "./config";
 import { getRoutes } from "./parser";
-import { copyAllFiles } from "./files";
 import { generateHtmlForRoutes } from "./generator";
 import fs from "fs";
 
 export function build(config: InkdocsConfig) {
   // TODO: make a "serve" function that uses elysia to serve the files
   // TODO: make sure this actually works
-  copyStaticFiles(config);
-
   const routes = getRoutes(config);
   const files = generateHtmlForRoutes(routes, config);
   for (const file of files) {
@@ -18,10 +15,14 @@ export function build(config: InkdocsConfig) {
     });
     fs.writeFileSync(file.path, file.content);
   }
+  copyStaticFiles(config);
 }
 
 function copyStaticFiles(config: InkdocsConfig) {
+  console.log("Copying static files");
   if (config.staticFolder) {
-    copyAllFiles(config.staticFolder, config.outputFolder ?? "build");
+    fs.cpSync(config.staticFolder, config.outputFolder ?? "build", {
+      recursive: true,
+    });
   }
 }

@@ -24,6 +24,7 @@ export const config: InkdocsConfig = {
     port: 3000,
     watch: true,
   },
+  staticFolder: "public",
   outputFolder: "build",
   layouts: [
     {

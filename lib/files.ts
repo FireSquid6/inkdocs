@@ -74,18 +74,6 @@ function recursivelyReadDir(directory: string): string[] {
   return result;
 }
 
-export function copyAllFiles(source: string, target: string): void {
-  const paths = recursivelyReadDir(source);
-  for (const path of paths) {
-    const relativePath = path.replace(source, "");
-    const targetPath = `${target}/${relativePath}`;
-    fs.mkdirSync(targetPath.split("/").slice(0, -1).join("/"), {
-      recursive: true,
-    });
-    fs.copyFileSync(path, targetPath);
-  }
-}
-
 export function readFile(filepath: string): string {
   return fs.readFileSync(filepath, "utf-8");
 }
