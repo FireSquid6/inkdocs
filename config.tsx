@@ -32,6 +32,7 @@ export const config: InkdocsConfig = {
       template: ({ page }) => {
         return (
           <main>
+            <script>{`console.log("Hello from the default layout")`}</script>
             <h1>{page.metadata.title}</h1>
             {page.children}
           </main>

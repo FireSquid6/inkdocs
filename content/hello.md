@@ -1,4 +1,8 @@
-# Hello
+---
+title: Hello World
+---
+
+# First header
 
 Hello world! I am from the content folder. Thanks for rendering me!
 
