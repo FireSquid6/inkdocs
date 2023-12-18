@@ -1,6 +1,6 @@
 import { expect, test, describe } from "bun:test";
 import { getPossibleFilepaths, getFileFromRoute } from "../lib/server";
-import { Filesystem, makeFakeFilesystem } from "../lib/files";
+import { makeFakeFilesystem } from "../lib/files";
 
 const outputFolder = "build";
 const system = makeFakeFilesystem([
