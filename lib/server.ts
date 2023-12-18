@@ -1,7 +1,7 @@
 import Elysia from "elysia";
 import { html } from "@elysiajs/html";
 import { InkdocsConfig } from "./config";
-import { Filesystem, getRealFilesystem } from "./files";
+import { Filesystem, getRealFilesystem, File } from "./files";
 
 export function inkdocsServe(config: InkdocsConfig) {
   const app = new Elysia();
@@ -26,31 +26,49 @@ function getPort(config: InkdocsConfig) {
   return config.devOptions?.port ?? 3000;
 }
 
-function getResponseFromRoute(
-  route: string,
-  outputFolder: string,
-  filesystem: Filesystem,
-) {}
-
-export function getFilepathFromRoute(
+export function getResponseFromRoute(
   route: string,
   outputFolder: string,
   filesystem: Filesystem,
 ) {
-  route = outputFolder + route;
-  if (route.split(".").length > 1 && !route.endsWith(".html")) {
-    return route;
+  const file = getFileFromRoute(route, outputFolder, filesystem);
+  return file.content;
+}
+
+export function getFileFromRoute(
+  route: string,
+  outputFolder: string,
+  filesystem: Filesystem,
+): File {
+  const filepath = outputFolder + route;
+  if (filepath.split(".").length > 1) {
+    const file = filesystem.files.find((file) => file.path === filepath);
+    if (!file) {
+      throw new Error(`File ${filepath} not found`);
+    }
+    return file;
   }
+
+  const possibleFilepaths = getPossibleFilepaths(filepath, outputFolder);
+  const file = filesystem.files.find((file) =>
+    possibleFilepaths.includes(file.path),
+  );
+  if (!file) {
+    throw new Error(`File ${filepath} not found`);
+  }
+  return file;
 }
 
 export function getPossibleFilepaths(
   filepath: string,
   buildDir: string,
-  filesystem: Filesystem,
-) {
-  const possibleFilepath = [filepath, `${filepath}/index.html`];
+): string[] {
+  if (filepath === "") {
+    return [`${buildDir}/index.html`];
+  }
+  const possibleFilepath = [`${filepath}.html`, `${filepath}/index.html`];
   if (filepath === "/") {
     possibleFilepath.push(`${filepath}index.html`);
   }
-  return possibleFilepath.map((filepath) => `${buildDir}${filepath}`);
+  return possibleFilepath.map((filepath) => `${buildDir}/${filepath}`);
 }

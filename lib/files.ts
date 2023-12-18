@@ -14,7 +14,29 @@ export type File = {
   content: string;
 };
 
+export function makeFakeFilesystem(files: File[]): Filesystem {
+  const system = emptyFilesystem();
+  system.outputToDirectory = () => { };
+  system.files = files;
+
+  return system;
+}
+
 export function getRealFilesystem(directory: string): Filesystem {
+  const system = emptyFilesystem();
+
+  const paths = recursivelyReadDir(directory);
+  for (const path of paths) {
+    system.files.push({
+      path: path,
+      content: fs.readFileSync(path, "utf-8"),
+    });
+  }
+
+  return system;
+}
+
+function emptyFilesystem(): Filesystem {
   const system: Filesystem = {
     files: [],
     read(path: string): File | null {
@@ -44,15 +66,6 @@ export function getRealFilesystem(directory: string): Filesystem {
       this.files.forEach(callback);
     },
   };
-
-  const paths = recursivelyReadDir(directory);
-  for (const path of paths) {
-    system.files.push({
-      path: path,
-      content: fs.readFileSync(path, "utf-8"),
-    });
-  }
-
   return system;
 }
 
