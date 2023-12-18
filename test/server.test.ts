@@ -36,14 +36,16 @@ const system = makeFakeFilesystem([
 
 describe("getPossibleFilepaths", () => {
   test("returns possible filepaths for a route", () => {
-    expect(getPossibleFilepaths("", outputFolder)).toEqual([
+    expect(getPossibleFilepaths("build/", outputFolder)).toEqual([
       "build/index.html",
     ]);
-    expect(getPossibleFilepaths("docs", outputFolder)).toEqual([
+    expect(getPossibleFilepaths("build/docs", outputFolder)).toEqual([
       "build/docs.html",
       "build/docs/index.html",
     ]);
-    expect(getPossibleFilepaths("docs/getting-started", outputFolder)).toEqual([
+    expect(
+      getPossibleFilepaths("build/docs/getting-started", outputFolder),
+    ).toEqual([
       "build/docs/getting-started.html",
       "build/docs/getting-started/index.html",
     ]);
@@ -52,10 +54,18 @@ describe("getPossibleFilepaths", () => {
 
 describe("getFileFromRoute", () => {
   test("returns a file from a route", () => {
-    expect(getFileFromRoute("", outputFolder, system).content).toEqual("index");
-    expect(getFileFromRoute("docs", outputFolder, system).content).toEqual(
-      "docs/index",
-    );
+    expect(getFileFromRoute("styles.css", outputFolder, system)).toEqual({
+      path: "build/styles.css",
+      content: "styles",
+    });
+    expect(getFileFromRoute("", outputFolder, system)).toEqual({
+      path: "build/index.html",
+      content: "index",
+    });
+    expect(getFileFromRoute("docs", outputFolder, system)).toEqual({
+      path: "build/docs/index.html",
+      content: "docs/index",
+    });
     expect(
       getFileFromRoute("docs/getting-started", outputFolder, system).content,
     ).toEqual("docs/getting-started");

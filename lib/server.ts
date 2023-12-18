@@ -2,6 +2,7 @@ import Elysia from "elysia";
 import { html } from "@elysiajs/html";
 import { InkdocsConfig } from "./config";
 import { Filesystem, getRealFilesystem, File } from "./files";
+import path from "path";
 
 export function inkdocsServe(config: InkdocsConfig) {
   const app = new Elysia();
@@ -40,7 +41,7 @@ export function getFileFromRoute(
   outputFolder: string,
   filesystem: Filesystem,
 ): File {
-  const filepath = outputFolder + route;
+  const filepath = path.join(outputFolder, route);
   if (filepath.split(".").length > 1) {
     const file = filesystem.files.find((file) => file.path === filepath);
     if (!file) {
@@ -50,25 +51,35 @@ export function getFileFromRoute(
   }
 
   const possibleFilepaths = getPossibleFilepaths(filepath, outputFolder);
-  const file = filesystem.files.find((file) =>
-    possibleFilepaths.includes(file.path),
-  );
-  if (!file) {
-    throw new Error(`File ${filepath} not found`);
+
+  for (const f of filesystem.files) {
+    if (possibleFilepaths.includes(f.path)) {
+      return f;
+    }
   }
-  return file;
+
+  throw new Error(`File ${filepath} not found`);
 }
 
 export function getPossibleFilepaths(
   filepath: string,
-  buildDir: string,
+  outputFolder: string,
 ): string[] {
-  if (filepath === "") {
-    return [`${buildDir}/index.html`];
+  const split = [];
+  for (const part of filepath.split("/")) {
+    if (part !== "") {
+      split.push(part);
+    }
   }
-  const possibleFilepath = [`${filepath}.html`, `${filepath}/index.html`];
-  if (filepath === "/") {
-    possibleFilepath.push(`${filepath}index.html`);
+
+  if (split[0] === outputFolder && split.length === 1) {
+    return [`${outputFolder}/index.html`];
   }
-  return possibleFilepath.map((filepath) => `${buildDir}/${filepath}`);
+
+  const possibleFilepaths: string[] = [
+    `${split.join("/")}.html`,
+    `${split.join("/")}/index.html`,
+  ];
+
+  return possibleFilepaths;
 }
