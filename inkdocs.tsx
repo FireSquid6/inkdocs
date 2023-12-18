@@ -1,5 +1,6 @@
 import { InkdocsConfig } from "./lib/config";
 import "@kitajs/html/register";
+import { inkdocs } from "./lib";
 
 export const config: InkdocsConfig = {
   baseHtmlPath: "./base.html",
@@ -41,3 +42,9 @@ export const config: InkdocsConfig = {
     },
   ],
 };
+
+function main() {
+  inkdocs(config);
+}
+
+main();
