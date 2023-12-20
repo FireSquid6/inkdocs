@@ -4,6 +4,7 @@ import { marked } from "marked";
 import { Route, Page, InkdocsConfig, Layout } from "./config";
 import { File } from "./files";
 import "@kitajs/html/register";
+import fs from "fs";
 
 function getLayoutsMap(config: InkdocsConfig): Map<string, Layout> {
   const layouts = new Map<string, Layout>();
@@ -17,7 +18,6 @@ export function generateHtmlForRoutes(
   routes: Route[],
   config: InkdocsConfig,
 ): File[] {
-
   const files: File[] = [];
   for (const route of routes) {
     try {
@@ -37,6 +37,11 @@ export function generateHtml(
   routes: Route[],
   config: InkdocsConfig,
 ): File {
+  const baseHtml = fs.readFileSync(config.baseHtmlPath, "utf-8");
+  if (baseHtml === undefined) {
+    throw new Error("Base html file not found");
+  }
+
   const layouts = getLayoutsMap(config);
   const layout = layouts.get(currentRoute.layout);
   if (!layout) {
@@ -49,18 +54,36 @@ export function generateHtml(
     metadata: currentRoute.metadata,
   };
 
-  const parser = jsxParsers.get(currentRoute.extension);
-  if (!parser) {
-    throw new Error(`Parser for ${currentRoute.extension} not found`);
+  const generator = jsxGenerators.get(currentRoute.extension);
+  if (!generator) {
+    throw new Error(`Generator for ${currentRoute.extension} not found`);
   }
-  page.children = parser(currentRoute.text);
+  page.children = generator(currentRoute.text);
 
-  const output = layout.template({ page, routes });
+  const templateOutput = layout.template({ page, routes });
+  const finalHtml = insertIntoBaseHtml(templateOutput, baseHtml);
 
   return {
-    path: getBuildFilepath(currentRoute.filepath, config.pagesFolder, config.outputFolder ?? "build"),
-    content: output as string,
+    path: getBuildFilepath(
+      currentRoute.filepath,
+      config.pagesFolder,
+      config.outputFolder ?? "build",
+    ),
+    content: finalHtml,
   };
+}
+
+function insertIntoBaseHtml(
+  templateOutput: JSX.Element,
+  baseHtml: string,
+): string {
+  const inputTag = "<$children$>";
+  const split = baseHtml.split(inputTag);
+  if (split.length !== 2) {
+    throw new Error("Base html must contain exactly one <$children$> tag");
+  }
+  split.splice(1, 0, templateOutput.toString());
+  return split.join("");
 }
 
 export function getBuildFilepath(
@@ -68,7 +91,6 @@ export function getBuildFilepath(
   contentFolder: string,
   buildFolder: string,
 ): string {
-  // TODO
   const split = filepath.split("/");
   if (split[0] === "" || split[0] === ".") {
     split.shift();
@@ -80,17 +102,17 @@ export function getBuildFilepath(
   return split.join("/").replace(/\.[^/.]+$/, ".html");
 }
 
-type JSXParser = (text: string) => JSX.Element;
+type jsxGenerator = (text: string) => JSX.Element;
 
-const jsxParsers = new Map<string, JSXParser>();
-jsxParsers.set("md", (text) => {
+const jsxGenerators = new Map<string, jsxGenerator>();
+jsxGenerators.set("md", (text) => {
   const jsx = marked(text) as JSX.Element;
   return jsx;
 });
-jsxParsers.set("html", (text) => {
+jsxGenerators.set("html", (text) => {
   const jsx = text as JSX.Element;
   return jsx;
 });
-jsxParsers.set("yaml", () => {
+jsxGenerators.set("yaml", () => {
   return "";
 });
