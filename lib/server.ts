@@ -3,6 +3,7 @@ import { html } from "@elysiajs/html";
 import { InkdocsConfig } from "./config";
 import { Filesystem, getRealFilesystem, File } from "./files";
 import path from "path";
+import staticPlugin from "@elysiajs/static";
 
 export function inkdocsServe(config: InkdocsConfig) {
   const app = new Elysia();
@@ -11,6 +12,12 @@ export function inkdocsServe(config: InkdocsConfig) {
   const filesystem = getRealFilesystem(outputFolder);
 
   app.use(html());
+  app.use(
+    staticPlugin({
+      assets: config.staticFolder ?? "public",
+      prefix: "/",
+    }),
+  );
   app.get("*", ({ params }) => {
     const route = params["*"];
     return getResponseFromRoute(route, outputFolder, filesystem);

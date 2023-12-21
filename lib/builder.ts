@@ -15,14 +15,4 @@ export function build(config: InkdocsConfig) {
     });
     fs.writeFileSync(file.path, file.content);
   }
-  copyStaticFiles(config);
-}
-
-function copyStaticFiles(config: InkdocsConfig) {
-  console.log("Copying static files");
-  if (config.staticFolder) {
-    fs.cpSync(config.staticFolder, config.outputFolder ?? "build", {
-      recursive: true,
-    });
-  }
 }

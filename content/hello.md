@@ -22,7 +22,7 @@ This is an h3 header
 3. Step 3
 
 Here's an image:
-![Icon](/logo.svg)
+![Diplomacy](diplomacy.png)
 
 ```js
 function helloWorld() {
