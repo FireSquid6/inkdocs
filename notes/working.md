@@ -1,3 +1,9 @@
+---
+title: Inkdocs working notes
+author: firesquid6
+description: My working notes for inkdocs while I was making the prototype and initial version of inkdocs.
+---
+
 See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3g2NH7nvJ8IWnngg) for information on how the building process should work.
 
 # Unanswered Questions
