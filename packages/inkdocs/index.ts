@@ -1,22 +1,27 @@
 import "@kitajs/html/register";
 
 export interface InkdocsOptions {
-  builders?: Builder[];
+  parser?: Parser[];
   staticFolder?: string | undefined;
   buildFolder?: string | undefined;
-  contentFolder: string;
+  contentFolder?: string;
+  layouts?: Map<string, Layout>;
 }
 
 export const defaultOptions: InkdocsOptions = {
   contentFolder: "content",
   buildFolder: "build",
+  layouts: new Map(),
 };
 
-export interface Builder {
+export interface Parser {
   filetypes: string[]; // filetypes that the
-  build(content: string): Promise<BuildResult> | BuildResult;
+  build(content: string): Promise<ParseResult> | ParseResult;
 }
 
-export interface BuildResult {
+export type Layout = (children: JSX.Element, metadata: object) => JSX.Element;
+
+export interface ParseResult {
   html: JSX.Element;
+  metadata: object;
 }
