@@ -1,16 +1,11 @@
 {
-  "name": "inkdocs",
+  "name": "minimal",
   "module": "index.ts",
-  "version": "0.1.0",
   "type": "module",
   "devDependencies": {
     "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@kitajs/html": "^3.0.10",
-    "@kitajs/ts-html-plugin": "^1.3.3"
   }
 }
