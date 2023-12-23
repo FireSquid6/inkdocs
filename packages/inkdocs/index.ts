@@ -1,18 +1,23 @@
 import "@kitajs/html/register";
 
 export interface InkdocsOptions {
-  parser?: Parser[];
+  parsers?: Parser[];
   staticFolder?: string | undefined;
   buildFolder?: string | undefined;
   contentFolder?: string;
   craftsmen?: Craftsman[];
   layouts?: Map<string, Layout>;
+  plugins?: Plugin[];
 }
 
 export const defaultOptions: InkdocsOptions = {
-  contentFolder: "content",
+  parsers: [],
+  staticFolder: "static",
   buildFolder: "build",
+  contentFolder: "content",
+  craftsmen: [],
   layouts: new Map(),
+  plugins: [],
 };
 
 export interface Parser {
@@ -41,3 +46,19 @@ export type Craftsman = (
   options: InkdocsOptions,
   parseResults: ParseResult[],
 ) => Artifact;
+
+export interface Plugin {
+  beforeParse?: () => void;
+  afterParse?: () => void;
+  beforeCraftsmen?: () => void;
+  afterCraftsmen?: () => void;
+  beforeLayouts?: () => void;
+  afterLayouts?: () => void;
+  beforeSlots?: () => void;
+  afterSlots?: () => void;
+}
+
+export interface Theme {
+  layouts?: Map<string, Layout>;
+  craftsmen?: Craftsman[];
+}

@@ -13,13 +13,11 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 - Will the server store the built files in memory, or load them from disk every time?
   - Maybe this could be a toggle. tbh I wouldn't think it would matter that much since we're dealing with kilobytes at most
 - How do we get tailwind working?
-- Handling translations
 
 # Main metrics:
 
 - Build time
 - Response time
--
 
 # Todo
 
@@ -32,6 +30,8 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 - ( ) Server
 - ( ) filepath to route
 - ( ) filesystem interface
+- ( ) plugin interface
+- ( ) theme interface
 
 # Places to share once finished
 
@@ -62,6 +62,8 @@ Pages:
 - Recipes
   - Using tailwind
   - Using a custom parser
+  - Using a plugin
+  - Dealing with translations
 - Contributing
 
 Of course, the documentation site for inkdocs should be made with inkdocs.
