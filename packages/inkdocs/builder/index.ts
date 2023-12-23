@@ -1,3 +1,3 @@
 import { InkdocsOptions } from "../index";
 
-export function build(options: InkdocsOptions) {}
+export function build(options: InkdocsOptions) { }
