@@ -1,5 +1,4 @@
 import { Parser } from "..";
-import YAML from "yaml"
 import { spliceMetadata } from ".";
 
 const html: Parser = {
