@@ -22,7 +22,7 @@ export const defaultOptions: InkdocsOptions = {
 
 export interface Parser {
   filetypes: string[]; // filetypes that the
-  parse(content: string): Promise<ParseResult> | ParseResult;
+  parse(text: string): ParseResult;
 }
 
 export type Layout = (
@@ -47,6 +47,7 @@ export type Craftsman = (
   parseResults: ParseResult[],
 ) => Artifact;
 
+// plugin
 export interface Plugin {
   beforeParse?: () => void;
   afterParse?: () => void;
