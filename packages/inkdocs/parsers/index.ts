@@ -11,6 +11,8 @@ export function spliceMetadata(text: string, metadataSeparator: string = "---"):
 
     metadata = YAML.parse(split[0]);
     content = split.length > 1 ? split[1] : "";
+  } else {
+    content = text;
   }
 
   return {
