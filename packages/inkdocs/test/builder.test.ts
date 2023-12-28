@@ -1,6 +1,8 @@
 import { describe, it, expect } from "bun:test";
-import { getNewFilepath } from "../builder";
-
+import { getNewFilepath, getArtifacts, getRoutes } from "../builder";
+import { InkdocsOptions, Route } from "..";
+import { mockFilesystem } from "../filesystem";
+import markdown from "../parsers/markdown";
 
 describe("getNewFilepath", () => {
   it("returns the correct path", () => {
@@ -23,5 +25,76 @@ describe("getNewFilepath", () => {
     const buildFolder = "./build";
     const result = getNewFilepath(filepath, contentFolder, buildFolder);
     expect(result).toEqual("build/index.html");
+  });
+});
+
+describe("getArtifacts", () => {
+  it("returns the correct artifacts", () => {
+    const options: InkdocsOptions = {
+      contentFolder: "content",
+      buildFolder: "build",
+      layouts: new Map(),
+      parsers: [],
+      craftsmen: [
+        () => {
+          return {
+            name: "test",
+            data: {
+              test: "test",
+            },
+          };
+        },
+      ],
+    };
+    const routes: Route[] = [
+      {
+        filepath: "./content/index.md",
+        metadata: {},
+        html: "<p>hello world</p>",
+      },
+    ];
+
+    const result = getArtifacts(options, routes);
+    expect(result).toEqual([
+      {
+        name: "test",
+        data: {
+          test: "test",
+        },
+      },
+    ]);
+  });
+});
+
+describe("getRoutes", () => {
+  it("returns the correct routes", () => {
+    const filesystem = mockFilesystem(
+      new Map<string, string>([
+        ["./content/index.md", "hello world"],
+        ["./content/subfolder/index.md", "hello world"],
+      ]),
+    );
+
+    const result = getRoutes(
+      filesystem.getAllFilenamesInDirectory("./content"),
+      filesystem,
+      "content",
+      "build",
+      [markdown],
+      console,
+    );
+
+    expect(result).toEqual([
+      {
+        filepath: "build/index.html",
+        metadata: {},
+        html: "<p>hello world</p>\n",
+      },
+      {
+        filepath: "build/subfolder/index.html",
+        metadata: {},
+        html: "<p>hello world</p>\n",
+      },
+    ]);
   });
 });

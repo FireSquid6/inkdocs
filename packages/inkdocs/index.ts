@@ -48,10 +48,7 @@ export interface Artifact {
   data: any;
 }
 
-export type Craftsman = (
-  options: InkdocsOptions,
-  parseResults: Route[],
-) => Artifact;
+export type Craftsman = (options: InkdocsOptions, routes: Route[]) => Artifact;
 
 // plugin interface is not completed yet. Expect breaking changes
 export interface Plugin {
