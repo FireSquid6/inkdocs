@@ -21,10 +21,10 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 
 # Todo
 
-- ( ) Parsers
-  - ( ) html parser
-  - ( ) yaml parser
-  - ( ) markdown parser
+- (x) Parsers
+  - (x) html parser
+  - (x) yaml parser
+  - (x) markdown parser
 - ( ) Layout support
 - ( ) create-inkdocs-app
 - ( ) Server
