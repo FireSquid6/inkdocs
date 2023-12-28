@@ -25,10 +25,10 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - (x) html parser
   - (x) yaml parser
   - (x) markdown parser
-- ( ) Layout support
+- (x) Layout support
 - ( ) create-inkdocs-app
 - ( ) Server
-- ( ) filepath to route
+- (x) filepath to route
 - ( ) filesystem interface
 - ( ) plugin interface
 - ( ) theme interface

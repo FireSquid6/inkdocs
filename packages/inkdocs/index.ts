@@ -26,15 +26,21 @@ export interface Parser {
 }
 
 export type Layout = (
-  route: string,
+  filepath: string,
   children: JSX.Element,
-  metadata: object,
+  metadata: any,
   artifacts: Map<string, any>,
 ) => Map<string, JSX.Element>;
 
 export interface ParseResult {
   html: JSX.Element;
-  metadata: object;
+  metadata: any;
+}
+
+export interface Route {
+  filepath: string;
+  html: JSX.Element;
+  metadata: any;
 }
 
 export interface Artifact {
@@ -44,10 +50,10 @@ export interface Artifact {
 
 export type Craftsman = (
   options: InkdocsOptions,
-  parseResults: ParseResult[],
+  parseResults: Route[],
 ) => Artifact;
 
-// plugin
+// plugin interface is not completed yet. Expect breaking changes
 export interface Plugin {
   beforeParse?: () => void;
   afterParse?: () => void;

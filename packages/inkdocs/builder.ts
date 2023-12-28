@@ -1,17 +1,48 @@
-import { InkdocsOptions } from ".";
-import { Filesystem } from "./filesystem";
+import { InkdocsOptions, Route, Artifact } from ".";
+import { Filesystem, Logger } from "./filesystem";
 import { defaultOptions } from ".";
 
 // Uses a filesystem to read the content folder and parse the files
-export function buildHtmlFiles(options: InkdocsOptions, filesystem: Filesystem): Map<string, string> {
+// returns a map of the new files and their contents 
+// TODO: separate this into multiple functions with tests
+export function buildHtmlFiles(options: InkdocsOptions, filesystem: Filesystem, logger: Logger): Map<string, string> {
   const filenames = filesystem.getAllFilenamesInDirectory(options.contentFolder ?? defaultOptions.contentFolder ?? "");
-  const htmlFiles = new Map<string, string>();
 
+  const routes: Route[] = [];
   for (const filename of filenames) {
+    const newFilename = getNewFilepath(filename, options.contentFolder ?? defaultOptions.contentFolder ?? "", options.buildFolder ?? defaultOptions.buildFolder ?? "");
     const fileContents = filesystem.readFile(filename);
     const parseResult = options.parsers?.find((parser) => parser.filetypes.includes(filename.split(".").pop()!))?.parse(fileContents);
     if (!parseResult) {
-      throw new Error(`Could not find parser for file ${filename}`);
+      logger.error(`No parser found for file ${filename}`);
+      continue;
+    }
+    routes.push({
+      filepath: newFilename,
+      html: parseResult.html,
+      metadata: parseResult.metadata,
+    });
+  }
+
+  const artifacts: Artifact[] = [];
+  for (const craftsman of options.craftsmen ?? defaultOptions.craftsmen ?? []) {
+    const artifact = craftsman(options, routes);
+    artifacts.push(artifact);
+  }
+
+
+  const htmlFiles = new Map<string, string>();
+  const artifactMap = new Map(artifacts.map((artifact) => [artifact.name, artifact.data]));
+  for (const route of routes) {
+    const layout = options.layouts?.get(route.metadata.layout ?? "default");
+    if (!layout) {
+      logger.error(`No layout found for ${route.filepath}. Tried to use ${layout}.`);
+      continue;
+    }
+    const layoutResult = layout(route.filepath, route.html, route.metadata, artifactMap);
+
+    for (const [filepath, html] of layoutResult) {
+      htmlFiles.set(filepath, html as string);
     }
   }
 
