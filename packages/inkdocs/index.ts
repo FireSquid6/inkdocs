@@ -63,8 +63,3 @@ export interface Plugin {
   beforeSlots?: () => void;
   afterSlots?: () => void;
 }
-
-export interface Theme {
-  layouts?: Map<string, Layout>;
-  craftsmen?: Craftsman[];
-}

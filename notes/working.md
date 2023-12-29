@@ -8,11 +8,9 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 
 # Unanswered Questions
 
-- How do you deploy elysia to vercel?
-  - The answer is probably docker but idrk how that works
 - Will the server store the built files in memory, or load them from disk every time?
   - Maybe this could be a toggle. tbh I wouldn't think it would matter that much since we're dealing with kilobytes at most
-- How do we get tailwind working?
+-
 
 # Main metrics:
 
@@ -29,15 +27,25 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 - ( ) create-inkdocs-app
 - ( ) Server
 - (x) filepath to route
-- ( ) filesystem interface
+- (x) filesystem interface
+- (x) build system
 - ( ) plugin interface
-- ( ) theme interface
+  - ( ) search plugin
+  - ( ) mdx plugin
+  - ( ) norg plugin
 
 # Places to share once finished
 
 - Hack Club
 - Linkedin
 - Ethan's Discord
+
+# Plugins
+
+Plugins should be able to:
+
+- Add layouts and craftsmen (essentially act as a theme)
+- Add special api routes to the server
 
 # Documentation for Inkdocs
 
