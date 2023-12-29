@@ -8,6 +8,7 @@ export interface InkdocsOptions {
   craftsmen?: Craftsman[];
   layouts?: Map<string, Layout>;
   plugins?: Plugin[];
+  baseHtml?: string;
 }
 
 export const defaultOptions: InkdocsOptions = {
@@ -18,6 +19,7 @@ export const defaultOptions: InkdocsOptions = {
   craftsmen: [],
   layouts: new Map(),
   plugins: [],
+  baseHtml: "<html><body>${body}$</body></html>",
 };
 
 export interface Parser {

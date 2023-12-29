@@ -1,5 +1,10 @@
 import { describe, it, expect } from "bun:test";
-import { getNewFilepath, getArtifacts, getRoutes } from "../builder";
+import {
+  getNewFilepath,
+  getArtifacts,
+  getRoutes,
+  getHtmlFiles,
+} from "../builder";
 import { InkdocsOptions, Route } from "..";
 import { mockFilesystem } from "../filesystem";
 import markdown from "../parsers/markdown";
@@ -96,5 +101,47 @@ describe("getRoutes", () => {
         html: "<p>hello world</p>\n",
       },
     ]);
+  });
+});
+
+describe("getHtmlFiles", () => {
+  it("returns the correct html files", () => {
+    const routes: Route[] = [
+      {
+        filepath: "build/index.html",
+        metadata: {},
+        html: "<p>hello world</p>\n",
+      },
+      {
+        filepath: "build/subfolder/index.html",
+        metadata: {},
+        html: "<p>hello world</p>\n",
+      },
+    ];
+
+    const result = getHtmlFiles(
+      routes,
+      new Map([
+        [
+          "default",
+          (_: string, children: JSX.Element) => {
+            return new Map([["body", children]]);
+          },
+        ],
+      ]),
+      "<html><body>{body}</body></html>",
+      [],
+      console,
+    );
+
+    expect(result).toEqual(
+      new Map([
+        ["build/index.html", "<html><body><p>hello world</p>\n</body></html>"],
+        [
+          "build/subfolder/index.html",
+          "<html><body><p>hello world</p>\n</body></html>",
+        ],
+      ]),
+    );
   });
 });

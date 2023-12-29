@@ -34,6 +34,7 @@ export function buildHtmlFiles(
   return getHtmlFiles(
     routes,
     options.layouts ?? defaultOptions.layouts ?? new Map(),
+    options.baseHtml ?? defaultOptions.baseHtml ?? "",
     artifacts,
     logger,
   );
@@ -118,6 +119,7 @@ export function getArtifacts(
 export function getHtmlFiles(
   routes: Route[],
   layouts: Map<string, Layout>,
+  baseHtml: string,
   artifacts: Artifact[],
   logger: Logger,
 ): Map<string, string> {
@@ -140,9 +142,18 @@ export function getHtmlFiles(
       artifactMap,
     );
 
-    for (const [filepath, html] of layoutResult) {
-      htmlFiles.set(filepath, html as string);
+    let finalHtml = baseHtml;
+
+    // TODO: optimize this by precalculating where and what the slots are instead of searching for them each time
+    // Should be fine for an early release though
+    for (const [slot, html] of layoutResult) {
+      if (finalHtml.includes(`{${slot}}`)) {
+        // note: using JSX.Element as string is fine because JSX.Element is really just a fancy string
+        finalHtml = finalHtml.replace(`{${slot}}`, html as string);
+      }
     }
+
+    htmlFiles.set(route.filepath, finalHtml);
   }
 
   return htmlFiles;
