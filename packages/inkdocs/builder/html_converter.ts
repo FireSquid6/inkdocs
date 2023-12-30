@@ -17,15 +17,15 @@ export function convertHtmlFiles(
   logger: Logger,
 ): Map<string, string> {
   const filenames = filesystem.getAllFilenamesInDirectory(
-    options.contentFolder ?? defaultOptions.contentFolder ?? "",
+    options.contentFolder ?? defaultOptions.contentFolder,
   );
 
   const routes = getRoutes(
     filenames,
     filesystem,
-    options.contentFolder ?? defaultOptions.contentFolder ?? "",
-    options.buildFolder ?? defaultOptions.buildFolder ?? "",
-    options.parsers ?? defaultOptions.parsers ?? [],
+    options.contentFolder ?? defaultOptions.contentFolder,
+    options.buildFolder ?? defaultOptions.buildFolder,
+    options.parsers ?? defaultOptions.parsers,
     logger,
   );
 
@@ -33,8 +33,8 @@ export function convertHtmlFiles(
 
   return getHtmlFiles(
     routes,
-    options.layouts ?? defaultOptions.layouts ?? new Map(),
-    options.baseHtml ?? defaultOptions.baseHtml ?? "",
+    options.layouts ?? defaultOptions.layouts,
+    options.baseHtml ?? defaultOptions.baseHtml,
     artifacts,
     logger,
   );

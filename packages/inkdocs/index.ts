@@ -11,7 +11,7 @@ export interface InkdocsOptions {
   baseHtml?: string;
 }
 
-export const defaultOptions: InkdocsOptions = {
+export const defaultOptions = {
   parsers: [],
   staticFolder: "static",
   buildFolder: "build",

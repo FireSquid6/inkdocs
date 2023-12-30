@@ -1,4 +1,8 @@
-import { Elysia, Handler } from "elysia";
+import { Elysia, Handler, NotFoundError } from "elysia";
+import { InkdocsOptions, defaultOptions } from "..";
+import path from "path";
+import { html } from "@elysiajs/html";
+import fs from "fs";
 
 export interface ServerOptions {
   port?: number;
@@ -16,8 +20,37 @@ export const defaultServerOptions = {
   apiRoutes: [],
 };
 
-export function serve(serverOptions: ServerOptions) {
+export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
   const app = new Elysia();
+  app.onError(({ code, error, set }) => {
+    if (code === "NOT_FOUND") {
+      set.status = 404;
+
+      return "Not found :(";
+    }
+
+    return error;
+  });
+
+  app.get("*", ({ params }) => {
+    const route = params["*"];
+    const filepath = path.join(
+      options.buildFolder ?? defaultOptions.buildFolder,
+      route,
+    );
+
+    switch (getExtension(filepath)) {
+      // TODO: handle index files
+      case "html":
+        return fs.readFileSync(filepath, "utf8");
+      default:
+        if (fs.existsSync(filepath)) {
+          return Bun.file(filepath);
+        }
+        throw new NotFoundError();
+    }
+  });
+  app.use(html());
 
   addApiRoutes(app, serverOptions.apiRoutes ?? defaultServerOptions.apiRoutes);
 
@@ -48,4 +81,13 @@ export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
         break;
     }
   }
+}
+
+function getExtension(filepath: string): string {
+  const parts = filepath.split(".");
+  if (parts.length === 1) {
+    return "html";
+  }
+
+  return parts[parts.length - 1];
 }
