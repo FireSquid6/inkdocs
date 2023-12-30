@@ -5,8 +5,8 @@ import {
   defaultOptions,
   Parser,
   Layout,
-} from ".";
-import { Filesystem, Logger } from "./filesystem";
+} from "../";
+import { Filesystem, Logger } from "../lib/filesystem";
 
 // Uses a filesystem to read the content folder and parse the files
 // returns a map of the new files and their contents

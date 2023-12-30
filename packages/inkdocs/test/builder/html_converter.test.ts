@@ -4,10 +4,10 @@ import {
   getArtifacts,
   getRoutes,
   getHtmlFiles,
-} from "../builder";
-import { InkdocsOptions, Route } from "..";
-import { mockFilesystem } from "../filesystem";
-import markdown from "../parsers/markdown";
+} from "../../builder/html_converter";
+import { InkdocsOptions, Route } from "../../";
+import { mockFilesystem } from "../../lib/filesystem";
+import markdown from "../../parsers/markdown";
 
 describe("getNewFilepath", () => {
   it("returns the correct path", () => {
