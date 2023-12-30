@@ -10,7 +10,6 @@ import { Filesystem, Logger } from "./filesystem";
 
 // Uses a filesystem to read the content folder and parse the files
 // returns a map of the new files and their contents
-// TODO: separate this into multiple functions with tests
 export function buildHtmlFiles(
   options: InkdocsOptions,
   filesystem: Filesystem,
