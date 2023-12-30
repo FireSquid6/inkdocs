@@ -6,12 +6,6 @@ description: My working notes for inkdocs while I was making the prototype and i
 
 See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3g2NH7nvJ8IWnngg) for information on how the building process should work.
 
-# Unanswered Questions
-
-- Will the server store the built files in memory, or load them from disk every time?
-  - Maybe this could be a toggle. tbh I wouldn't think it would matter that much since we're dealing with kilobytes at most
--
-
 # Main metrics:
 
 - Build time
@@ -25,7 +19,7 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - (x) markdown parser
 - (x) Layout support
 - ( ) create-inkdocs-app
-- ( ) Server
+- ( ) server
 - (x) filepath to route
 - (x) filesystem interface
 - (x) build system
@@ -33,6 +27,9 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - ( ) search plugin
   - ( ) mdx plugin
   - ( ) norg plugin
+  - ( ) in8n plugin
+- ( ) 404 page support and handling
+- ( ) server caching
 
 # Places to share once finished
 

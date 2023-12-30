@@ -1,5 +1,6 @@
 // provides a wrapper around the filesystem to allow for easier testing
 import fs from "fs";
+import path from "path";
 
 export interface Filesystem {
   readFile(path: string): string;
@@ -48,4 +49,40 @@ export function realFilesystem(): Filesystem {
       return files.map((file) => `${path}/${file}`);
     },
   };
+}
+
+export function copyFiles(from: string, to: string): void {
+  const files = recursivelyReadDir(from);
+
+  for (const file of files) {
+    const relativePath = file.replace(from, "");
+    const newPath = path.join(to, relativePath);
+
+    if (fs.statSync(file).isDirectory()) {
+      fs.mkdirSync(newPath, { recursive: true });
+    } else {
+      if (!fs.existsSync(path.dirname(newPath))) {
+        fs.mkdirSync(path.dirname(newPath), { recursive: true });
+      }
+      fs.copyFileSync(file, newPath);
+    }
+  }
+}
+
+function recursivelyReadDir(dir: string) {
+  // recursive: true doesn't work with bun, so we need our own function
+  const files: string[] = [];
+
+  fs.readdirSync(dir).forEach((file) => {
+    const filePath = `${dir}/${file}`;
+    const stat = fs.statSync(filePath);
+
+    if (stat.isDirectory()) {
+      files.push(...recursivelyReadDir(filePath));
+    } else {
+      files.push(filePath);
+    }
+  });
+
+  return files;
 }

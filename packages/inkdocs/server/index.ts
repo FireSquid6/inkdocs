@@ -7,7 +7,7 @@ export interface ServerOptions {
 
 export interface ApiRoute {
   route: string;
-  verb: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
+  verb: "GET" | "POST" | "PATCH" | "PUT" | "DELETE" | "ALL";
   handler: Handler;
 }
 
@@ -42,6 +42,9 @@ export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
         break;
       case "DELETE":
         app.delete(route, apiRoute.handler);
+        break;
+      case "ALL":
+        app.all(route, apiRoute.handler);
         break;
     }
   }
