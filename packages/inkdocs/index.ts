@@ -54,12 +54,10 @@ export type Craftsman = (options: InkdocsOptions, routes: Route[]) => Artifact;
 
 // plugin interface is not completed yet. Expect breaking changes
 export interface Plugin {
-  beforeParse?: () => void;
-  afterParse?: () => void;
-  beforeCraftsmen?: () => void;
-  afterCraftsmen?: () => void;
-  beforeLayouts?: () => void;
-  afterLayouts?: () => void;
-  beforeSlots?: () => void;
-  afterSlots?: () => void;
+  craftsmen: Craftsman[];
+  layouts: Map<string, Layout>;
+  parsers: Parser[];
+  // TODO: figure out how to give the plugin access to files
+  beforeBuild?: (options: InkdocsOptions) => void;
+  afterBuild?: (options: InkdocsOptions) => void;
 }
