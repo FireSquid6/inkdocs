@@ -6,11 +6,12 @@ import {
   Parser,
   Layout,
 } from "../";
-import { Filesystem, Logger } from "../lib/filesystem";
+import { Filesystem } from "../lib/filesystem";
+import { Logger } from "../lib/logger";
 
 // Uses a filesystem to read the content folder and parse the files
 // returns a map of the new files and their contents
-export function buildHtmlFiles(
+export function convertHtmlFiles(
   options: InkdocsOptions,
   filesystem: Filesystem,
   logger: Logger,

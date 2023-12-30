@@ -1,11 +1,6 @@
 // provides a wrapper around the filesystem to allow for easier testing
 import fs from "fs";
 
-export interface Logger {
-  log(message: string): void;
-  error(message: string): void;
-}
-
 export interface Filesystem {
   readFile(path: string): string;
   writeFile(path: string, contents: string): void;
