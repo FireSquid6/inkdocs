@@ -30,6 +30,13 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - ( ) in8n plugin
 - ( ) 404 page support and handling
 - ( ) server caching
+- ( ) layout choosing system
+
+  - For each page, we first check the metadata for a layout. If a layout there is specified, we use that. Then we check a "directory layouts" map recursively for a layout. If nothing there is found, we just use the default layout.
+
+- ( ) bugs in initial testing
+  - ( ) if the static directory doesn't exit, it crashes
+  - ( ) recursivelyreaddir doesn't work if the main file isn't the cwd
 
 # Places to share once finished
 

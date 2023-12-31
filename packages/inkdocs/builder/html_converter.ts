@@ -48,21 +48,37 @@ export function getNewFilepath(
   filepath = stripSlashesAndDots(filepath);
   contentFolder = stripSlashesAndDots(contentFolder);
   buildFolder = stripSlashesAndDots(buildFolder);
+  // TODO: this doesn't work if the content or build folders are not in the root directory
+  // TODO: clean up this function
 
   const parts = filepath.split("/");
   if (parts[0] === "." || parts[0] === "") {
     parts.shift();
   }
 
-  if (parts[0] === contentFolder) {
-    parts[0] = buildFolder;
-  }
   parts[parts.length - 1] = parts[parts.length - 1].replace(
     /\.[^/.]+$/,
     ".html",
   );
 
-  return parts.join("/");
+  const contentFolderParts = contentFolder.split("/");
+  if (contentFolderParts[0] === "." || contentFolderParts[0] === "") {
+    contentFolderParts.shift();
+  }
+  for (const part of contentFolderParts) {
+    if (parts[0] === part) {
+      parts.shift();
+    }
+  }
+  const buildFolderParts = buildFolder.split("/");
+  if (buildFolderParts[0] === "." || buildFolderParts[0] === "") {
+    buildFolderParts.shift();
+  }
+  const newFilepath = [...buildFolderParts, ...parts].join("/");
+
+  console.log(filepath, newFilepath);
+
+  return newFilepath;
 }
 
 function stripSlashesAndDots(str: string): string {
@@ -136,10 +152,10 @@ export function getHtmlFiles(
       continue;
     }
     const layoutResult = layout(
-      route.filepath,
       route.html,
       route.metadata,
       artifactMap,
+      route.filepath,
     );
 
     let finalHtml = baseHtml;

@@ -32,21 +32,25 @@ export function mockFilesystem(files: Map<string, string>): Filesystem {
 
 export function realFilesystem(): Filesystem {
   return {
-    readFile(path: string): string {
-      if (!fs.existsSync(path)) {
-        throw new Error(`File ${path} does not exist`);
+    readFile(filepath: string): string {
+      if (!fs.existsSync(filepath)) {
+        throw new Error(`File ${filepath} does not exist`);
       }
-      return fs.readFileSync(path, "utf8");
+      return fs.readFileSync(filepath, "utf8");
     },
-    writeFile(path: string, contents: string): void {
-      fs.writeFileSync(path, contents);
+    writeFile(filepath: string, contents: string): void {
+      // ensure the directory exists
+      if (!fs.existsSync(path.dirname(filepath))) {
+        fs.mkdirSync(path.dirname(filepath), { recursive: true });
+      }
+
+      fs.writeFileSync(filepath, contents);
     },
-    exists(path: string): boolean {
-      return fs.existsSync(path);
+    exists(filepath: string): boolean {
+      return fs.existsSync(filepath);
     },
-    getAllFilenamesInDirectory(path: string): string[] {
-      const files = fs.readdirSync(path, { recursive: true });
-      return files.map((file) => `${path}/${file}`);
+    getAllFilenamesInDirectory(filepath: string): string[] {
+      return recursivelyReadDir(filepath);
     },
   };
 }
@@ -69,7 +73,7 @@ export function copyFiles(from: string, to: string): void {
   }
 }
 
-function recursivelyReadDir(dir: string) {
+function recursivelyReadDir(dir: string): string[] {
   // recursive: true doesn't work with bun, so we need our own function
   const files: string[] = [];
 

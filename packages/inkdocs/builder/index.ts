@@ -12,6 +12,9 @@ export function build(
     options.staticFolder ?? defaultOptions.staticFolder,
     options.buildFolder ?? defaultOptions.buildFolder,
   );
+  // TODO: delete build folder abd remake it
+
+  console.log(realFilesystem().getAllFilenamesInDirectory("example"));
   const htmlFiles = convertHtmlFiles(options, filesystem, logger);
 
   for (const [filepath, html] of htmlFiles) {

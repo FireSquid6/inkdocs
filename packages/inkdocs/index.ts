@@ -28,10 +28,10 @@ export interface Parser {
 }
 
 export type Layout = (
-  filepath: string,
   children: JSX.Element,
   metadata: any,
   artifacts: Map<string, any>,
+  filepath: string,
 ) => Map<string, JSX.Element>;
 
 export interface ParseResult {

@@ -32,6 +32,8 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
     return error;
   });
 
+  app.use(html());
+
   app.get("*", ({ params }) => {
     const route = params["*"];
     const filepath = path.join(
@@ -42,7 +44,7 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
     switch (getExtension(filepath)) {
       // TODO: handle index files
       case "html":
-        return fs.readFileSync(filepath, "utf8");
+        return fs.readFileSync(filepath, "utf8") as JSX.Element;
       default:
         if (fs.existsSync(filepath)) {
           return Bun.file(filepath);
@@ -50,7 +52,6 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
         throw new NotFoundError();
     }
   });
-  app.use(html());
 
   addApiRoutes(app, serverOptions.apiRoutes ?? defaultServerOptions.apiRoutes);
 
