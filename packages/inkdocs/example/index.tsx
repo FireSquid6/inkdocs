@@ -5,6 +5,16 @@ import html from "../parsers/html";
 import markdown from "../parsers/markdown";
 import "@kitajs/html/register";
 
+const baseHtml = `<html>
+<head>
+  <title>Example Inkdocs</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+{body}
+</body>
+</html>`;
+
 function main() {
   const defaultLayout: Layout = (children: JSX.Element, metadata: any) => {
     const body = (
@@ -30,7 +40,7 @@ function main() {
     craftsmen: [],
     layouts: new Map([["default", defaultLayout]]),
     plugins: [],
-    baseHtml: "<html><body>{body}</body></html>",
+    baseHtml: baseHtml,
   };
 
   console.log("Building Pages...");

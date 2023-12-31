@@ -37,6 +37,11 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 - ( ) bugs in initial testing
   - ( ) if the static directory doesn't exit, it crashes
   - ( ) recursivelyreaddir doesn't work if the main file isn't the cwd
+  - ( ) if .html isn't specified the file isn't found
+  - ( ) index files aren't properly respected
+  - ( ) no "starting on port x" is printed
+  - ( ) no logs when building are printed
+  - ( ) too many meaningless logs are printed
 
 # Places to share once finished
 
