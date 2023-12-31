@@ -92,3 +92,23 @@ function getExtension(filepath: string): string {
 
   return parts[parts.length - 1];
 }
+
+export function getPossibleFilepaths(
+  route: string,
+  buildFolder: string,
+): string[] {
+  if (route.at(-1) === "/") {
+    route = route.slice(0, -1);
+  }
+
+  const parts = route.split("/");
+  const possibleFilepaths = [];
+  if (parts.length < 2) {
+    return [path.join(buildFolder, "index.html")];
+  }
+
+  return [
+    path.join(buildFolder, route) + ".html",
+    path.join(buildFolder, route, "index.html"),
+  ];
+}

@@ -1,6 +1,11 @@
 import { InkdocsOptions, defaultOptions } from "..";
 import { convertHtmlFiles } from "./html_converter";
-import { Filesystem, copyFiles, realFilesystem } from "../lib/filesystem";
+import {
+  Filesystem,
+  copyFiles,
+  realFilesystem,
+  resetDirectory,
+} from "../lib/filesystem";
 import { Logger, realLogger } from "../lib/logger";
 
 export function build(
@@ -8,11 +13,14 @@ export function build(
   filesystem: Filesystem = realFilesystem(),
   logger: Logger = realLogger(),
 ): void {
-  copyFiles(
-    options.staticFolder ?? defaultOptions.staticFolder,
-    options.buildFolder ?? defaultOptions.buildFolder,
-  );
-  // TODO: delete build folder abd remake it
+  resetDirectory(options.buildFolder ?? defaultOptions.buildFolder);
+
+  if (options.staticFolder !== undefined) {
+    copyFiles(
+      options.staticFolder ?? defaultOptions.staticFolder,
+      options.buildFolder ?? defaultOptions.buildFolder,
+    );
+  }
 
   console.log(realFilesystem().getAllFilenamesInDirectory("example"));
   const htmlFiles = convertHtmlFiles(options, filesystem, logger);

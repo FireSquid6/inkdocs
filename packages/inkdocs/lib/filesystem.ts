@@ -90,3 +90,10 @@ function recursivelyReadDir(dir: string): string[] {
 
   return files;
 }
+
+export function resetDirectory(dir: string): void {
+  if (fs.existsSync(dir)) {
+    fs.rmdirSync(dir, { recursive: true });
+  }
+  fs.mkdirSync(dir, { recursive: true });
+}

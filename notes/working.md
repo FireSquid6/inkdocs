@@ -19,7 +19,7 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - (x) markdown parser
 - (x) Layout support
 - ( ) create-inkdocs-app
-- ( ) server
+- (x) server
 - (x) filepath to route
 - (x) filesystem interface
 - (x) build system
@@ -30,13 +30,14 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - ( ) in8n plugin
 - ( ) 404 page support and handling
 - ( ) server caching
+  - Server can instruct build function to not write and instead just return the routes to be stored in memory
 - ( ) layout choosing system
 
   - For each page, we first check the metadata for a layout. If a layout there is specified, we use that. Then we check a "directory layouts" map recursively for a layout. If nothing there is found, we just use the default layout.
 
 - ( ) bugs in initial testing
-  - ( ) if the static directory doesn't exit, it crashes
-  - ( ) recursivelyreaddir doesn't work if the main file isn't the cwd
+  - (x) if the static directory doesn't exit, it crashes
+  - (x) recursivelyreaddir doesn't work if the main file isn't the cwd
   - ( ) if .html isn't specified the file isn't found
   - ( ) index files aren't properly respected
   - ( ) no "starting on port x" is printed

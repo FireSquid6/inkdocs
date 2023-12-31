@@ -124,7 +124,7 @@ describe("getHtmlFiles", () => {
       new Map([
         [
           "default",
-          (_: string, children: JSX.Element) => {
+          (children: JSX.Element) => {
             return new Map([["body", children]]);
           },
         ],
