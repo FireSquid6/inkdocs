@@ -45,7 +45,8 @@ function main() {
 
   console.log("Building Pages...");
   build(options);
-  console.log("Starting Server...");
+  console.log("✅ Pages successfully built!");
+  console.log(`\n🚀 Started Server on port ${serverOptions.port}`);
   serve(options, serverOptions);
 }
 

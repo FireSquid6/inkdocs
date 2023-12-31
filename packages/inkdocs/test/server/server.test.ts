@@ -9,12 +9,29 @@ describe("getPossibleFilepaths", () => {
     ]);
   });
   it("deals with edge case of home index", () => {
-    expect(getPossibleFilepaths("/", "build")).toEqual(["build/index.html"]);
+    expect(getPossibleFilepaths("", "build")).toEqual(["build/index.html"]);
+  });
+  it("deals with a one part route", () => {
+    expect(getPossibleFilepaths("hello", "build")).toEqual([
+      "build/hello.html",
+      "build/hello/index.html",
+    ]);
   });
   it("deals with a trailing slash", () => {
-    expect(getPossibleFilepaths("/hello/world/", "build")).toEqual([
+    expect(getPossibleFilepaths("hello/world/", "build")).toEqual([
       "build/hello/world.html",
       "build/hello/world/index.html",
+    ]);
+  });
+  it("deals with the user specifying an index", () => {
+    expect(getPossibleFilepaths("hello/world/index", "build")).toEqual([
+      "build/hello/world.html",
+      "build/hello/world/index.html",
+    ]);
+  });
+  it("deals with .html being specified", () => {
+    expect(getPossibleFilepaths("hello/world.html", "build")).toEqual([
+      "build/hello/world.html",
     ]);
   });
 });

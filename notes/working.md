@@ -35,14 +35,14 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 
   - For each page, we first check the metadata for a layout. If a layout there is specified, we use that. Then we check a "directory layouts" map recursively for a layout. If nothing there is found, we just use the default layout.
 
-- ( ) bugs in initial testing
+- (x) bugs in initial testing
   - (x) if the static directory doesn't exit, it crashes
   - (x) recursivelyreaddir doesn't work if the main file isn't the cwd
-  - ( ) if .html isn't specified the file isn't found
-  - ( ) index files aren't properly respected
-  - ( ) no "starting on port x" is printed
-  - ( ) no logs when building are printed
-  - ( ) too many meaningless logs are printed
+  - (x) if .html isn't specified the file isn't found
+  - (x) index files aren't properly respected
+  - (x) no "starting on port x" is printed
+  - (x) no logs when building are printed
+  - (x) too many meaningless logs are printed
 
 # Places to share once finished
 

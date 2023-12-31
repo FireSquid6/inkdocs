@@ -22,7 +22,6 @@ export function build(
     );
   }
 
-  console.log(realFilesystem().getAllFilenamesInDirectory("example"));
   const htmlFiles = convertHtmlFiles(options, filesystem, logger);
 
   for (const [filepath, html] of htmlFiles) {

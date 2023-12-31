@@ -44,8 +44,27 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
     switch (getExtension(filepath)) {
       // TODO: handle index files
       case "html":
-        return fs.readFileSync(filepath, "utf8") as JSX.Element;
+      case "":
+        const possibleFilepaths = getPossibleFilepaths(
+          route,
+          options.buildFolder ?? defaultOptions.buildFolder,
+        );
+
+        for (const possibleFilepath of possibleFilepaths) {
+          if (fs.existsSync(possibleFilepath)) {
+            console.log(`📄 /${route} -> ${possibleFilepath}`);
+            const html = fs.readFileSync(
+              possibleFilepath,
+              "utf-8",
+            ) as JSX.Element;
+            return html;
+          }
+        }
+        throw new NotFoundError();
+
+        break;
       default:
+        console.log(`📦 ${filepath}`);
         if (fs.existsSync(filepath)) {
           return Bun.file(filepath);
         }
@@ -87,7 +106,7 @@ export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
 function getExtension(filepath: string): string {
   const parts = filepath.split(".");
   if (parts.length === 1) {
-    return "html";
+    return "";
   }
 
   return parts[parts.length - 1];
@@ -97,18 +116,27 @@ export function getPossibleFilepaths(
   route: string,
   buildFolder: string,
 ): string[] {
+  if (getExtension(route) === "html") {
+    return [path.join(buildFolder, route)];
+  }
+
   if (route.at(-1) === "/") {
     route = route.slice(0, -1);
   }
 
-  const parts = route.split("/");
-  const possibleFilepaths = [];
-  if (parts.length < 2) {
+  if (route === "") {
     return [path.join(buildFolder, "index.html")];
   }
 
+  const parts = route.split("/");
+  const possibleFilepaths = [];
+
+  if (parts[parts.length - 1] === "index") {
+    parts.pop();
+  }
+
   return [
-    path.join(buildFolder, route) + ".html",
-    path.join(buildFolder, route, "index.html"),
+    path.join(buildFolder, parts.join("/")) + ".html",
+    path.join(buildFolder, parts.join("/"), "index.html"),
   ];
 }

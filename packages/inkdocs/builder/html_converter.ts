@@ -76,8 +76,6 @@ export function getNewFilepath(
   }
   const newFilepath = [...buildFolderParts, ...parts].join("/");
 
-  console.log(filepath, newFilepath);
-
   return newFilepath;
 }
 
@@ -144,7 +142,10 @@ export function getHtmlFiles(
     artifacts.map((artifact) => [artifact.name, artifact.data]),
   );
   for (const route of routes) {
-    const layout = layouts?.get(route.metadata.layout ?? "default");
+    // TODO: Properly get the layout
+    const layoutName = route.metadata.layout ?? "default";
+
+    const layout = layouts?.get(layoutName);
     if (!layout) {
       logger.error(
         `No layout found for ${route.filepath}. Tried to use ${layout}.`,
@@ -157,6 +158,8 @@ export function getHtmlFiles(
       artifactMap,
       route.filepath,
     );
+
+    logger.log(`🔨 ${route.filepath} with layout ${layoutName}`);
 
     let finalHtml = baseHtml;
 
