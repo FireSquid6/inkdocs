@@ -177,3 +177,30 @@ export function getHtmlFiles(
 
   return htmlFiles;
 }
+
+export function chooseLayout(
+  route: Route,
+  layouts: Map<string, Layout>,
+  directoryMap: Map<string, string>,
+): string {
+  if (route.metadata.layout) {
+    if (layouts.has(route.metadata.layout)) {
+      return route.metadata.layout;
+    }
+    return "default";
+  }
+
+  const filepathSplit = route.filepath.split("/");
+  filepathSplit.pop();
+  const directory = filepathSplit.join("/");
+
+  if (directoryMap.has(directory)) {
+    const layout = directoryMap.get(directory);
+    if (layout === undefined || !layouts.has(layout!)) {
+      return "default";
+    }
+    return layout;
+  }
+
+  return "default";
+}
