@@ -36,6 +36,7 @@ export function convertHtmlFiles(
     options.layouts ?? defaultOptions.layouts,
     options.baseHtml ?? defaultOptions.baseHtml,
     artifacts,
+    new Map<string, string>(),
     logger,
   );
 }
