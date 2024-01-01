@@ -135,6 +135,7 @@ export function getHtmlFiles(
   layouts: Map<string, Layout>,
   baseHtml: string,
   artifacts: Artifact[],
+  layoutMap: Map<string, string>,
   logger: Logger,
 ): Map<string, string> {
   const htmlFiles = new Map<string, string>();
@@ -142,8 +143,7 @@ export function getHtmlFiles(
     artifacts.map((artifact) => [artifact.name, artifact.data]),
   );
   for (const route of routes) {
-    // TODO: Properly get the layout
-    const layoutName = route.metadata.layout ?? "default";
+    const layoutName = chooseLayout(route, layouts, layoutMap);
 
     const layout = layouts?.get(layoutName);
     if (!layout) {

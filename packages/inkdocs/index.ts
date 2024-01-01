@@ -9,8 +9,10 @@ export interface InkdocsOptions {
   layouts?: Map<string, Layout>;
   plugins?: Plugin[];
   baseHtml?: string;
+  directoryLayoutMap?: Map<string, string>;
 }
 
+// this isn't given the type of InkdocsOptions because if it is then the typescript compiler thinks that everything is undefined (which it isn't, because this is a literal)
 export const defaultOptions = {
   parsers: [],
   staticFolder: "static",
@@ -18,12 +20,13 @@ export const defaultOptions = {
   contentFolder: "content",
   craftsmen: [],
   layouts: new Map(),
+  directoryLayoutMap: new Map(),
   plugins: [],
-  baseHtml: "<html><body>${body}$</body></html>",
+  baseHtml: "<html><body>{body}</body></html>",
 };
 
 export interface Parser {
-  filetypes: string[]; // filetypes that the
+  filetypes: string[];
   parse(text: string): ParseResult;
 }
 

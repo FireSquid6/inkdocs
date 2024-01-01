@@ -132,6 +132,7 @@ describe("getHtmlFiles", () => {
       ]),
       "<html><body>{body}</body></html>",
       [],
+      new Map(),
       console,
     );
 
