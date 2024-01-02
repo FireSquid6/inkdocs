@@ -28,7 +28,7 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - ( ) in8n plugin
 - (x) 404 page support and handling
 
-## New Intelligent Router System
+## New Lazy Router System
 
 See ./page.svg for a "skeleton" of how a page should look. The green represents the base html defined by this user. This is never changed. The purple represents the layout defined by the user. This only changes when it needs to. The blue represents the actual contnet of the page. This only changes if a request to a page with a different layout is made. The blue represents the actual content of a page.
 
