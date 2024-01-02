@@ -28,21 +28,43 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
   - ( ) mdx plugin
   - ( ) norg plugin
   - ( ) in8n plugin
-- ( ) 404 page support and handling
-- ( ) server caching
-  - Server can instruct build function to not write and instead just return the routes to be stored in memory
-- ( ) layout choosing system
+- (x) 404 page support and handling
 
-  - For each page, we first check the metadata for a layout. If a layout there is specified, we use that. Then we check a "directory layouts" map recursively for a layout. If nothing there is found, we just use the default layout.
+## New Intelligent Router System
 
-- (x) bugs in initial testing
-  - (x) if the static directory doesn't exit, it crashes
-  - (x) recursivelyreaddir doesn't work if the main file isn't the cwd
-  - (x) if .html isn't specified the file isn't found
-  - (x) index files aren't properly respected
-  - (x) no "starting on port x" is printed
-  - (x) no logs when building are printed
-  - (x) too many meaningless logs are printed
+- ( ) New Layouts
+  - A "layout" exports two functions:
+  - `page` - which takes in a `content`, `metadata`, `filepath`, and `artifacts`
+  - `content` - which takes in the arguments `html`, `metadata`, and `filepath`
+  - When switching to a page of the same layout, we just swap out the content. When switching
+  - pages are built by first calling the `content` function and then calling the `page function`
+- ( ) Use htmx in markdoc
+  - hx-swap tags are automatically added for all `a` tags. If the a tag links to a page of the same layout, we swap the content. If it links to a page of a different layout, we swap the whole page (excluding base html)
+  - This should get the benefits of an SPA while also getting the benefits of an MPA
+- ( ) New server
+  - /api/\* - routes to user defined api routes that can return json, html, or whatever
+  - /@pages/\* - routes to built pages used for hx swapping
+  - /@content/\* - routes to built content used for hx swapping
+  - /@components/\* - routes to user defined components
+- ( ) Components
+
+  - Custom components can be called using code blocks, much like the way mdx works. For example, the markdown:
+
+  ````markdown
+  ```inkdocs
+  cool-graph
+
+  ---
+
+  type: scatter
+  year: 2024
+  ```
+  ````
+
+  would hx-swap on page load for the `cool-graph` component. It would be passed the props `type: scatter` and `year: 2024`. All text after the `---` is parsed as yaml. This may require shipping some custom javascript on the client.
+
+- ( ) Remove custom parsers
+  - They won't work with new custom htmx rendering
 
 # Places to share once finished
 
