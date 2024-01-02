@@ -25,8 +25,6 @@ See [the exscalidraw](https://excalidraw.com/#json=vLl1eq1dLLDo3hOySVoLH,SXJzVd3
 - (x) build system
 - ( ) plugin interface
   - ( ) search plugin
-  - ( ) mdx plugin
-  - ( ) norg plugin
   - ( ) in8n plugin
 - (x) 404 page support and handling
 
