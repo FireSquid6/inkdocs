@@ -4,23 +4,14 @@ import path from "path";
 import { html } from "@elysiajs/html";
 import fs from "fs";
 
-export interface ServerOptions {
-  port?: number;
-  apiRoutes?: ApiRoute[];
-}
-
 export interface ApiRoute {
   route: string;
   verb: "GET" | "POST" | "PATCH" | "PUT" | "DELETE" | "ALL";
   handler: Handler;
 }
 
-export const defaultServerOptions = {
-  port: 3000,
-  apiRoutes: [],
-};
-
-export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
+export function serve(options: InkdocsOptions) {
+  const serverOptions = options.server ?? defaultOptions.server;
   const app = new Elysia();
   app.onError(({ code, error, set }) => {
     if (code === "NOT_FOUND") {
@@ -70,9 +61,9 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
     }
   });
 
-  addApiRoutes(app, serverOptions.apiRoutes ?? defaultServerOptions.apiRoutes);
+  addApiRoutes(app, serverOptions.apiRoutes ?? defaultOptions.server.apiRoutes);
 
-  app.listen(serverOptions.port ?? defaultServerOptions.port);
+  app.listen(serverOptions.port ?? defaultOptions.server.port);
 }
 
 export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
