@@ -1,5 +1,5 @@
 import { Elysia, Handler, NotFoundError } from "elysia";
-import { InkdocsOptions, PluginServerResult, defaultOptions } from "..";
+import { InkdocsOptions, defaultOptions } from "..";
 import path from "path";
 import { html } from "@elysiajs/html";
 import fs from "fs";
