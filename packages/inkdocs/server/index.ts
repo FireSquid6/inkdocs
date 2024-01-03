@@ -1,5 +1,5 @@
 import { Elysia, Handler, NotFoundError } from "elysia";
-import { InkdocsOptions, defaultOptions } from "..";
+import { InkdocsOptions, PluginServerResult, defaultOptions } from "..";
 import path from "path";
 import { html } from "@elysiajs/html";
 import fs from "fs";
@@ -60,6 +60,13 @@ export function serve(options: InkdocsOptions) {
         throw new NotFoundError();
     }
   });
+
+  for (const plugin of options.plugins ?? defaultOptions.plugins) {
+    if (plugin.setupServer) {
+      const pluginServerResult = plugin.setupServer(options);
+      addApiRoutes(app, pluginServerResult.apiRoutes);
+    }
+  }
 
   addApiRoutes(app, serverOptions.apiRoutes ?? defaultOptions.server.apiRoutes);
 

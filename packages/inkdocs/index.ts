@@ -77,12 +77,9 @@ export interface Plugin {
     options: InkdocsOptions,
     routes: Route[],
   ) => PluginDuringbuildResult;
-  // TODO: figure out how to pass in the build results to afterBuild
   // TODO: actuall call duringBuild and afterBuild
-  afterBuild?: (
-    options: InkdocsOptions,
-    pages: Page[],
-  ) => PluginPostbuildResult;
+  afterBuild?: (options: InkdocsOptions, pages: Page[]) => void;
+  setupServer?: (options: InkdocsOptions) => PluginServerResult;
 }
 
 export type PluginPrebuildResult = {
@@ -92,9 +89,8 @@ export type PluginPrebuildResult = {
 
 export type PluginDuringbuildResult = {
   layouts: Map<string, Layout>;
-  apiRoutes: ApiRoute[];
 };
 
-export type PluginPostbuildResult = {
+export type PluginServerResult = {
   apiRoutes: ApiRoute[];
 };

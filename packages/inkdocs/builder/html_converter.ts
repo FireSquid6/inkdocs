@@ -7,7 +7,6 @@ import {
   Layout,
   PluginPrebuildResult,
   PluginDuringbuildResult,
-  PluginPostbuildResult,
   Page,
 } from "../";
 import { Filesystem } from "../lib/filesystem";
@@ -67,10 +66,9 @@ export function convertHtmlFiles(
     logger,
   );
 
-  const postbuildResults: PluginPostbuildResult[] = [];
   for (const plugin of options.plugins ?? defaultOptions.plugins) {
     if (plugin.afterBuild) {
-      postbuildResults.push(plugin.afterBuild(options, pages));
+      plugin.afterBuild(options, pages);
     }
   }
 
@@ -125,7 +123,6 @@ export function getNewFilepath(
   filepath = stripSlashesAndDots(filepath);
   contentFolder = stripSlashesAndDots(contentFolder);
   buildFolder = stripSlashesAndDots(buildFolder);
-  // TODO: this doesn't work if the content or build folders are not in the root directory
   // TODO: clean up this function
 
   const parts = filepath.split("/");
