@@ -8,6 +8,7 @@ import {
 } from "../";
 import { Filesystem } from "../lib/filesystem";
 import { Logger } from "../lib/logger";
+import markdown from "../parsers/markdown";
 
 // Uses a filesystem to read the content folder and parse the files
 // returns a map of the new files and their contents
@@ -25,7 +26,7 @@ export function convertHtmlFiles(
     filesystem,
     options.contentFolder ?? defaultOptions.contentFolder,
     options.buildFolder ?? defaultOptions.buildFolder,
-    options.parsers ?? defaultOptions.parsers,
+    [markdown],
     logger,
   );
 
