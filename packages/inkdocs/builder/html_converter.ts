@@ -7,6 +7,7 @@ import {
   Layout,
   PluginPrebuildResult,
   PluginDuringbuildResult,
+  PluginPostbuildResult,
   Page,
 } from "../";
 import { Filesystem } from "../lib/filesystem";
@@ -50,7 +51,6 @@ export function convertHtmlFiles(
       duringbuildResults.push(plugin.duringBuild(options, routes));
     }
   }
-
   const artifacts = getArtifacts(options, routes);
   const layouts = getLayouts(
     options.layouts ?? defaultOptions.layouts,
@@ -66,6 +66,18 @@ export function convertHtmlFiles(
     new Map<string, string>(),
     logger,
   );
+
+  const postbuildResults: PluginPostbuildResult[] = [];
+  for (const plugin of options.plugins ?? defaultOptions.plugins) {
+    if (plugin.afterBuild) {
+      postbuildResults.push(plugin.afterBuild(options, pages));
+    }
+  }
+
+  // todo: figure out how to get apiRoutes into the server
+  // todo: use the static files from the plugins
+  // this part may need to be moves into the main builder/index file
+  // consider merging ServerOptions and InkdocsOptionser into one type
 
   return pages;
 }
