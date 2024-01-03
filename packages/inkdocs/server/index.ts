@@ -61,8 +61,6 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
           }
         }
         throw new NotFoundError();
-
-        break;
       default:
         console.log(`📦 ${filepath}`);
         if (fs.existsSync(filepath)) {
@@ -79,7 +77,7 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
 
 export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
   for (const apiRoute of apiRoutes) {
-    const route = "/api" + apiRoute.route;
+    const route = apiRoute.route;
     switch (apiRoute.verb) {
       case "GET":
         app.get(route, apiRoute.handler);
@@ -129,7 +127,6 @@ export function getPossibleFilepaths(
   }
 
   const parts = route.split("/");
-  const possibleFilepaths = [];
 
   if (parts[parts.length - 1] === "index") {
     parts.pop();

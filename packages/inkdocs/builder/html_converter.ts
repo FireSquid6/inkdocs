@@ -5,11 +5,12 @@ import {
   defaultOptions,
   Parser,
   Layout,
-  Plugin,
+  PluginPrebuildResult,
+  PluginDuringbuildResult,
+  Page,
 } from "../";
 import { Filesystem } from "../lib/filesystem";
 import { Logger } from "../lib/logger";
-import markdown from "../parsers/markdown";
 
 // Uses a filesystem to read the content folder and parse the files
 // returns a map of the new files and their contents
@@ -17,14 +18,21 @@ export function convertHtmlFiles(
   options: InkdocsOptions,
   filesystem: Filesystem,
   logger: Logger,
-): Map<string, string> {
+): Page[] {
   const filenames = filesystem.getAllFilenamesInDirectory(
     options.contentFolder ?? defaultOptions.contentFolder,
   );
 
+  const prebuildResults: PluginPrebuildResult[] = [];
+  for (const plugin of options.plugins ?? defaultOptions.plugins) {
+    if (plugin.beforeBuild) {
+      prebuildResults.push(plugin.beforeBuild(options));
+    }
+  }
+
   const parsers = getParsers(
     options.parsers ?? defaultOptions.parsers,
-    options.plugins ?? defaultOptions.plugins,
+    prebuildResults,
   );
 
   const routes = getRoutes(
@@ -36,13 +44,21 @@ export function convertHtmlFiles(
     logger,
   );
 
+  const duringbuildResults: PluginDuringbuildResult[] = [];
+  for (const plugin of options.plugins ?? defaultOptions.plugins) {
+    if (plugin.duringBuild) {
+      duringbuildResults.push(plugin.duringBuild(options, routes));
+    }
+  }
+
   const artifacts = getArtifacts(options, routes);
   const layouts = getLayouts(
     options.layouts ?? defaultOptions.layouts,
-    options.plugins ?? defaultOptions.plugins,
+    duringbuildResults,
   );
 
-  return getHtmlFiles(
+  // TODO: This should return a map of strings to JSX.Element and map of strings to strings
+  const pages = buildPages(
     routes,
     layouts,
     options.baseHtml ?? defaultOptions.baseHtml,
@@ -50,14 +66,16 @@ export function convertHtmlFiles(
     new Map<string, string>(),
     logger,
   );
+
+  return pages;
 }
 
-export function getParsers(
+function getParsers(
   userPasers: Map<string, Parser>,
-  plugins: Plugin[],
+  pluginPrebuildResult: PluginPrebuildResult[],
 ): Map<string, Parser> {
-  for (const plugin of plugins) {
-    for (const [extension, parser] of plugin.parsers) {
+  for (const result of pluginPrebuildResult) {
+    for (const [extension, parser] of result.parsers) {
       userPasers.set(extension, parser);
     }
   }
@@ -69,13 +87,13 @@ export function getParsers(
   return new Map();
 }
 
-export function getLayouts(
+function getLayouts(
   userLayouts: Map<string, Layout>,
-  plugins: Plugin[],
+  pluginPrebuildResult: PluginDuringbuildResult[],
 ): Map<string, Layout> {
   const layouts = new Map<string, Layout>();
-  for (const plugin of plugins) {
-    for (const [name, layout] of plugin.layouts) {
+  for (const result of pluginPrebuildResult) {
+    for (const [name, layout] of result.layouts) {
       layouts.set(name, layout);
     }
   }
@@ -178,15 +196,15 @@ export function getArtifacts(
   return artifacts;
 }
 
-export function getHtmlFiles(
+export function buildPages(
   routes: Route[],
   layouts: Map<string, Layout>,
   baseHtml: string,
   artifacts: Artifact[],
   layoutMap: Map<string, string>,
   logger: Logger,
-): Map<string, string> {
-  const htmlFiles = new Map<string, string>();
+): Page[] {
+  const pages: Page[] = [];
   const artifactMap = new Map(
     artifacts.map((artifact) => [artifact.name, artifact.data]),
   );
@@ -217,10 +235,14 @@ export function getHtmlFiles(
       finalHtml = finalHtml.replace(`{slot}`, layoutResult as string);
     }
 
-    htmlFiles.set(route.filepath, finalHtml);
+    pages.push({
+      filepath: route.filepath,
+      layoutResult: layoutResult,
+      page: finalHtml,
+    });
   }
 
-  return htmlFiles;
+  return pages;
 }
 
 export function chooseLayout(

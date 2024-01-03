@@ -1,4 +1,5 @@
 import "@kitajs/html/register";
+import { ApiRoute } from "./server";
 
 export interface InkdocsOptions {
   staticFolder?: string | undefined;
@@ -50,14 +51,40 @@ export interface Artifact {
   data: any;
 }
 
+export interface Page {
+  filepath: string;
+  layoutResult: JSX.Element;
+  page: string;
+}
+
 export type Craftsman = (options: InkdocsOptions, routes: Route[]) => Artifact;
 
 // plugin interface is not completed yet. Expect breaking changes
 export interface Plugin {
-  craftsmen: Craftsman[];
-  layouts: Map<string, Layout>;
-  parsers: Map<string, Parser>;
-  // TODO: figure out how to give the plugin access to files
-  beforeBuild?: (options: InkdocsOptions) => void;
-  afterBuild?: (options: InkdocsOptions) => void;
+  staticFiles?: Map<string, string>; // a map of filepaths to content of those files. Useful for adding custom css
+  beforeBuild?: (options: InkdocsOptions) => PluginPrebuildResult;
+  duringBuild?: (
+    options: InkdocsOptions,
+    routes: Route[],
+  ) => PluginDuringbuildResult;
+  // TODO: figure out how to pass in the build results to afterBuild
+  // TODO: actuall call duringBuild and afterBuild
+  afterBuild?: (
+    options: InkdocsOptions,
+    pages: Page[],
+  ) => PluginPostbuildResult;
 }
+
+export type PluginPrebuildResult = {
+  craftsmen: Craftsman[];
+  parsers: Map<string, Parser>;
+};
+
+export type PluginDuringbuildResult = {
+  layouts: Map<string, Layout>;
+  apiRoutes: ApiRoute[];
+};
+
+export type PluginPostbuildResult = {
+  apiRoutes: ApiRoute[];
+};
