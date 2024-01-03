@@ -40,7 +40,7 @@ describe("getArtifacts", () => {
       contentFolder: "content",
       buildFolder: "build",
       layouts: new Map(),
-      parsers: [],
+      parsers: new Map(),
       craftsmen: [
         () => {
           return {
@@ -86,7 +86,7 @@ describe("getRoutes", () => {
       filesystem,
       "content",
       "build",
-      [markdown],
+      new Map([["md", markdown()]]),
       console,
     );
 
@@ -126,11 +126,11 @@ describe("getHtmlFiles", () => {
         [
           "default",
           (children: JSX.Element) => {
-            return new Map([["body", children]]);
+            return children;
           },
         ],
       ]),
-      "<html><body>{body}</body></html>",
+      "<html><body>{slot}</body></html>",
       [],
       new Map(),
       console,
@@ -162,7 +162,7 @@ describe("chooseLayout", () => {
         [
           "test",
           () => {
-            return new Map([["body", "test"]]);
+            return "test";
           },
         ],
       ]),
@@ -183,7 +183,7 @@ describe("chooseLayout", () => {
         [
           "test",
           () => {
-            return new Map([["body", "test"]]);
+            return "test";
           },
         ],
       ]),
@@ -205,7 +205,7 @@ describe("chooseLayout", () => {
         [
           "test",
           () => {
-            return new Map([["body", "test"]]);
+            return "test";
           },
         ],
       ]),
@@ -225,7 +225,7 @@ describe("chooseLayout", () => {
         [
           "test",
           () => {
-            return new Map([["body", "test"]]);
+            return "test";
           },
         ],
       ]),
@@ -249,7 +249,7 @@ describe("chooseLayout", () => {
         [
           "test",
           () => {
-            return new Map([["body", "test"]]);
+            return "test";
           },
         ],
       ]),

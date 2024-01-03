@@ -2,9 +2,8 @@ import { Parser } from "../index";
 import { marked } from "marked";
 import { spliceMetadata } from ".";
 
-const markdown: Parser = {
-  filetypes: ["md", "markdown", "mdx"],
-  parse: (text: string) => {
+function markdown(): Parser {
+  return (text: string) => {
     const { content, metadata } = spliceMetadata(text);
     marked.use({
       renderer: {
@@ -19,7 +18,7 @@ const markdown: Parser = {
       html: html,
       metadata: metadata,
     };
-  },
-};
+  };
+}
 
 export default markdown;

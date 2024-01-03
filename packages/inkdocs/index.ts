@@ -9,6 +9,7 @@ export interface InkdocsOptions {
   plugins?: Plugin[];
   baseHtml?: string;
   directoryLayoutMap?: Map<string, string>;
+  parsers?: Map<string, Parser>;
 }
 
 // this isn't given the type of InkdocsOptions because if it is then the typescript compiler thinks that everything is undefined (which it isn't, because this is a literal)
@@ -19,21 +20,19 @@ export const defaultOptions = {
   craftsmen: [],
   layouts: new Map(),
   directoryLayoutMap: new Map(),
-  plugins: [],
   baseHtml: "<html><body>{body}</body></html>",
+  parsers: new Map(),
+  plugins: [],
 };
 
-export interface Parser {
-  filetypes: string[];
-  parse(text: string): ParseResult;
-}
+export type Parser = (text: string) => ParseResult;
 
 export type Layout = (
   children: JSX.Element,
   metadata: any,
   artifacts: Map<string, any>,
   filepath: string,
-) => Map<string, JSX.Element>;
+) => JSX.Element;
 
 export interface ParseResult {
   html: JSX.Element;
@@ -57,7 +56,7 @@ export type Craftsman = (options: InkdocsOptions, routes: Route[]) => Artifact;
 export interface Plugin {
   craftsmen: Craftsman[];
   layouts: Map<string, Layout>;
-  parsers: Parser[];
+  parsers: Map<string, Parser>;
   // TODO: figure out how to give the plugin access to files
   beforeBuild?: (options: InkdocsOptions) => void;
   afterBuild?: (options: InkdocsOptions) => void;

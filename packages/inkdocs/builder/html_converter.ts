@@ -5,6 +5,7 @@ import {
   defaultOptions,
   Parser,
   Layout,
+  Plugin,
 } from "../";
 import { Filesystem } from "../lib/filesystem";
 import { Logger } from "../lib/logger";
@@ -21,25 +22,69 @@ export function convertHtmlFiles(
     options.contentFolder ?? defaultOptions.contentFolder,
   );
 
+  const parsers = getParsers(
+    options.parsers ?? defaultOptions.parsers,
+    options.plugins ?? defaultOptions.plugins,
+  );
+
   const routes = getRoutes(
     filenames,
     filesystem,
     options.contentFolder ?? defaultOptions.contentFolder,
     options.buildFolder ?? defaultOptions.buildFolder,
-    [markdown],
+    parsers,
     logger,
   );
 
   const artifacts = getArtifacts(options, routes);
+  const layouts = getLayouts(
+    options.layouts ?? defaultOptions.layouts,
+    options.plugins ?? defaultOptions.plugins,
+  );
 
   return getHtmlFiles(
     routes,
-    options.layouts ?? defaultOptions.layouts,
+    layouts,
     options.baseHtml ?? defaultOptions.baseHtml,
     artifacts,
     new Map<string, string>(),
     logger,
   );
+}
+
+export function getParsers(
+  userPasers: Map<string, Parser>,
+  plugins: Plugin[],
+): Map<string, Parser> {
+  for (const plugin of plugins) {
+    for (const [extension, parser] of plugin.parsers) {
+      userPasers.set(extension, parser);
+    }
+  }
+
+  for (const [extension, parser] of userPasers) {
+    userPasers.set(extension, parser);
+  }
+
+  return new Map();
+}
+
+export function getLayouts(
+  userLayouts: Map<string, Layout>,
+  plugins: Plugin[],
+): Map<string, Layout> {
+  const layouts = new Map<string, Layout>();
+  for (const plugin of plugins) {
+    for (const [name, layout] of plugin.layouts) {
+      layouts.set(name, layout);
+    }
+  }
+
+  for (const [name, layout] of userLayouts) {
+    layouts.set(name, layout);
+  }
+
+  return layouts;
 }
 
 export function getNewFilepath(
@@ -94,7 +139,7 @@ export function getRoutes(
   filesystem: Filesystem,
   contentFolder: string,
   buildFolder: string,
-  parsers: Parser[],
+  parsers: Map<string, Parser>,
   logger: Logger,
 ) {
   const routes: Route[] = [];
@@ -102,9 +147,10 @@ export function getRoutes(
   for (const filename of filenames) {
     const newFilename = getNewFilepath(filename, contentFolder, buildFolder);
     const fileContents = filesystem.readFile(filename);
-    const parseResult = parsers
-      ?.find((parser) => parser.filetypes.includes(filename.split(".").pop()!))
-      ?.parse(fileContents);
+    const fileExtension = filename.split(".").pop();
+    const parser = parsers.get(fileExtension ?? "");
+    const parseResult = parser?.(fileContents);
+
     if (!parseResult) {
       logger.error(`No parser found for file ${filename}`);
       continue;
@@ -165,13 +211,10 @@ export function getHtmlFiles(
 
     let finalHtml = baseHtml;
 
-    // TODO: optimize this by precalculating where and what the slots are instead of searching for them each time
     // Should be fine for an early release though
-    for (const [slot, html] of layoutResult) {
-      if (finalHtml.includes(`{${slot}}`)) {
-        // note: using JSX.Element as string is fine because JSX.Element is really just a fancy string
-        finalHtml = finalHtml.replace(`{${slot}}`, html as string);
-      }
+    if (finalHtml.includes("{slot}")) {
+      // note: using JSX.Element as string is fine because JSX.Element is really just a fancy string
+      finalHtml = finalHtml.replace(`{slot}`, layoutResult as string);
     }
 
     htmlFiles.set(route.filepath, finalHtml);
