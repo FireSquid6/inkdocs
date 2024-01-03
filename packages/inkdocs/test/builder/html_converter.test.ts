@@ -3,12 +3,44 @@ import {
   getNewFilepath,
   getArtifacts,
   getRoutes,
-  getHtmlFiles,
+  buildPages,
   chooseLayout,
 } from "../../builder/html_converter";
 import { InkdocsOptions, Route } from "../../";
 import { mockFilesystem } from "../../lib/filesystem";
 import markdown from "../../parsers/markdown";
+
+describe("buildPages", () => {
+  it("returns the correct pages", () => {
+    const routes: Route[] = [
+      {
+        filepath: "build/index.html",
+        metadata: {},
+        html: "<p>hello world</p>",
+      },
+    ];
+    const layouts = new Map([
+      [
+        "default",
+        () => {
+          return "default";
+        },
+      ],
+    ]);
+    const baseHtml = "<html></html>";
+    const logger = console;
+
+    const result = buildPages(routes, layouts, baseHtml, [], new Map(), logger);
+
+    expect(result).toEqual([
+      {
+        filepath: "build/index.html",
+        page: "<html></html>",
+        layoutResult: "default",
+      },
+    ]);
+  });
+});
 
 describe("getNewFilepath", () => {
   it("returns the correct path", () => {
@@ -102,49 +134,6 @@ describe("getRoutes", () => {
         html: "<p>hello world</p>\n",
       },
     ]);
-  });
-});
-
-describe("getHtmlFiles", () => {
-  it("returns the correct html files", () => {
-    const routes: Route[] = [
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      {
-        filepath: "build/subfolder/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-    ];
-
-    const result = getHtmlFiles(
-      routes,
-      new Map([
-        [
-          "default",
-          (children: JSX.Element) => {
-            return children;
-          },
-        ],
-      ]),
-      "<html><body>{slot}</body></html>",
-      [],
-      new Map(),
-      console,
-    );
-
-    expect(result).toEqual(
-      new Map([
-        ["build/index.html", "<html><body><p>hello world</p>\n</body></html>"],
-        [
-          "build/subfolder/index.html",
-          "<html><body><p>hello world</p>\n</body></html>",
-        ],
-      ]),
-    );
   });
 });
 
