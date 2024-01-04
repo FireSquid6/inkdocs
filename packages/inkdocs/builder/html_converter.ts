@@ -259,12 +259,13 @@ export function chooseLayout(
   layouts: Map<string, Layout>,
   directoryMap: Map<string, string>,
 ): string {
-  if (route.metadata.layout) {
-    if (layouts.has(route.metadata.layout)) {
-      return route.metadata.layout;
-    }
-    return "default";
-  }
+  // uses the layout specified in the metadata
+  // if (route.metadata.layout) {
+  //   if (layouts.has(route.metadata.layout)) {
+  //     return route.metadata.layout;
+  //   }
+  //   return "default";
+  // }
 
   const filepathSplit = route.filepath.split("/");
   filepathSplit.pop();

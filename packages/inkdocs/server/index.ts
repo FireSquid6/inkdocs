@@ -33,6 +33,7 @@ export function serve(options: InkdocsOptions) {
     );
 
     switch (getExtension(filepath)) {
+      // TODO: handle index files
       case "html":
       case "":
         const possibleFilepaths = getPossibleFilepaths(
@@ -59,13 +60,6 @@ export function serve(options: InkdocsOptions) {
         throw new NotFoundError();
     }
   });
-
-  for (const plugin of options.plugins ?? defaultOptions.plugins) {
-    if (plugin.setupServer) {
-      const pluginServerResult = plugin.setupServer(options);
-      addApiRoutes(app, pluginServerResult.apiRoutes);
-    }
-  }
 
   addApiRoutes(app, serverOptions.apiRoutes ?? defaultOptions.server.apiRoutes);
 

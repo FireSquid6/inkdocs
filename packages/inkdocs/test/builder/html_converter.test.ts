@@ -138,29 +138,6 @@ describe("getRoutes", () => {
 });
 
 describe("chooseLayout", () => {
-  it("returns the correct layout if it is specified in the metadata", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {
-          layout: "test",
-        },
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return "test";
-          },
-        ],
-      ]),
-      new Map(),
-    );
-
-    expect(result).toEqual("test");
-  });
-
   it("returns the default layout if no layout is specified in the metadata", () => {
     const result = chooseLayout(
       {
