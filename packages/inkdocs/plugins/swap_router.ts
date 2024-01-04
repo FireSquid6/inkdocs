@@ -18,5 +18,13 @@ export default function lazyRouter(): Plugin {
         craftsmen: [],
       };
     },
+    afterBuild: (options, pages) => {
+      // todo: add api routs for all of the pages
+    },
+    setupServer: () => {
+      return {
+        apiRoutes: apiRoutes,
+      };
+    },
   };
 }
