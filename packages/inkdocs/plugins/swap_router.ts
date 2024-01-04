@@ -1,17 +1,48 @@
 // To use this plugin, you must:
 import { Parser, Plugin } from "..";
 import { ApiRoute } from "../server";
+import { spliceMetadata } from "../parsers";
+import { marked } from "marked";
 
 // TODO
 // This plugin assumes that the user has installed htmx into the head of their base html.
 // This plugin also can only deal with markdown. Any other file type must have a custom parser written.
-export default function lazyRouter(): Plugin {
-  let apiRoutes: ApiRoute[] = [];
+
+// todo: option for turning on special component stuff
+// todo: option for using custom marked renderers
+// todo: extension interface? Maybe plugin plugns are a bit too meta
+export interface LazyRouterOptions {
+  contentSelector: string;
+  layoutSelector: string;
+}
+export default function lazyRouter(opts: LazyRouterOptions): Plugin {
+  const apiRoutes: ApiRoute[] = [];
+
+  const markdownParser: Parser = (text: string) => {
+    const { content, metadata } = spliceMetadata(text);
+    marked.use({
+      renderer: {
+        link: (href, title, text) => {
+          const getUrl = href;
+          const target = opts.contentSelector;
+
+          return `<a hx-get="${getUrl}" hx-swap="innerHtml" hx-target=${target} hx-trigger="click" title="${title}">${text}</a>`;
+        },
+      },
+    });
+    const html = marked(content);
+
+    return {
+      html: html,
+      metadata: metadata,
+    };
+  };
+
   return {
     beforeBuild: () => {
       const parsers = new Map<string, Parser>();
 
-      // parsers.set(".md", markdownParser);
+      parsers.set(".md", markdownParser);
 
       return {
         parsers: parsers,
