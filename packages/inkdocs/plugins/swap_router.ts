@@ -3,7 +3,7 @@ import { InkdocsOptions, Parser, Plugin, Route, defaultOptions } from "..";
 import { ApiRoute, getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
 import { marked } from "marked";
-import { chooseLayout } from "../builder/html_converter";
+import { chooseLayout } from "../builder/layout";
 
 // TODO
 // This plugin assumes that the user has installed htmx into the head of their base html.
@@ -71,21 +71,10 @@ export function getLayoutFromHref(
   href: string,
   options: InkdocsOptions,
 ): string {
-  const possibleFilepaths = getPossibleFilepaths(href, "");
-  console.log(possibleFilepaths);
+  const possibleFilepaths = getPossibleFilepaths(href, "build");
   const possibleLayouts: string[] = [];
   for (const filepath of possibleFilepaths) {
-    const layout = chooseLayout(
-      {
-        filepath: filepath,
-        html: "",
-        metadata: {},
-      },
-      options.layouts ?? defaultOptions.layouts,
-      options.directoryLayoutMap ?? defaultOptions.directoryLayoutMap,
-    );
-    possibleLayouts.push(layout);
   }
 
-  return possibleLayouts[0];
+  return possibleLayouts[possibleLayouts.length - 1];
 }

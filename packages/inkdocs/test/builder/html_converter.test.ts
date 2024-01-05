@@ -4,7 +4,6 @@ import {
   getArtifacts,
   getRoutes,
   buildPages,
-  chooseLayout,
 } from "../../builder/html_converter";
 import { InkdocsOptions, Route } from "../../";
 import { mockFilesystem } from "../../lib/filesystem";
@@ -30,7 +29,14 @@ describe("buildPages", () => {
     const baseHtml = "<html></html>";
     const logger = console;
 
-    const result = buildPages(routes, layouts, baseHtml, [], new Map(), logger);
+    const result = buildPages(
+      routes,
+      layouts,
+      baseHtml,
+      [],
+      { path: "", layoutName: "default", children: [] },
+      logger,
+    );
 
     expect(result).toEqual([
       {
@@ -134,97 +140,5 @@ describe("getRoutes", () => {
         html: "<p>hello world</p>\n",
       },
     ]);
-  });
-});
-
-describe("chooseLayout", () => {
-  it("returns the default layout if no layout is specified in the metadata", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return "test";
-          },
-        ],
-      ]),
-      new Map(),
-    );
-
-    expect(result).toEqual("default");
-  });
-  it("returns the default layout if the specified layout does not exist", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {
-          layout: "nonexistent",
-        },
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return "test";
-          },
-        ],
-      ]),
-      new Map(),
-    );
-
-    expect(result).toEqual("default");
-  });
-  it("returns a layout if the directories map specifies it", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return "test";
-          },
-        ],
-      ]),
-      new Map([
-        ["build", "test"],
-        ["build/subfolder", "test"],
-      ]),
-    );
-
-    expect(result).toEqual("test");
-  });
-
-  it("returns the default layout if the directories map specified a nonexistent layout", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return "test";
-          },
-        ],
-      ]),
-      new Map([
-        ["build", "nonexistent"],
-        ["build/subfolder", "nonexistent"],
-      ]),
-    );
-
-    expect(result).toEqual("default");
   });
 });

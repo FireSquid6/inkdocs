@@ -9,9 +9,9 @@ export interface InkdocsOptions {
   layouts?: Map<string, Layout>;
   plugins?: Plugin[];
   baseHtml?: string;
-  directoryLayoutMap?: Map<string, string>;
   parsers?: Map<string, Parser>;
   server?: ServerOptions;
+  layoutTree?: LayoutTree;
 }
 
 export interface ServerOptions {
@@ -26,7 +26,6 @@ export const defaultOptions = {
   contentFolder: "content",
   craftsmen: [],
   layouts: new Map(),
-  directoryLayoutMap: new Map(),
   baseHtml: "<html><body>{body}</body></html>",
   parsers: new Map(),
   plugins: [],
@@ -34,7 +33,18 @@ export const defaultOptions = {
     port: 3000,
     apiRoutes: [],
   },
+  layoutTree: {
+    path: "",
+    layoutName: "default",
+    children: [],
+  },
 };
+
+export interface LayoutTree {
+  path: string;
+  layoutName: string;
+  children: LayoutTree[];
+}
 
 export type Parser = (text: string) => ParseResult;
 

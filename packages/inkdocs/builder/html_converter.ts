@@ -8,9 +8,11 @@ import {
   PluginPrebuildResult,
   PluginDuringbuildResult,
   Page,
+  LayoutTree,
 } from "../";
 import { Filesystem } from "../lib/filesystem";
 import { Logger } from "../lib/logger";
+import { chooseLayout } from "./layout";
 
 // Uses a filesystem to read the content folder and parse the files
 // returns a map of the new files and their contents
@@ -62,7 +64,7 @@ export function convertHtmlFiles(
     layouts,
     options.baseHtml ?? defaultOptions.baseHtml,
     artifacts,
-    new Map<string, string>(),
+    defaultOptions.layoutTree,
     logger,
   );
 
@@ -210,7 +212,7 @@ export function buildPages(
   layouts: Map<string, Layout>,
   baseHtml: string,
   artifacts: Artifact[],
-  layoutMap: Map<string, string>,
+  layoutTree: LayoutTree,
   logger: Logger,
 ): Page[] {
   const pages: Page[] = [];
@@ -218,7 +220,7 @@ export function buildPages(
     artifacts.map((artifact) => [artifact.name, artifact.data]),
   );
   for (const route of routes) {
-    const layoutName = chooseLayout(route, layouts, layoutMap);
+    const layoutName = chooseLayout(route, layoutTree);
 
     const layout = layouts?.get(layoutName);
     if (!layout) {
@@ -252,32 +254,4 @@ export function buildPages(
   }
 
   return pages;
-}
-
-export function chooseLayout(
-  route: Route,
-  layouts: Map<string, Layout>,
-  directoryMap: Map<string, string>,
-): string {
-  // uses the layout specified in the metadata
-  // if (route.metadata.layout) {
-  //   if (layouts.has(route.metadata.layout)) {
-  //     return route.metadata.layout;
-  //   }
-  //   return "default";
-  // }
-
-  const filepathSplit = route.filepath.split("/");
-  filepathSplit.pop();
-  const directory = filepathSplit.join("/");
-
-  if (directoryMap.has(directory)) {
-    const layout = directoryMap.get(directory);
-    if (layout === undefined || !layouts.has(layout!)) {
-      return "default";
-    }
-    return layout;
-  }
-
-  return "default";
 }
