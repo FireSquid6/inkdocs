@@ -1,5 +1,5 @@
 // To use this plugin, you must:
-import { InkdocsOptions, Parser, Plugin, Route, defaultOptions } from "..";
+import { Parser, Plugin, Route } from "..";
 import { LayoutTree } from "..";
 import { ApiRoute, getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
