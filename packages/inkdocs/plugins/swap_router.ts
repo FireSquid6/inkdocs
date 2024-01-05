@@ -13,12 +13,12 @@ import { chooseLayout } from "../builder/layout";
 // todo: option for turning on special component stuff
 // todo: option for using custom marked renderers
 // todo: extension interface? Maybe plugin plugns are a bit too meta
-export interface LazyRouterOptions {
+export interface SwapRouterOptions {
   contentSelector: string;
   layoutSelector: string;
 }
 
-export default function lazyRouter(opts: LazyRouterOptions): Plugin {
+export default function swapRouter(opts: SwapRouterOptions): Plugin {
   const apiRoutes: ApiRoute[] = [];
 
   const markdownParser: Parser = (text: string) => {
@@ -66,6 +66,23 @@ export default function lazyRouter(opts: LazyRouterOptions): Plugin {
 interface SwapATag {
   target: string;
   getUrl: string;
+}
+
+export function getSwapATag(
+  myLayout: string,
+  href: string,
+  layoutTree: LayoutTree,
+  opts: SwapRouterOptions,
+): SwapATag {
+  const otherLayout = getLayoutFromHref(href, layoutTree);
+  const target =
+    otherLayout === myLayout ? opts.contentSelector : opts.layoutSelector;
+  const getUrl = href;
+
+  return {
+    target: target,
+    getUrl: getUrl,
+  };
 }
 
 export function getLayoutFromHref(
