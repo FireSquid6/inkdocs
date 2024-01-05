@@ -1,5 +1,6 @@
 // To use this plugin, you must:
 import { InkdocsOptions, Parser, Plugin, Route, defaultOptions } from "..";
+import { LayoutTree } from "..";
 import { ApiRoute, getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
 import { marked } from "marked";
@@ -69,11 +70,19 @@ interface SwapATag {
 
 export function getLayoutFromHref(
   href: string,
-  options: InkdocsOptions,
+  layoutTree: LayoutTree,
+  buildFolder: string = "build",
 ): string {
-  const possibleFilepaths = getPossibleFilepaths(href, "build");
+  const possibleFilepaths = getPossibleFilepaths(href, buildFolder);
   const possibleLayouts: string[] = [];
   for (const filepath of possibleFilepaths) {
+    const route: Route = {
+      filepath: filepath,
+      html: "",
+      metadata: {},
+    };
+    const layout = chooseLayout(route, layoutTree);
+    possibleLayouts.push(layout);
   }
 
   return possibleLayouts[possibleLayouts.length - 1];
