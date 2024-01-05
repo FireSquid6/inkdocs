@@ -74,10 +74,15 @@ export function getSwapATag(
   layoutTree: LayoutTree,
   opts: SwapRouterOptions,
 ): SwapATag {
+  if (href[0] === "/") {
+    href = href.slice(1);
+  }
+
   const otherLayout = getLayoutFromHref(href, layoutTree);
   const target =
     otherLayout === myLayout ? opts.contentSelector : opts.layoutSelector;
-  const getUrl = href;
+  const prefix = otherLayout === myLayout ? "@content/" : "@layout/";
+  const getUrl = prefix + href;
 
   return {
     target: target,
