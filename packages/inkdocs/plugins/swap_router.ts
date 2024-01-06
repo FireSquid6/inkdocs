@@ -5,6 +5,7 @@ import { ApiRoute, getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
 import { marked } from "marked";
 import { chooseLayout } from "../builder/layout";
+import { defaultOptions } from "../";
 
 // TODO
 // This plugin assumes that the user has installed htmx into the head of their base html.
@@ -18,16 +19,23 @@ export interface SwapRouterOptions {
   layoutSelector: string;
 }
 
-export default function swapRouter(opts: SwapRouterOptions): Plugin {
-  const apiRoutes: ApiRoute[] = [];
-
-  const markdownParser: Parser = (text: string) => {
+export function getMarkdownParser(
+  layoutTree: LayoutTree,
+  opts: SwapRouterOptions,
+): Parser {
+  return (text: string, filepath: string) => {
     const { content, metadata } = spliceMetadata(text);
+    const myLayout = chooseLayout({ filepath, html: "", metadata }, layoutTree);
+
     marked.use({
       renderer: {
         link: (href, title, text) => {
-          const getUrl = href;
-          const target = opts.contentSelector;
+          const { target, getUrl } = getSwapATag(
+            myLayout,
+            href,
+            layoutTree,
+            opts,
+          );
 
           return `<a hx-get="${getUrl}" hx-swap="innerHtml" hx-target=${target} hx-trigger="click" title="${title}">${text}</a>`;
         },
@@ -40,10 +48,18 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
       metadata: metadata,
     };
   };
+}
+
+export default function swapRouter(opts: SwapRouterOptions): Plugin {
+  const apiRoutes: ApiRoute[] = [];
 
   return {
-    beforeBuild: () => {
+    beforeBuild: (options) => {
       const parsers = new Map<string, Parser>();
+      const markdownParser = getMarkdownParser(
+        options.layoutTree || defaultOptions.layoutTree,
+        opts,
+      );
 
       parsers.set(".md", markdownParser);
 

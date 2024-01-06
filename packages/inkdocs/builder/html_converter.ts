@@ -178,7 +178,7 @@ export function getRoutes(
     const fileContents = filesystem.readFile(filename);
     const fileExtension = filename.split(".").pop();
     const parser = parsers.get(fileExtension ?? "");
-    const parseResult = parser?.(fileContents);
+    const parseResult = parser?.(fileContents, newFilename);
 
     if (!parseResult) {
       logger.error(`No parser found for file ${filename}`);

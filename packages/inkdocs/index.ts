@@ -46,7 +46,7 @@ export interface LayoutTree {
   children: LayoutTree[];
 }
 
-export type Parser = (text: string) => ParseResult;
+export type Parser = (text: string, filepath: string) => ParseResult;
 
 export type Layout = (
   children: JSX.Element,
