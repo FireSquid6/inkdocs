@@ -6,6 +6,7 @@ import { spliceMetadata } from "../parsers";
 import { marked } from "marked";
 import { chooseLayout } from "../builder/layout";
 import { defaultOptions } from "../";
+import path from "node:path";
 
 // TODO
 // This plugin assumes that the user has installed htmx into the head of their base html.
@@ -70,6 +71,20 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
     },
     afterBuild: (options, pages) => {
       // todo: add api routs for all of the pages
+      const buildFolder = options.buildFolder || defaultOptions.buildFolder;
+
+      for (const page of pages) {
+        apiRoutes.push({
+          route: path.join(
+            "/@layout/",
+            getHrefFromFilepath(page.filepath, buildFolder),
+          ),
+          verb: "GET",
+          handler: () => {
+            return page.layoutResult;
+          },
+        });
+      }
     },
     setupServer: () => {
       return {
@@ -97,7 +112,7 @@ export function getSwapATag(
   const otherLayout = getLayoutFromHref(href, layoutTree);
   const target =
     otherLayout === myLayout ? opts.contentSelector : opts.layoutSelector;
-  const prefix = otherLayout === myLayout ? "@content/" : "@layout/";
+  const prefix = otherLayout === myLayout ? "/@content/" : "/@layout/";
   const getUrl = prefix + href;
 
   return {
@@ -124,4 +139,13 @@ export function getLayoutFromHref(
   }
 
   return possibleLayouts[possibleLayouts.length - 1];
+}
+
+export function getHrefFromFilepath(filepath: string, buildFolder: string) {
+  const parts = filepath.split(buildFolder);
+  if (parts.length === 1) {
+    return "";
+  }
+
+  return parts[parts.length - 1];
 }
