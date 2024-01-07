@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import html from "../../parsers/html"
+import html from "../../parsers/html";
 
 describe("html parser", () => {
   it("should parse html", () => {
@@ -13,7 +13,8 @@ describe("html parser", () => {
         </body>
       </html>
     `;
-    const result = html.parse(content);
+    const parser = html();
+    const result = parser(content);
     expect(result.html).toEqual(content);
   });
   it("should deal with metadata", () => {
@@ -31,7 +32,7 @@ describe("html parser", () => {
         </body>
       </html>
     `;
-    const result = html.parse(content);
+    const result = html()(content);
     expect(result.metadata).toEqual({
       title: "Test",
       layout: "default",
@@ -48,4 +49,4 @@ describe("html parser", () => {
       </html>
     `);
   });
-})
+});

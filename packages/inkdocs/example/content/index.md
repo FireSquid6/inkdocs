@@ -5,7 +5,7 @@ title: Home
 
 # Hello World
 
-Hello world! This is the default index markdown file in the content/ folder. It has a title of home.
+Hello world! This is the default index markdown file in the content/ folder. It has a title of home. [I'm a link](/blog)
 
 ## A Subheading
 

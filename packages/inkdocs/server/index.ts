@@ -4,23 +4,14 @@ import path from "path";
 import { html } from "@elysiajs/html";
 import fs from "fs";
 
-export interface ServerOptions {
-  port?: number;
-  apiRoutes?: ApiRoute[];
-}
-
 export interface ApiRoute {
   route: string;
   verb: "GET" | "POST" | "PATCH" | "PUT" | "DELETE" | "ALL";
   handler: Handler;
 }
 
-export const defaultServerOptions = {
-  port: 3000,
-  apiRoutes: [],
-};
-
-export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
+export function serve(options: InkdocsOptions) {
+  const serverOptions = options.server ?? defaultOptions.server;
   const app = new Elysia();
   app.onError(({ code, error, set }) => {
     if (code === "NOT_FOUND") {
@@ -61,8 +52,6 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
           }
         }
         throw new NotFoundError();
-
-        break;
       default:
         console.log(`📦 ${filepath}`);
         if (fs.existsSync(filepath)) {
@@ -72,14 +61,23 @@ export function serve(options: InkdocsOptions, serverOptions: ServerOptions) {
     }
   });
 
-  addApiRoutes(app, serverOptions.apiRoutes ?? defaultServerOptions.apiRoutes);
+  for (const plugin of options.plugins ?? defaultOptions.plugins) {
+    if (plugin.setupServer) {
+      const result = plugin.setupServer(options);
+      if (result.apiRoutes) {
+        addApiRoutes(app, result.apiRoutes);
+      }
+    }
+  }
 
-  app.listen(serverOptions.port ?? defaultServerOptions.port);
+  addApiRoutes(app, serverOptions.apiRoutes ?? defaultOptions.server.apiRoutes);
+
+  app.listen(serverOptions.port ?? defaultOptions.server.port);
 }
 
 export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
   for (const apiRoute of apiRoutes) {
-    const route = "/api" + apiRoute.route;
+    const route = apiRoute.route;
     switch (apiRoute.verb) {
       case "GET":
         app.get(route, apiRoute.handler);
@@ -100,6 +98,7 @@ export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
         app.all(route, apiRoute.handler);
         break;
     }
+    console.log(`🔗 ${apiRoute.verb} -> ${route}`);
   }
 }
 
@@ -129,7 +128,6 @@ export function getPossibleFilepaths(
   }
 
   const parts = route.split("/");
-  const possibleFilepaths = [];
 
   if (parts[parts.length - 1] === "index") {
     parts.pop();

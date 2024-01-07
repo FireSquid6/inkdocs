@@ -1,4 +1,4 @@
-import { InkdocsOptions, defaultOptions } from "..";
+import { InkdocsOptions, Page, defaultOptions } from "..";
 import { convertHtmlFiles } from "./html_converter";
 import {
   Filesystem,
@@ -22,9 +22,10 @@ export function build(
     );
   }
 
-  const htmlFiles = convertHtmlFiles(options, filesystem, logger);
+  const htmlFiles: Page[] = convertHtmlFiles(options, filesystem, logger);
 
-  for (const [filepath, html] of htmlFiles) {
-    filesystem.writeFile(filepath, html);
+  for (let i = 0; i < htmlFiles.length; i++) {
+    const file = htmlFiles[i];
+    filesystem.writeFile(file.filepath, file.page);
   }
 }

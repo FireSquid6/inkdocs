@@ -3,12 +3,50 @@ import {
   getNewFilepath,
   getArtifacts,
   getRoutes,
-  getHtmlFiles,
-  chooseLayout,
+  buildPages,
 } from "../../builder/html_converter";
 import { InkdocsOptions, Route } from "../../";
 import { mockFilesystem } from "../../lib/filesystem";
 import markdown from "../../parsers/markdown";
+
+describe("buildPages", () => {
+  it("returns the correct pages", () => {
+    const routes: Route[] = [
+      {
+        filepath: "build/index.html",
+        metadata: {},
+        html: "<p>hello world</p>",
+      },
+    ];
+    const layouts = new Map([
+      [
+        "default",
+        () => {
+          return "default";
+        },
+      ],
+    ]);
+    const baseHtml = "<html></html>";
+    const logger = console;
+
+    const result = buildPages(
+      routes,
+      layouts,
+      baseHtml,
+      [],
+      { path: "", layoutName: "default", children: [] },
+      logger,
+    );
+
+    expect(result).toEqual([
+      {
+        filepath: "build/index.html",
+        page: "<html></html>",
+        layoutResult: "default",
+      },
+    ]);
+  });
+});
 
 describe("getNewFilepath", () => {
   it("returns the correct path", () => {
@@ -40,7 +78,7 @@ describe("getArtifacts", () => {
       contentFolder: "content",
       buildFolder: "build",
       layouts: new Map(),
-      parsers: [],
+      parsers: new Map(),
       craftsmen: [
         () => {
           return {
@@ -86,7 +124,7 @@ describe("getRoutes", () => {
       filesystem,
       "content",
       "build",
-      [markdown],
+      new Map([["md", markdown()]]),
       console,
     );
 
@@ -102,163 +140,5 @@ describe("getRoutes", () => {
         html: "<p>hello world</p>\n",
       },
     ]);
-  });
-});
-
-describe("getHtmlFiles", () => {
-  it("returns the correct html files", () => {
-    const routes: Route[] = [
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      {
-        filepath: "build/subfolder/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-    ];
-
-    const result = getHtmlFiles(
-      routes,
-      new Map([
-        [
-          "default",
-          (children: JSX.Element) => {
-            return new Map([["body", children]]);
-          },
-        ],
-      ]),
-      "<html><body>{body}</body></html>",
-      [],
-      new Map(),
-      console,
-    );
-
-    expect(result).toEqual(
-      new Map([
-        ["build/index.html", "<html><body><p>hello world</p>\n</body></html>"],
-        [
-          "build/subfolder/index.html",
-          "<html><body><p>hello world</p>\n</body></html>",
-        ],
-      ]),
-    );
-  });
-});
-
-describe("chooseLayout", () => {
-  it("returns the correct layout if it is specified in the metadata", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {
-          layout: "test",
-        },
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return new Map([["body", "test"]]);
-          },
-        ],
-      ]),
-      new Map(),
-    );
-
-    expect(result).toEqual("test");
-  });
-
-  it("returns the default layout if no layout is specified in the metadata", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return new Map([["body", "test"]]);
-          },
-        ],
-      ]),
-      new Map(),
-    );
-
-    expect(result).toEqual("default");
-  });
-  it("returns the default layout if the specified layout does not exist", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {
-          layout: "nonexistent",
-        },
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return new Map([["body", "test"]]);
-          },
-        ],
-      ]),
-      new Map(),
-    );
-
-    expect(result).toEqual("default");
-  });
-  it("returns a layout if the directories map specifies it", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return new Map([["body", "test"]]);
-          },
-        ],
-      ]),
-      new Map([
-        ["build", "test"],
-        ["build/subfolder", "test"],
-      ]),
-    );
-
-    expect(result).toEqual("test");
-  });
-
-  it("returns the default layout if the directories map specified a nonexistent layout", () => {
-    const result = chooseLayout(
-      {
-        filepath: "build/index.html",
-        metadata: {},
-        html: "<p>hello world</p>\n",
-      },
-      new Map([
-        [
-          "test",
-          () => {
-            return new Map([["body", "test"]]);
-          },
-        ],
-      ]),
-      new Map([
-        ["build", "nonexistent"],
-        ["build/subfolder", "nonexistent"],
-      ]),
-    );
-
-    expect(result).toEqual("default");
   });
 });

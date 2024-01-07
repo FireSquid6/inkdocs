@@ -63,14 +63,12 @@ See ./page.svg for a "skeleton" of how a page should look. The green represents 
 
   would hx-swap on page load for the `cool-graph` component. It would be passed the props `type: scatter` and `year: 2024`. All text after the `---` is parsed as yaml. This may require shipping some custom javascript on the client.
 
-- ( ) Remove custom parsers
-  - They won't work with new custom htmx rendering
-
 # Places to share once finished
 
 - Hack Club
 - Linkedin
 - Ethan's Discord
+- Elysia discord
 
 # Plugins
 
@@ -103,6 +101,8 @@ Pages:
   - Using tailwind
   - Using a custom parser
   - Using a plugin
+  - Using the swap router
+  - Using hyperscript
   - Dealing with translations
 - Contributing
 
