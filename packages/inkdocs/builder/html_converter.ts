@@ -86,17 +86,18 @@ function getParsers(
   userPasers: Map<string, Parser>,
   pluginPrebuildResult: PluginPrebuildResult[],
 ): Map<string, Parser> {
+  const parsers = new Map<string, Parser>();
   for (const result of pluginPrebuildResult) {
     for (const [extension, parser] of result.parsers) {
-      userPasers.set(extension, parser);
+      parsers.set(extension, parser);
     }
   }
 
   for (const [extension, parser] of userPasers) {
-    userPasers.set(extension, parser);
+    parsers.set(extension, parser);
   }
 
-  return new Map();
+  return parsers;
 }
 
 function getLayouts(

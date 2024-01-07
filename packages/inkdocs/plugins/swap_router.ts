@@ -63,7 +63,7 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
         opts,
       );
 
-      parsers.set(".md", markdownParser);
+      parsers.set("md", markdownParser);
 
       return {
         parsers: parsers,
@@ -162,6 +162,9 @@ export function getHrefFromFilepath(filepath: string, buildFolder: string) {
   if (parts.length === 1) {
     return "";
   }
+
+  // remove extension
+  parts[parts.length - 1] = parts[parts.length - 1].replace(/\.[^/.]+$/, "");
 
   return parts[parts.length - 1];
 }

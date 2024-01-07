@@ -1,53 +1,58 @@
-import { serve, ServerOptions } from "../server";
 import { build } from "../builder";
 import { InkdocsOptions, Layout } from "..";
-import html from "../parsers/html";
-import markdown from "../parsers/markdown";
 import "@kitajs/html/register";
+import swapRouter from "../plugins/swap_router";
+import { serve } from "../server";
 
 const baseHtml = `<html>
 <head>
   <title>Example Inkdocs</title>
   <link rel="stylesheet" href="/styles.css" />
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
-{body}
+{slot}
 </body>
 </html>`;
 
 function main() {
   const defaultLayout: Layout = (children: JSX.Element, metadata: any) => {
-    const body = (
-      <main>
-        <h1>{metadata.title ?? "Untitled"}</h1>
+    return (
+      <main id="layout">
+        <div>Pretend I'm some really cool sidebar</div>
 
-        <div>{children}</div>
+        <article id="content">
+          <h1>{metadata.title ?? "Untitled"}</h1>
+          {children}
+        </article>
       </main>
     );
-
-    return new Map([["body", body]]);
-  };
-  const serverOptions: ServerOptions = {
-    port: 3000,
-    apiRoutes: [],
   };
 
   const options: InkdocsOptions = {
-    parsers: [html, markdown],
+    parsers: new Map(),
     staticFolder: "example/static",
     buildFolder: "example/build",
     contentFolder: "example/content",
     craftsmen: [],
     layouts: new Map([["default", defaultLayout]]),
-    plugins: [],
     baseHtml: baseHtml,
+    server: {
+      port: 3000,
+    },
+    plugins: [
+      swapRouter({
+        contentSelector: "content",
+        layoutSelector: "layout",
+      }),
+    ],
   };
 
   console.log("Building Pages...");
   build(options);
   console.log("✅ Pages successfully built!");
-  // console.log(`\n🚀 Started Server on port ${serverOptions.port}`);
-  // serve(options, serverOptions);
+  console.log(`\n🚀 Started Server on port 3000`);
+  serve(options);
 }
 
 main();

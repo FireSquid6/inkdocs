@@ -61,6 +61,15 @@ export function serve(options: InkdocsOptions) {
     }
   });
 
+  for (const plugin of options.plugins ?? defaultOptions.plugins) {
+    if (plugin.setupServer) {
+      const result = plugin.setupServer(options);
+      if (result.apiRoutes) {
+        addApiRoutes(app, result.apiRoutes);
+      }
+    }
+  }
+
   addApiRoutes(app, serverOptions.apiRoutes ?? defaultOptions.server.apiRoutes);
 
   app.listen(serverOptions.port ?? defaultOptions.server.port);
@@ -89,6 +98,7 @@ export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {
         app.all(route, apiRoute.handler);
         break;
     }
+    console.log(`🔗 ${apiRoute.verb} -> ${route}`);
   }
 }
 
