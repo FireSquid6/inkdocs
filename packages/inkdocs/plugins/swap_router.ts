@@ -87,6 +87,17 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
         });
         // todo: create @content pages
         // this will need to be done with a custom parser
+        const content = findContent(page.page, opts.contentSelector);
+        apiRoutes.push({
+          route: path.join(
+            "/@content/",
+            getHrefFromFilepath(page.filepath, buildFolder),
+          ),
+          verb: "GET",
+          handler: () => {
+            return content as JSX.Element;
+          },
+        });
       }
     },
     setupServer: () => {
@@ -164,12 +175,6 @@ export function findContent(
   const content = dom.getElementById(contentSelector);
   if (!content) {
     throw new Error(`Could not find content with id ${contentSelector}`);
-  }
-
-  if (!content.outerHTML) {
-    throw new Error(
-      `Content with selector ${contentSelector} has no innerHTML`,
-    );
   }
 
   return content.outerHTML;
