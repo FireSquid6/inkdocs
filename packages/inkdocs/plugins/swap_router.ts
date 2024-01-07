@@ -7,6 +7,7 @@ import { marked } from "marked";
 import { chooseLayout } from "../builder/layout";
 import { defaultOptions } from "../";
 import path from "node:path";
+import { parseFromString } from "dom-parser";
 
 // TODO
 // This plugin assumes that the user has installed htmx into the head of their base html.
@@ -38,7 +39,7 @@ export function getMarkdownParser(
             opts,
           );
 
-          return `<a hx-get="${getUrl}" hx-swap="innerHtml" hx-target=${target} hx-trigger="click" title="${title}">${text}</a>`;
+          return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-trigger="click" title="${title}">${text}</a>`;
         },
       },
     });
@@ -84,6 +85,8 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
             return page.layoutResult;
           },
         });
+        // todo: create @content pages
+        // this will need to be done with a custom parser
       }
     },
     setupServer: () => {
@@ -111,7 +114,9 @@ export function getSwapATag(
 
   const otherLayout = getLayoutFromHref(href, layoutTree);
   const target =
-    otherLayout === myLayout ? opts.contentSelector : opts.layoutSelector;
+    otherLayout === myLayout
+      ? "#" + opts.contentSelector
+      : "#" + opts.layoutSelector;
   const prefix = otherLayout === myLayout ? "/@content/" : "/@layout/";
   const getUrl = prefix + href;
 
@@ -148,4 +153,24 @@ export function getHrefFromFilepath(filepath: string, buildFolder: string) {
   }
 
   return parts[parts.length - 1];
+}
+
+// todo: make contentSelector work with classes or tags
+export function findContent(
+  layoutResult: string,
+  contentSelector: string,
+): string {
+  const dom = parseFromString(layoutResult);
+  const content = dom.getElementById(contentSelector);
+  if (!content) {
+    throw new Error(`Could not find content with id ${contentSelector}`);
+  }
+
+  if (!content.outerHTML) {
+    throw new Error(
+      `Content with selector ${contentSelector} has no innerHTML`,
+    );
+  }
+
+  return content.outerHTML;
 }
