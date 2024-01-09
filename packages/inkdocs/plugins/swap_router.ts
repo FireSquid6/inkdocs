@@ -1,5 +1,5 @@
 // To use this plugin, you must:
-import { Parser, Plugin, Route } from "..";
+import { Page, Parser, Plugin, Route } from "..";
 import { LayoutTree } from "..";
 import { ApiRoute, getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
@@ -53,8 +53,6 @@ export function getMarkdownParser(
 }
 
 export default function swapRouter(opts: SwapRouterOptions): Plugin {
-  const apiRoutes: ApiRoute[] = [];
-
   return {
     beforeBuild: (options) => {
       const parsers = new Map<string, Parser>();
@@ -73,37 +71,31 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
     afterBuild: (options, pages) => {
       // todo: add api routs for all of the pages
       const buildFolder = options.buildFolder || defaultOptions.buildFolder;
+      const newPages: Page[] = [];
 
       for (const page of pages) {
-        apiRoutes.push({
-          route: path.join(
+        newPages.push({
+          filepath: path.join(
+            buildFolder,
             "/@layout/",
-            getHrefFromFilepath(page.filepath, buildFolder),
+            getHrefFromFilepath(page.filepath, buildFolder) + ".html",
           ),
-          verb: "GET",
-          handler: () => {
-            return page.layoutResult;
-          },
+          page: page.layoutResult as string,
+          layoutResult: "",
         });
-        // todo: create @content pages
-        // this will need to be done with a custom parser
         const content = findContent(page.page, opts.contentSelector);
-        apiRoutes.push({
-          route: path.join(
+        newPages.push({
+          filepath: path.join(
+            buildFolder,
             "/@content/",
-            getHrefFromFilepath(page.filepath, buildFolder),
+            getHrefFromFilepath(page.filepath, buildFolder) + ".html",
           ),
-          verb: "GET",
-          handler: () => {
-            return content as JSX.Element;
-          },
+          layoutResult: "",
+          page: content,
         });
       }
-    },
-    setupServer: () => {
-      return {
-        apiRoutes: apiRoutes,
-      };
+
+      pages.push(...newPages);
     },
   };
 }

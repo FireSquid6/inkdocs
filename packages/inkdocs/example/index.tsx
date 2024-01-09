@@ -51,8 +51,8 @@ function main() {
   console.log("Building Pages...");
   build(options);
   console.log("✅ Pages successfully built!");
-  // console.log(`\n🚀 Started Server on port 3000`);
-  // serve(options);
+  console.log(`\n🚀 Started Server on port 3000`);
+  serve(options);
 }
 
 main();
