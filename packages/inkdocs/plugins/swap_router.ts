@@ -73,26 +73,33 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
       const buildFolder = options.buildFolder || defaultOptions.buildFolder;
       const newPages: Page[] = [];
 
+      console.log("\n📁 Building swap router pages...");
+
       for (const page of pages) {
+        const layoutPath = path.join(
+          buildFolder,
+          "/@layout/",
+          getHrefFromFilepath(page.filepath, buildFolder) + ".html",
+        );
+
         newPages.push({
-          filepath: path.join(
-            buildFolder,
-            "/@layout/",
-            getHrefFromFilepath(page.filepath, buildFolder) + ".html",
-          ),
+          filepath: layoutPath,
           page: page.layoutResult as string,
           layoutResult: "",
         });
         const content = findContent(page.page, opts.contentSelector);
+        const contentPath = path.join(
+          buildFolder,
+          "/@content/",
+          getHrefFromFilepath(page.filepath, buildFolder) + ".html",
+        );
         newPages.push({
-          filepath: path.join(
-            buildFolder,
-            "/@content/",
-            getHrefFromFilepath(page.filepath, buildFolder) + ".html",
-          ),
+          filepath: contentPath,
           layoutResult: "",
           page: content,
         });
+
+        console.log("🔁 Layout: " + layoutPath, "| Content: " + contentPath);
       }
 
       pages.push(...newPages);
