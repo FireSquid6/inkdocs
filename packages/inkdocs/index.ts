@@ -106,6 +106,3 @@ export type PluginDuringbuildResult = {
 export type PluginServerResult = {
   apiRoutes: ApiRoute[];
 };
-
-export build
-export serve

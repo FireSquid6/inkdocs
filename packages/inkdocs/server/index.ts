@@ -72,8 +72,8 @@ export function serve(options: InkdocsOptions): Elysia {
 
   addApiRoutes(app, serverOptions.apiRoutes ?? defaultOptions.server.apiRoutes);
 
-  app.listen(serverOptions.port ?? defaultOptions.server.port, () => {
-    console.log(`\n🚀 Started Server on port 3000`);
+  app.listen(serverOptions.port ?? defaultOptions.server.port, (server) => {
+    console.log(`\n🚀 Started Server on port ${server.port}`);
   });
 
   return app;
