@@ -1,5 +1,7 @@
 import "@kitajs/html/register";
 import { ApiRoute } from "./server";
+import { serve } from "./server";
+import { build } from "./builder";
 
 export interface InkdocsOptions {
   staticFolder?: string | undefined;
@@ -104,3 +106,6 @@ export type PluginDuringbuildResult = {
 export type PluginServerResult = {
   apiRoutes: ApiRoute[];
 };
+
+export build
+export serve

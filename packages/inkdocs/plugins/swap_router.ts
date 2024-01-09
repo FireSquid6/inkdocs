@@ -1,7 +1,7 @@
 // To use this plugin, you must:
 import { Page, Parser, Plugin, Route } from "..";
 import { LayoutTree } from "..";
-import { ApiRoute, getPossibleFilepaths } from "../server";
+import { getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
 import { marked } from "marked";
 import { chooseLayout } from "../builder/layout";

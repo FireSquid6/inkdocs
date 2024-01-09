@@ -10,7 +10,7 @@ export interface ApiRoute {
   handler: Handler;
 }
 
-export function serve(options: InkdocsOptions) {
+export function serve(options: InkdocsOptions): Elysia {
   const serverOptions = options.server ?? defaultOptions.server;
   const app = new Elysia();
   app.onError(({ code, error, set }) => {
@@ -72,7 +72,11 @@ export function serve(options: InkdocsOptions) {
 
   addApiRoutes(app, serverOptions.apiRoutes ?? defaultOptions.server.apiRoutes);
 
-  app.listen(serverOptions.port ?? defaultOptions.server.port);
+  app.listen(serverOptions.port ?? defaultOptions.server.port, () => {
+    console.log(`\n🚀 Started Server on port 3000`);
+  });
+
+  return app;
 }
 
 export function addApiRoutes(app: Elysia, apiRoutes: ApiRoute[]) {

@@ -13,6 +13,7 @@ export function build(
   filesystem: Filesystem = realFilesystem(),
   logger: Logger = realLogger(),
 ): void {
+  logger.log("🏗 Building Pages...");
   resetDirectory(options.buildFolder ?? defaultOptions.buildFolder);
 
   if (options.staticFolder !== undefined) {
@@ -28,4 +29,6 @@ export function build(
     const file = htmlFiles[i];
     filesystem.writeFile(file.filepath, file.page);
   }
+
+  logger.log("✅ Pages successfully built!");
 }
