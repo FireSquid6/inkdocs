@@ -1,4 +1,3 @@
-// To use this plugin, you must:
 import { Page, Parser, Plugin, Route } from "..";
 import { LayoutTree } from "..";
 import { getPossibleFilepaths } from "../server";
@@ -9,13 +8,8 @@ import { defaultOptions } from "../";
 import path from "node:path";
 import { parseFromString } from "dom-parser";
 
-// TODO
 // This plugin assumes that the user has installed htmx into the head of their base html.
 // This plugin also can only deal with markdown. Any other file type must have a custom parser written.
-
-// todo: option for turning on special component stuff
-// todo: option for using custom marked renderers
-// todo: extension interface? Maybe plugin plugns are a bit too meta
 export interface SwapRouterOptions {
   contentSelector: string;
   layoutSelector: string;
@@ -39,7 +33,7 @@ export function getMarkdownParser(
             opts,
           );
 
-          return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-trigger="click" title="${title}">${text}</a>`;
+          return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-push-url=${href} hx-trigger="click" title="${title}">${text}</a>`;
         },
       },
     });

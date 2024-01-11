@@ -41,6 +41,7 @@ export default function SwapLink({
       hx-swap="outerHTML"
       hx-target={target}
       hx-trigger="click"
+      hx-push-url={href}
     >
       {children}
     </a>
