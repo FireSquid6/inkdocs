@@ -14,6 +14,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@kitajs/html": "^3.0.11",
     "inkdocs": "^0.3.0"
   }
 }
