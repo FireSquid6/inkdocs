@@ -1,5 +1,9 @@
 import { InkdocsOptions } from "inkdocs";
 
-const options: InkdocsOptions = {};
+const options: InkdocsOptions = {
+  staticFolder: "static",
+  buildFolder: "build",
+  contentFolder: "content",
+};
 
 export default options;
