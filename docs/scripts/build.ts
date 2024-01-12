@@ -1,4 +1,4 @@
-import { build } from "../../builder";
+import { build } from "inkdocs/builder";
 import options from "..";
 
 build(options);

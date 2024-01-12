@@ -2,6 +2,11 @@
   "name": "docs",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "bun run scripts/dev.ts",
+    "build": "bun run scripts/build.ts",
+    "serve": "bun run scripts/serve.ts"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },

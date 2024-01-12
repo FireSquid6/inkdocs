@@ -1,9 +1,9 @@
-import { serve } from "../../server";
-import { build } from "../../builder";
+import { serve } from "inkdocs/server";
+import { build } from "inkdocs/builder";
 import { watch } from "fs";
 import options from "..";
 import Elysia from "elysia";
-import { defaultOptions } from "../..";
+import { defaultOptions } from "inkdocs";
 
 let currentApp: Elysia;
 
