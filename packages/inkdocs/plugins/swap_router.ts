@@ -167,7 +167,6 @@ export function findContent(
   layoutResult: string,
   contentSelector: string,
 ): string {
-  console.log(layoutResult);
   const dom = parseFromString(layoutResult);
   const content = dom.getElementById(contentSelector);
   if (!content) {
