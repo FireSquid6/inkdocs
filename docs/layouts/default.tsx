@@ -3,8 +3,7 @@ import { Layout } from "inkdocs";
 const defaultLayout: Layout = (children: JSX.Element, metadata: any) => {
   return (
     <main id="layout">
-      <div>Pretend I'm some really cool sidebar</div>
-
+      <title>Inkdocs</title>
       <article id="content">
         <h1>{metadata.title ?? "Untitled"}</h1>
         {children}
