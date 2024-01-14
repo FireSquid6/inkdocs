@@ -10,49 +10,12 @@ import { parseFromString } from "dom-parser";
 
 // This plugin assumes that the user has installed htmx into the head of their base html.
 // This plugin also can only deal with markdown. Any other file type must have a custom parser written.
-export interface SwapRouterOptions {
-  contentSelector: string;
-  layoutSelector: string;
-}
-
-export function getMarkdownParser(
-  layoutTree: LayoutTree,
-  opts: SwapRouterOptions,
-): Parser {
-  return (text: string, filepath: string) => {
-    const { content, metadata } = spliceMetadata(text);
-    const myLayout = chooseLayout({ filepath, html: "", metadata }, layoutTree);
-
-    marked.use({
-      renderer: {
-        link: (href, title, text) => {
-          const { target, getUrl } = getSwapATag(
-            myLayout,
-            href,
-            layoutTree,
-            opts,
-          );
-
-          return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-push-url=${href} hx-trigger="click" title="${title}">${text}</a>`;
-        },
-      },
-    });
-    const html = marked(content);
-
-    return {
-      html: html,
-      metadata: metadata,
-    };
-  };
-}
-
-export default function swapRouter(opts: SwapRouterOptions): Plugin {
+export default function swapRouter(): Plugin {
   return {
     beforeBuild: (options) => {
       const parsers = new Map<string, Parser>();
       const markdownParser = getMarkdownParser(
         options.layoutTree || defaultOptions.layoutTree,
-        opts,
       );
 
       parsers.set("md", markdownParser);
@@ -81,7 +44,7 @@ export default function swapRouter(opts: SwapRouterOptions): Plugin {
           page: page.layoutResult as string,
           layoutResult: "",
         });
-        const content = findContent(page.page, opts.contentSelector);
+        const content = findContent(page.page, "content");
         const contentPath = path.join(
           buildFolder,
           "/@content/",
@@ -110,17 +73,13 @@ export function getSwapATag(
   myLayout: string,
   href: string,
   layoutTree: LayoutTree,
-  opts: SwapRouterOptions,
 ): SwapATag {
   if (href[0] === "/") {
     href = href.slice(1);
   }
 
   const otherLayout = getLayoutFromHref(href, layoutTree);
-  const target =
-    otherLayout === myLayout
-      ? "#" + opts.contentSelector
-      : "#" + opts.layoutSelector;
+  const target = otherLayout === myLayout ? "#content" : "#layout";
   const prefix = otherLayout === myLayout ? "/@content/" : "/@layout/";
   const getUrl = prefix + href;
 
@@ -174,4 +133,27 @@ export function findContent(
   }
 
   return content.outerHTML;
+}
+
+export function getMarkdownParser(layoutTree: LayoutTree): Parser {
+  return (text: string, filepath: string) => {
+    const { content, metadata } = spliceMetadata(text);
+    const myLayout = chooseLayout({ filepath, html: "", metadata }, layoutTree);
+
+    marked.use({
+      renderer: {
+        link: (href, title, text) => {
+          const { target, getUrl } = getSwapATag(myLayout, href, layoutTree);
+
+          return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-push-url=${href} hx-trigger="click" title="${title}">${text}</a>`;
+        },
+      },
+    });
+    const html = marked(content);
+
+    return {
+      html: html,
+      metadata: metadata,
+    };
+  };
 }
