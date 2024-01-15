@@ -8,6 +8,7 @@
     "serve": "bun run scripts/serve.ts"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "latest",
     "bun-types": "latest",
     "tailwind": "^4.0.0"
   },

@@ -18,14 +18,9 @@ export function getOptions(): InkdocsOptions {
       layoutName: "default",
       children: [],
     },
-    plugins: [
-      swapRouter({
-        contentSelector: "content",
-        layoutSelector: "layout",
-      }),
-    ],
+    plugins: [swapRouter()],
     server: {
-      port: 8008,
+      port: 3000,
       apiRoutes: [],
     },
   };

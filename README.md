@@ -47,6 +47,10 @@ When we visit another blog post, we really only need to change what's inside of 
 
 Contributing will be kinda a mess until the 1.0. Contact @firesquid6 on discord if you think this project is cool and you'd like to help out.
 
+## Setting Up
+
+If you're on nixos or using the nix package manager, just run `nix-shell` to start using all of the appropriate dependencies. Other users will need to install bun, node js 20, and optionally flyctl.
+
 # Deploying
 
 Coming soon. This will be handled using docker and/or vercel.
