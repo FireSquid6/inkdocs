@@ -16,7 +16,7 @@ export default function SwapLink({
     <a
       hx-get={getUrl}
       hx-swap="outerHTML"
-      hx-target={target}
+      hx-target={`#${target}`}
       hx-trigger="click"
       hx-push-url={href}
     >
