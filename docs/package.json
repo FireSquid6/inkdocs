@@ -8,7 +8,8 @@
     "serve": "bun run scripts/serve.ts"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "tailwind": "^4.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
