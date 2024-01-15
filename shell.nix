@@ -3,6 +3,7 @@ mkShell {
   buildInputs = [
     nodejs_20
     bun
+    flyctl
   ];
 }
 
