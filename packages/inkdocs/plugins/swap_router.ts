@@ -33,6 +33,7 @@ export default function swapRouter(): Plugin {
       console.log("\n📁 Building swap router pages...");
 
       for (const page of pages) {
+        const layout = findElement(page.page, "layout");
         const layoutPath = path.join(
           buildFolder,
           "/@layout/",
@@ -41,10 +42,11 @@ export default function swapRouter(): Plugin {
 
         newPages.push({
           filepath: layoutPath,
-          page: page.layoutResult as string,
+          page: layout,
           layoutResult: "",
         });
-        const content = findContent(page.page, "content");
+
+        const content = findElement(page.page, "content");
         const contentPath = path.join(
           buildFolder,
           "/@content/",
@@ -52,8 +54,8 @@ export default function swapRouter(): Plugin {
         );
         newPages.push({
           filepath: contentPath,
-          layoutResult: "",
           page: content,
+          layoutResult: "",
         });
 
         console.log("🔁 Layout: " + layoutPath, "| Content: " + contentPath);
@@ -121,15 +123,11 @@ export function getHrefFromFilepath(filepath: string, buildFolder: string) {
   return parts[parts.length - 1];
 }
 
-// todo: make contentSelector work with classes or tags
-export function findContent(
-  layoutResult: string,
-  contentSelector: string,
-): string {
+export function findElement(layoutResult: string, selector: string): string {
   const dom = parseFromString(layoutResult);
-  const content = dom.getElementById(contentSelector);
+  const content = dom.getElementById(selector);
   if (!content) {
-    throw new Error(`Could not find content with id ${contentSelector}`);
+    throw new Error(`Could not find element with id ${selector}`);
   }
 
   return content.outerHTML;
