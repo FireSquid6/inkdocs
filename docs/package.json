@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot scripts/dev.ts",
+    "dev": "bun run --watch scripts/dev.ts",
     "build": "bun run scripts/build.ts",
     "serve": "bun run scripts/serve.ts"
   },

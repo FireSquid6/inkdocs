@@ -3,6 +3,10 @@
   "module": "index.ts",
   "version": "0.4.2",
   "type": "module",
+  "bin": {
+    "inkdocs-serve": "bin/serve.ts",
+    "inkdocs-build": "bin/build.ts"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },
