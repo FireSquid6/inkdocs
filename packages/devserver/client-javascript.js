@@ -1,10 +1,28 @@
-let version = 0;
+async function main() {
+  const version = await getServerVersion();
+  try {
+    document.getElementById("devserver-version-display").innerText = version;
+  } catch (e) {
+    console.log(
+      "DEVSERVER: did not find version display element. This is probably ok.",
+    );
+  }
 
-setInterval(async () => {
+  setInterval(async () => {
+    const newVersion = await getServerVersion();
+    if (newVersion !== version) {
+      window.location.reload();
+    }
+  }, 1000);
+}
+
+async function getServerVersion() {
   const response = await fetch("http://localhost:8008/version", {
     mode: "no-cors",
     crossorigin: true,
     cache: "no-store",
   });
-  console.log(response);
-}, 1000);
+  const body = await response.json();
+  return body.version;
+}
+main();

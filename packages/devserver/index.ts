@@ -20,13 +20,13 @@ app.get("/client-javascript", () => {
   return Bun.file(path.join(__dirname, "client-javascript.js"));
 });
 app.get("/version", () => {
-  console.log("version requested");
-  return version;
+  return {
+    version: version,
+  };
 });
 // TODO: remove this
 app.get("/test", () => {
   const file = fs.readFileSync("test-html.html", "utf-8");
-  console.log(file);
   return file as JSX.Element;
 });
 
