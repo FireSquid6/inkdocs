@@ -51,6 +51,14 @@ Contributing will be kinda a mess until the 1.0. Contact @firesquid6 on discord 
 
 If you're on nixos or using the nix package manager, just run `nix-shell` to start using all of the appropriate dependencies. Other users will need to install bun, node js 20, and optionally flyctl.
 
+## Guide to This Repo
+
+- `/docs` - contains the documentation website for inkdocs (which is built in inkdocs)
+- `/packages` - contains all of the packages for inkdocs
+  - `/inkdocs` - the core of inkdocs. Contains the code for building and serving code as well as some of the core plugins
+  - `/devserver` - contains the code for the `inkdocs-devserver` package on npm. Helps with the inkdocs DX by adding the automatic reloading seen in stuff like vite.
+  - `/create-inkdocs` - cli for bootstrapping new inkdocs sites
+
 # Deploying
 
 Coming soon. This will be handled using docker and/or vercel.
