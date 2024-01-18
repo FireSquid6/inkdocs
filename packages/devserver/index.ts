@@ -1,7 +1,6 @@
 import Elysia from "elysia";
 import path from "path";
 import { watch } from "fs";
-import { cors } from "@elysiajs/cors";
 import { html } from "@elysiajs/html";
 import "@kitajs/html/register";
 import fs from "fs";
@@ -13,7 +12,6 @@ app.use(html());
 // - add a build folder option in the cli args to avoid watching
 // - make interface to give devserver access to what commands to run for building and serving
 // - maybe a devserver config file?
-let serverPid = -1;
 let version = 0;
 
 app.get("/client-javascript", () => {
