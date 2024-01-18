@@ -3,9 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch scripts/dev.ts",
-    "build": "bun run scripts/build.ts",
-    "serve": "bun run scripts/serve.ts"
+    "build": "inkdocs-build",
+    "serve": "inkdocs-serve"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
@@ -17,6 +16,6 @@
   },
   "dependencies": {
     "@kitajs/html": "^3.0.11",
-    "inkdocs": "^0.4.2"
+    "inkdocs": "^0.5.0"
   }
 }
