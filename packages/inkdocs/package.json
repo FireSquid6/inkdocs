@@ -1,7 +1,7 @@
 {
   "name": "inkdocs",
   "module": "index.ts",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "type": "module",
   "bin": {
     "inkdocs-serve": "bin/serve.ts",
