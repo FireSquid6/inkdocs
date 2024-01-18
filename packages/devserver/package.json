@@ -2,6 +2,9 @@
   "name": "inkdocs-devserver",
   "module": "index.ts",
   "type": "module",
+  "bin": {
+    "inkdocs-devserver": "index.ts"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },
