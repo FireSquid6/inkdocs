@@ -4,7 +4,7 @@ async function main() {
     document.getElementById("devserver-version-display").innerText = version;
   } catch (e) {
     console.log(
-      "DEVSERVER: did not find version display element. This is probably ok.",
+      "DEVSERVER: did not find version display element. This is fine unless you are developing the devserver itself.",
     );
   }
 
