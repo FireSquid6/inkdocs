@@ -47,3 +47,18 @@ watch(
     console.log(version);
   },
 );
+
+const argNames = ["watch-ignore", "build-script", "serve-script"];
+
+function getArgs() {
+  const args = new Map<string, string>();
+  for (const arg of process.argv) {
+    if (arg.startsWith("--")) {
+      const argSplit = arg.slice(2).split("=");
+      if (argNames.includes(argSplit[0])) {
+        args.set(argSplit[0], argSplit[1]);
+      }
+    }
+  }
+  return args;
+}
