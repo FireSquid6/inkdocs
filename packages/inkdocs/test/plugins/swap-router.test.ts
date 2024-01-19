@@ -1,6 +1,9 @@
 import { describe, it, expect } from "bun:test";
-import { getLayoutFromHref, getSwapATag } from "../../plugins/swap_router";
-import { findElement } from "../../plugins/swap_router";
+import {
+  getLayoutFromHref,
+  getSwapATag,
+  findElement,
+} from "../../plugins/swap-router";
 
 describe("getLayoutFromHref", () => {
   it("correctly identifies standard routes", () => {

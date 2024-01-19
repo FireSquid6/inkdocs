@@ -1,6 +1,6 @@
 import { InkdocsOptions, Layout } from "..";
 import "@kitajs/html/register";
-import swapRouter from "../plugins/swap_router";
+import swapRouter from "../plugins/swap-router";
 
 const baseHtml = `<html>
 <head>
@@ -37,12 +37,7 @@ const options: InkdocsOptions = {
   server: {
     port: 3000,
   },
-  plugins: [
-    swapRouter({
-      contentSelector: "content",
-      layoutSelector: "layout",
-    }),
-  ],
+  plugins: [swapRouter()],
 };
 
 export default options;
