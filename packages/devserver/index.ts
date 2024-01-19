@@ -70,7 +70,6 @@ watch(
     }
     serveProcess = Bun.spawn(["bun", "run", serveScript]);
     version += 1;
-    console.log(version);
   },
 );
 
