@@ -1,5 +1,5 @@
 import { InkdocsOptions, Page, defaultOptions } from "..";
-import { convertHtmlFiles } from "./html_converter";
+import { convertHtmlFiles } from "./html-converter";
 import {
   Filesystem,
   copyFiles,

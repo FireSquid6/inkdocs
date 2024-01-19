@@ -4,7 +4,7 @@ import {
   getArtifacts,
   getRoutes,
   buildPages,
-} from "../../builder/html_converter";
+} from "../../builder/html-converter";
 import { InkdocsOptions, Route } from "../../";
 import { mockFilesystem } from "../../lib/filesystem";
 import markdown from "../../parsers/markdown";
@@ -42,7 +42,6 @@ describe("buildPages", () => {
       {
         filepath: "build/index.html",
         page: "<html></html>",
-        layoutResult: "default",
       },
     ]);
   });

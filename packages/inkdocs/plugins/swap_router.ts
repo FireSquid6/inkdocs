@@ -43,7 +43,6 @@ export default function swapRouter(): Plugin {
         newPages.push({
           filepath: layoutPath,
           page: layout,
-          layoutResult: "",
         });
 
         const content = findElement(page.page, "content");
@@ -55,7 +54,6 @@ export default function swapRouter(): Plugin {
         newPages.push({
           filepath: contentPath,
           page: content,
-          layoutResult: "",
         });
 
         console.log("🔁 Layout: " + layoutPath, "| Content: " + contentPath);

@@ -249,7 +249,6 @@ export function buildPages(
 
     pages.push({
       filepath: route.filepath,
-      layoutResult: layoutResult,
       page: finalHtml,
     });
   }

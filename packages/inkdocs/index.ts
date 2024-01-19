@@ -73,7 +73,6 @@ export interface Artifact {
 
 export interface Page {
   filepath: string;
-  layoutResult: JSX.Element;
   page: string;
 }
 
