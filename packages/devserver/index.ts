@@ -4,6 +4,7 @@ import { watch } from "fs";
 import { html } from "@elysiajs/html";
 import "@kitajs/html/register";
 import fs from "fs";
+import { Subprocess } from "bun";
 
 const app = new Elysia();
 app.use(html());
@@ -15,6 +16,15 @@ app.use(html());
 let version = 0;
 const args = getArgs();
 const ignoreFolders: string[] = args.get("watch-ignore")?.split(",") ?? [];
+const buildScript = args.get("build-script");
+const serveScript = args.get("serve-script");
+
+let serveProcess: Subprocess | undefined = undefined;
+
+if (buildScript === undefined || serveScript === undefined) {
+  console.error("DEVSERVER: build-script and serve-script are required");
+  process.exit(1);
+}
 
 app.get("/client-javascript", () => {
   return Bun.file(path.join(__dirname, "client-javascript.js"));
@@ -31,16 +41,16 @@ app.get("/test", () => {
 });
 
 app.listen(8008, () => {
-  console.log("listening on port 8008");
+  console.log("DEVSERVER: using port 8008 to watch for changes");
 });
 
 watch(
   // TODO: change this to a real thing
   "test-files",
   { recursive: true },
-  (_, filepath) => {
+  async (_, filepath) => {
     if (filepath === null) {
-      // idk how this could happen. Compiler is kinda pissy about it though
+      // idk how this could happen. Compiler is kinda pissy about it though so we just return
       return;
     }
 
@@ -50,12 +60,15 @@ watch(
       }
     }
 
-    console.log("change detected. Increasing Version.");
-    // TODO: this should:
-    // - kill the old server process
-    // - run the build
-    // - start the new server
-    // - FINALLY, increase version
+    console.log("DEVSERVER: change detected");
+
+    const buildProcess = Bun.spawn(["bun", "run", buildScript]);
+    await buildProcess.exited;
+
+    if (serveProcess !== undefined) {
+      serveProcess.kill();
+    }
+    serveProcess = Bun.spawn(["bun", "run", serveScript]);
     version += 1;
     console.log(version);
   },
