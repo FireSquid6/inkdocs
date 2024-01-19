@@ -7,6 +7,7 @@ import { chooseLayout } from "../builder/layout";
 import { defaultOptions } from "../";
 import path from "node:path";
 import { parseFromString } from "dom-parser";
+import { fatalError } from "../lib/logger";
 
 // This plugin assumes that the user has installed htmx into the head of their base html.
 // This plugin also can only deal with markdown. Any other file type must have a custom parser written.
@@ -33,30 +34,35 @@ export default function swapRouter(): Plugin {
       console.log("\n📁 Building swap router pages...");
 
       for (const page of pages) {
-        const layout = findElement(page.page, "layout");
-        const layoutPath = path.join(
-          buildFolder,
-          "/@layout/",
-          getHrefFromFilepath(page.filepath, buildFolder) + ".html",
-        );
+        try {
+          const layout = findElement(page.page, "layout");
+          const layoutPath = path.join(
+            buildFolder,
+            "/@layout/",
+            getHrefFromFilepath(page.filepath, buildFolder) + ".html",
+          );
 
-        newPages.push({
-          filepath: layoutPath,
-          page: layout,
-        });
+          newPages.push({
+            filepath: layoutPath,
+            page: layout,
+          });
 
-        const content = findElement(page.page, "content");
-        const contentPath = path.join(
-          buildFolder,
-          "/@content/",
-          getHrefFromFilepath(page.filepath, buildFolder) + ".html",
-        );
-        newPages.push({
-          filepath: contentPath,
-          page: content,
-        });
-
-        console.log("🔁 Layout: " + layoutPath, "| Content: " + contentPath);
+          const content = findElement(page.page, "content");
+          const contentPath = path.join(
+            buildFolder,
+            "/@content/",
+            getHrefFromFilepath(page.filepath, buildFolder) + ".html",
+          );
+          newPages.push({
+            filepath: contentPath,
+            page: content,
+          });
+          console.log("🔁 Layout: " + layoutPath, "| Content: " + contentPath);
+        } catch (e) {
+          fatalError(
+            `Could not find layout or content element in ${page.filepath}. When using the swap router, pages must contain a #layout and #content id. See the docs for more information.`,
+          );
+        }
       }
 
       pages.push(...newPages);

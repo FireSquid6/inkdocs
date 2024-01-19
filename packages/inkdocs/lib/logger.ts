@@ -24,3 +24,8 @@ export function mockLogger(logs: string[], errors: string[]): Logger {
     },
   };
 }
+
+export function fatalError(message: string): never {
+  console.error("\x1b[31;1mFATAL: ", message);
+  process.exit(1);
+}

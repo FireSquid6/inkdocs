@@ -33,7 +33,6 @@ export function serve(options: InkdocsOptions): Elysia {
     );
 
     switch (getExtension(filepath)) {
-      // TODO: handle index files
       case "html":
       case "":
         const possibleFilepaths = getPossibleFilepaths(

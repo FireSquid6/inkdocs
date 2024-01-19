@@ -86,7 +86,6 @@ export interface Plugin {
     options: InkdocsOptions,
     routes: Route[],
   ) => PluginDuringbuildResult;
-  // TODO: actuall call duringBuild and afterBuild
   afterBuild?: (options: InkdocsOptions, pages: Page[]) => void;
   setupServer?: (options: InkdocsOptions) => PluginServerResult;
 }

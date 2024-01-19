@@ -6,7 +6,7 @@ import {
   realFilesystem,
   resetDirectory,
 } from "../lib/filesystem";
-import { Logger, realLogger } from "../lib/logger";
+import { Logger, fatalError, realLogger } from "../lib/logger";
 
 export function build(
   options: InkdocsOptions,
@@ -15,6 +15,12 @@ export function build(
 ): void {
   logger.log("🏗 Building Pages...");
   resetDirectory(options.buildFolder ?? defaultOptions.buildFolder);
+
+  if (
+    !filesystem.exists(options.contentFolder ?? defaultOptions.contentFolder)
+  ) {
+    fatalError("❌ Content folder does not exist!");
+  }
 
   if (options.staticFolder !== undefined) {
     copyFiles(
