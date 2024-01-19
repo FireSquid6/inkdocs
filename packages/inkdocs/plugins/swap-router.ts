@@ -128,10 +128,20 @@ export function getHrefFromFilepath(filepath: string, buildFolder: string) {
 }
 
 export function findElement(layoutResult: string, selector: string): string {
-  const dom = parseFromString(layoutResult);
+  let dom;
+  try {
+    dom = parseFromString(layoutResult);
+  } catch (e) {
+    fatalError(
+      `Error parsing html: \n${layoutResult}\nThis could be because your html contains a <DOCTYPE>, which is unecessary.`,
+    );
+  }
+
   const content = dom.getElementById(selector);
   if (!content) {
-    throw new Error(`Could not find element with id ${selector}`);
+    throw new Error(
+      `Could not find element with id ${selector} in: \n${layoutResult}`,
+    );
   }
 
   return content.outerHTML;
