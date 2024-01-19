@@ -13,6 +13,8 @@ app.use(html());
 // - make interface to give devserver access to what commands to run for building and serving
 // - maybe a devserver config file?
 let version = 0;
+const args = getArgs();
+const ignoreFolders: string[] = args.get("watch-ignore")?.split(",") ?? [];
 
 app.get("/client-javascript", () => {
   return Bun.file(path.join(__dirname, "client-javascript.js"));
@@ -36,7 +38,18 @@ watch(
   // TODO: change this to a real thing
   "test-files",
   { recursive: true },
-  () => {
+  (_, filepath) => {
+    if (filepath === null) {
+      // idk how this could happen. Compiler is kinda pissy about it though
+      return;
+    }
+
+    for (const ignoreFolder of ignoreFolders) {
+      if (filepath.startsWith(ignoreFolder)) {
+        return;
+      }
+    }
+
     console.log("change detected. Increasing Version.");
     // TODO: this should:
     // - kill the old server process
