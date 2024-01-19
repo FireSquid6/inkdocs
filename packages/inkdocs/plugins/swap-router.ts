@@ -127,21 +127,19 @@ export function getHrefFromFilepath(filepath: string, buildFolder: string) {
   return parts[parts.length - 1];
 }
 
-export function findElement(layoutResult: string, selector: string): string {
+export function findElement(html: string, id: string): string {
   let dom;
   try {
-    dom = parseFromString(layoutResult);
+    dom = parseFromString(html);
   } catch (e) {
     fatalError(
-      `Error parsing html: \n${layoutResult}\nThis could be because your html contains a <DOCTYPE>, which is unecessary.`,
+      `Error parsing html: \n${html}\nThis could be because your html contains a <!DOCTYPE html>, which is unecessary.`,
     );
   }
 
-  const content = dom.getElementById(selector);
+  const content = dom.getElementById(id);
   if (!content) {
-    throw new Error(
-      `Could not find element with id ${selector} in: \n${layoutResult}`,
-    );
+    throw new Error(`Could not find element with id ${id} in: \n${html}`);
   }
 
   return content.outerHTML;
