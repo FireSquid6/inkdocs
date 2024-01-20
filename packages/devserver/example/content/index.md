@@ -35,5 +35,3 @@ export default function main(foo) {
   }
 }
 ```
-
-I just made a change

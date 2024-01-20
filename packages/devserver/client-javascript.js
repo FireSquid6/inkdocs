@@ -23,10 +23,8 @@ async function getServerVersion() {
     credentials: "include",
     header: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
     },
   });
-  console.log(response);
   const body = await response.json();
   return body.version;
 }

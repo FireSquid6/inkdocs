@@ -35,7 +35,7 @@ app.get("/client-javascript", () => {
   return Bun.file(path.join(__dirname, "client-javascript.js"));
 });
 app.get("/version", () => {
-  return version;
+  return { version };
 });
 // TODO: remove this
 app.get("/test", () => {
