@@ -31,7 +31,7 @@ const useTestHtml = args.get("use-test-html") !== undefined;
 let serveProcess: Subprocess | undefined = undefined;
 
 if (buildScript === undefined || serveScript === undefined) {
-  console.error("DEVSERVER: build-script and serve-script are required");
+  error("build-script and serve-script are required");
   process.exit(1);
 }
 
@@ -51,7 +51,7 @@ app.get("/version", () => {
 });
 
 app.listen(8008, () => {
-  console.log("DEVSERVER: using port 8008 to watch for changes");
+  log("using port 8008 to watch for changes");
 });
 
 watch(process.cwd(), { recursive: true }, async (_, filepath) => {
@@ -66,7 +66,9 @@ watch(process.cwd(), { recursive: true }, async (_, filepath) => {
     }
   }
 
-  console.log(`DEVSERVER: detected change in ${filepath}`);
+  console.log("------------------------------------");
+  log(`detected change in ${filepath}. Restarting...`);
+  console.log("------------------------------------\n");
   restartServer(buildScript, serveScript);
   version += 1;
 });
@@ -100,4 +102,12 @@ function getArgs() {
     }
   }
   return args;
+}
+
+function log(text: string) {
+  console.log(`💻 \x1b[34mDEVSERVER: \x1b[0m${text}`);
+}
+
+function error(text: string) {
+  console.error(`❌ \x1b[31;1m DEVSERVER: \x1b31;${text}`);
 }
