@@ -6,7 +6,8 @@
     "inkdocs-devserver": "index.ts"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "inkdocs": "^0.5.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

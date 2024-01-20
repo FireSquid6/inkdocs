@@ -18,10 +18,15 @@ async function main() {
 
 async function getServerVersion() {
   const response = await fetch("http://localhost:8008/version", {
-    mode: "no-cors",
-    crossorigin: true,
     cache: "no-store",
+    mode: "cors",
+    credentials: "include",
+    header: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
   });
+  console.log(response);
   const body = await response.json();
   return body.version;
 }
