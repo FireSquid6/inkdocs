@@ -8,7 +8,12 @@ import { Subprocess } from "bun";
 import cors from "@elysiajs/cors";
 
 const app = new Elysia();
-const argNames = ["watch-ignore", "build-script", "serve-script"];
+const argNames = [
+  "watch-ignore",
+  "build-script",
+  "serve-script",
+  "use-test-html",
+];
 app.use(html());
 app.use(cors());
 
@@ -67,13 +72,17 @@ watch(process.cwd(), { recursive: true }, async (_, filepath) => {
 });
 
 async function restartServer(buildScript: string, serveScript: string) {
-  const buildProcess = Bun.spawn(["bun", "run", buildScript]);
+  const buildProcess = Bun.spawn(["bun", "run", buildScript], {
+    stdio: ["inherit", "inherit", "inherit"],
+  });
   await buildProcess.exited;
 
   if (serveProcess !== undefined) {
     serveProcess.kill();
   }
-  serveProcess = Bun.spawn(["bun", "run", serveScript]);
+  serveProcess = Bun.spawn(["bun", "run", serveScript], {
+    stdio: ["inherit", "inherit", "inherit"],
+  });
 }
 
 function getArgs() {
@@ -82,6 +91,10 @@ function getArgs() {
     if (arg.startsWith("--")) {
       const argSplit = arg.slice(2).split("=");
       if (argNames.includes(argSplit[0])) {
+        if (argSplit.length === 1) {
+          args.set(argSplit[0], "");
+          continue;
+        }
         args.set(argSplit[0], argSplit[1]);
       }
     }
