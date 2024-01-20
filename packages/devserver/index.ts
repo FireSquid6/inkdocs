@@ -21,6 +21,7 @@ const args = getArgs();
 const ignoreFolders: string[] = args.get("watch-ignore")?.split(",") ?? [];
 const buildScript = args.get("build-script");
 const serveScript = args.get("serve-script");
+const useTestHtml = args.get("use-test-html") !== undefined;
 
 let serveProcess: Subprocess | undefined = undefined;
 
@@ -34,13 +35,14 @@ restartServer(buildScript, serveScript);
 app.get("/client-javascript", () => {
   return Bun.file(path.join(__dirname, "client-javascript.js"));
 });
+if (useTestHtml) {
+  app.get("/test", () => {
+    const file = fs.readFileSync("test-html.html", "utf-8");
+    return file as JSX.Element;
+  });
+}
 app.get("/version", () => {
   return { version };
-});
-// TODO: remove this
-app.get("/test", () => {
-  const file = fs.readFileSync("test-html.html", "utf-8");
-  return file as JSX.Element;
 });
 
 app.listen(8008, () => {
