@@ -9,6 +9,7 @@
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
     "bun-types": "latest",
+    "inkdocs-devserver": "^2.0.0",
     "tailwind": "^4.0.0"
   },
   "peerDependencies": {
