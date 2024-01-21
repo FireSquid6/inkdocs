@@ -1,6 +1,6 @@
 import { InkdocsOptions } from "inkdocs";
 import fs from "node:fs";
-import swapRouter from "inkdocs/plugins/swap_router";
+import swapRouter from "inkdocs/plugins/swap-router";
 import "@kitajs/html/register";
 import DefaultLayout from "./layouts/default";
 
