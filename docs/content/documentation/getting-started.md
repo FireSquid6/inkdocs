@@ -1,17 +1,13 @@
-# With a Template
+# Creating a Project
 
-`create-inkdocs` is currently being worked on. Check back here later when it is completed!
-
-# Manual Setup
-
-First, create a new bun project (Inkdocs will not work with other js runtimes). It's assumed that you will be using typescript.
+Creating an inkdocs project is simple. Just run:
 
 ```bash
-bun init
+bunx create-inkdocs
 ```
 
-Next, install inkdocs:
+This CLI will guide you through creating an inkdocs app. It's recommended that you use the swap router. Routing will be explained in more detail in [Building Your Site](/documentation/building-your-site).
 
-```bash
-bun add inkdocs
-```
+# Writing content
+
+In your `inkdocs.ts` file you should see

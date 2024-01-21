@@ -114,6 +114,12 @@ export default function devserver(
 //   return args;
 // }
 
+export function devserverScript() {
+  return `
+  <script src="http://localhost:8008/client-javascript"></script>
+  `;
+}
+
 function log(text: string) {
   console.log(`💻 \x1b[34mDEVSERVER: \x1b[0m${text}`);
 }
