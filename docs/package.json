@@ -3,8 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "build": "inkdocs-build",
-    "serve": "inkdocs-serve"
+    "build": "bun run ./scripts/build.ts",
+    "serve": "bun run ./scripts/serve.ts"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
