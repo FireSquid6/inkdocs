@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "bun run ./scripts/build.ts",
-    "serve": "bun run ./scripts/serve.ts"
+    "serve": "bun run ./scripts/serve.ts",
+    "dev": "bun run ./scripts/dev.ts"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
