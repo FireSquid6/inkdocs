@@ -36,6 +36,7 @@ export default function devserver(
   app.use(cors());
 
   let version = 0;
+  let success = false;
 
   let serveProcess: Subprocess | undefined = undefined;
 
@@ -56,7 +57,7 @@ export default function devserver(
     });
   }
   app.get("/version", () => {
-    return { version };
+    return { version, success };
   });
 
   app.listen(8008, () => {
@@ -88,9 +89,17 @@ export default function devserver(
     });
     await buildProcess.exited;
 
+    if (buildProcess.exitCode !== 0) {
+      error("build failed with exit code " + buildProcess.exitCode);
+      success = false;
+      return;
+    }
+    success = true;
+
     if (serveProcess !== undefined) {
       serveProcess.kill();
     }
+
     serveProcess = Bun.spawn(["bun", "run", serveScript], {
       stdio: ["inherit", "inherit", "inherit"],
     });
@@ -125,5 +134,5 @@ function log(text: string) {
 }
 
 function error(text: string) {
-  console.error(`❌ \x1b[31;1m DEVSERVER: \x1b31;${text}`);
+  console.error(`❌ \x1b[31;1m DEVSERVER: \x1b[31;0m ${text}`);
 }

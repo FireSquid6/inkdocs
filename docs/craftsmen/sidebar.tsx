@@ -8,13 +8,17 @@ export default function Sidebar(
   const sidenav = (
     <div class="sidenav">
       {routes.map((route) => {
-        return;
-        <SwapLink>{route.metadata.title ?? route.filepath}</SwapLink>;
+        // TODO: figure out href from filepath
+        return (
+          <SwapLink target="content" href="">
+            {route.metadata.title ?? route.filepath}
+          </SwapLink>
+        );
       })}
     </div>
   );
   return {
     name: "sidebar",
-    data: sidebar,
+    data: sidenav,
   };
 }
