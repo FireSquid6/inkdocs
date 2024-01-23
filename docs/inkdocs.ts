@@ -3,6 +3,7 @@ import fs from "node:fs";
 import swapRouter from "inkdocs/plugins/swap-router";
 import "@kitajs/html/register";
 import DefaultLayout from "./layouts/default";
+import Sidebar from "./craftsmen/sidebar";
 
 export function getOptions(): InkdocsOptions {
   const baseHtml = fs.readFileSync("base.html", "utf-8");
@@ -13,6 +14,7 @@ export function getOptions(): InkdocsOptions {
     contentFolder: "content",
     baseHtml,
     layouts: new Map([["default", DefaultLayout]]),
+    craftsmen: [Sidebar],
     layoutTree: {
       path: "",
       layoutName: "default",
