@@ -15,7 +15,7 @@ async function main() {
 
     if (!success) {
       console.log("build failure");
-      document.body.innerHTML = `<div style="font-family: sans-serif; font-size: 24px; color: red; padding: 32px; text-align: center;">Build failed. Check your console for more information.</div>`;
+      document.body.innerHTML = `<div style="font-family: sans-serif; font-size: 24px; color: red; background-color: white; padding: 32px; text-align: center;">Build failed. Check your console for more information.</div>`;
       return;
     }
 
