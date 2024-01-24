@@ -69,6 +69,18 @@ describe("chooseLayout", () => {
       ],
     };
 
+    const testTree = {
+      path: "",
+      layoutName: "default",
+      children: [
+        {
+          path: "documentation",
+          layoutName: "docs",
+          children: [],
+        },
+      ],
+    };
+
     expect(
       chooseLayout(
         { filepath: "build/docs/api.html", html: "", metadata: {} },
@@ -93,5 +105,11 @@ describe("chooseLayout", () => {
         layoutTree,
       ),
     ).toEqual("default");
+    expect(
+      chooseLayout(
+        { filepath: "build/documentation/index.html", html: "", metadata: {} },
+        testTree,
+      ),
+    ).toEqual("docs");
   });
 });

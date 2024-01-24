@@ -71,3 +71,35 @@ main {
 .expander {
   width: 100%;
 }
+
+.ml-0 {
+  margin-left: 0;
+}
+
+.ml-1 {
+  margin-left: 3px;
+}
+
+.ml-2 {
+  margin-left: 6px;
+}
+
+.ml-3 {
+  margin-left: 9px;
+}
+
+.ml-4 {
+  margin-left: 12px;
+}
+
+.ml-5 {
+  margin-left: 15px;
+}
+
+.ml-6 {
+  margin-left: 18px;
+}
+
+title {
+  display: none;
+}

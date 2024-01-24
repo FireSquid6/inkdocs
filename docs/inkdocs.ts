@@ -1,24 +1,46 @@
 import { InkdocsOptions } from "inkdocs";
-import fs from "node:fs";
 import swapRouter from "inkdocs/plugins/swap-router";
 import "@kitajs/html/register";
 import DefaultLayout from "./layouts/default";
 import Sidebar from "./craftsmen/sidebar";
+import DocsLayout from "./layouts/documentation";
 
 export function getOptions(): InkdocsOptions {
-  const baseHtml = fs.readFileSync("base.html", "utf-8");
+  const baseHtml = `<html>
+
+<head>
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="http://localhost:8008/client-javascript"></script>
+</head>
+
+<body>
+  {slot}
+</body>
+
+</html>
+`;
 
   const options: InkdocsOptions = {
     staticFolder: "static",
     buildFolder: "build",
     contentFolder: "content",
     baseHtml,
-    layouts: new Map([["default", DefaultLayout]]),
+    layouts: new Map([
+      ["default", DefaultLayout],
+      ["docs", DocsLayout],
+    ]),
     craftsmen: [Sidebar],
     layoutTree: {
-      path: "",
-      layoutName: "default",
-      children: [],
+      path: "build",
+      layoutName: "docs",
+      children: [
+        {
+          path: "documentation",
+          layoutName: "docs",
+          children: [],
+        },
+      ],
     },
     plugins: [swapRouter()],
     server: {
