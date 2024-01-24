@@ -1,5 +1,7 @@
+#!/usr/bin/env bun
 import { createSelection, createPrompt } from "bun-promptx";
 import fs from "node:fs";
+import path from "node:path";
 
 interface Instructions {
   directory: string;
@@ -19,19 +21,22 @@ const templates: Template[] = [
       "The recommended template using the swap router and tailwind with some boilerplate",
     directory: "recommended",
   },
-  {
-    name: "Swap Rotuer Minimal",
-    description: "A minimal template using the swap router",
-    directory: "minimal",
-  },
-  {
-    name: "Tailwind + Swap Router Minimal",
-    description: "A template using the swap router and tailwind",
-    directory: "tailwind",
-  },
+  // {
+  //   name: "Swap Rotuer Minimal",
+  //   description: "A minimal template using the swap router",
+  //   directory: "minimal",
+  // },
+  // {
+  //   name: "Tailwind + Swap Router Minimal",
+  //   description: "A template using the swap router and tailwind",
+  //   directory: "tailwind",
+  // },
 ];
 
 export function getInstructions(): Instructions {
+  console.log(
+    "⚠ create-inkdocs is still under development. You'll only be able to use the recommended template for now.",
+  );
   const instructions: Instructions = {
     directory: "inkdocs-project",
     template: templates[0],
@@ -75,5 +80,49 @@ export function getInstructions(): Instructions {
   return instructions;
 }
 
+function createProject(instructions: Instructions) {
+  copyFiles(
+    path.join(__dirname, "../templates", instructions.template.directory),
+    instructions.directory,
+  );
+}
+
+function copyFiles(from: string, to: string): void {
+  const files = recursivelyReadDir(from);
+
+  for (const file of files) {
+    const relativePath = file.replace(from, "");
+    const newPath = path.join(to, relativePath);
+
+    if (fs.statSync(file).isDirectory()) {
+      fs.mkdirSync(newPath, { recursive: true });
+    } else {
+      if (!fs.existsSync(path.dirname(newPath))) {
+        fs.mkdirSync(path.dirname(newPath), { recursive: true });
+      }
+      fs.copyFileSync(file, newPath);
+    }
+  }
+}
+
+function recursivelyReadDir(dir: string): string[] {
+  // { recursive: true } doesn't work with bun, so we need our own function
+  const files: string[] = [];
+
+  fs.readdirSync(dir).forEach((file) => {
+    const filePath = `${dir}/${file}`;
+    const stat = fs.statSync(filePath);
+
+    if (stat.isDirectory()) {
+      files.push(...recursivelyReadDir(filePath));
+    } else {
+      files.push(filePath);
+    }
+  });
+
+  return files;
+}
+
 const instructions = getInstructions();
+createProject(instructions);
 console.log(instructions);
