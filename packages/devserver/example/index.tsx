@@ -32,7 +32,21 @@ const options: InkdocsOptions = {
   buildFolder: "example/build",
   contentFolder: "example/content",
   craftsmen: [],
-  layouts: new Map([["default", defaultLayout]]),
+  layouts: new Map([
+    ["default", defaultLayout],
+    ["docs", defaultLayout],
+  ]),
+  layoutTree: {
+    layoutName: "default",
+    path: "",
+    children: [
+      {
+        layoutName: "docs",
+        path: "docs",
+        children: [],
+      },
+    ],
+  },
   baseHtml: baseHtml,
   server: {
     port: 3000,

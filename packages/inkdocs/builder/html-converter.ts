@@ -64,8 +64,9 @@ export function convertHtmlFiles(
     layouts,
     options.baseHtml ?? defaultOptions.baseHtml,
     artifacts,
-    defaultOptions.layoutTree,
+    options.layoutTree ?? defaultOptions.layoutTree,
     logger,
+    options.buildFolder ?? defaultOptions.buildFolder,
   );
 
   for (const plugin of options.plugins ?? defaultOptions.plugins) {
@@ -237,13 +238,16 @@ export function buildPages(
   artifacts: Artifact[],
   layoutTree: LayoutTree,
   logger: Logger,
+  buildFolder: string,
 ): Page[] {
   const pages: Page[] = [];
   const artifactMap = new Map(
     artifacts.map((artifact) => [artifact.name, artifact.data]),
   );
   for (const route of routes) {
-    const layoutName = chooseLayout(route, layoutTree);
+    console.log("\nabout to choose a real layout:");
+    const layoutName = chooseLayout(route, layoutTree, buildFolder);
+    console.log(layoutName);
 
     const layout = layouts?.get(layoutName);
     if (!layout) {

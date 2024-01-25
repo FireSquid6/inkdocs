@@ -13,10 +13,13 @@ export function chooseLayout(
   //   return "default";
   // }
 
-  const filepathSplit = route.filepath.split("/");
-  if (filepathSplit[0] === buildFolder) {
-    filepathSplit.shift();
+  let filepath = route.filepath;
+
+  if (filepath.startsWith(buildFolder)) {
+    filepath = filepath.slice(buildFolder.length);
   }
+
+  const filepathSplit = filepath.split("/");
 
   const filename = filepathSplit.pop();
   if (filename !== "index.html") {
@@ -25,8 +28,16 @@ export function chooseLayout(
     filepathSplit.push(extensionSplit.join("."));
   }
 
-  const directory = filepathSplit.join("/");
+  let directory = filepathSplit.join("/");
+
+  if (directory.startsWith("/")) {
+    directory = directory.slice(1);
+  }
+  // console.log(layoutTree);
+  // console.log(route.filepath, " -> ", directory);
+
   const layout = getLayoutFromTree(directory, layoutTree);
+  console.log(route.filepath, " -> ", directory, " -> ", layout);
 
   return layout === "" ? "default" : layout;
 }

@@ -37,6 +37,7 @@ describe("buildPages", () => {
       [],
       { path: "", layoutName: "default", children: [] },
       logger,
+      "build",
     );
 
     expect(result).toEqual([

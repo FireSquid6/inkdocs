@@ -83,33 +83,64 @@ describe("chooseLayout", () => {
 
     expect(
       chooseLayout(
-        { filepath: "build/docs/api.html", html: "", metadata: {} },
+        { filepath: "build/docs/api.html", href: "", html: "", metadata: {} },
         layoutTree,
       ),
     ).toEqual("docs");
     expect(
       chooseLayout(
-        { filepath: "blog.html", html: "", metadata: {} },
+        { filepath: "blog.html", href: "", html: "", metadata: {} },
         layoutTree,
       ),
     ).toEqual("blog");
     expect(
       chooseLayout(
-        { filepath: "docs.html", html: "", metadata: {} },
+        { filepath: "docs.html", href: "", html: "", metadata: {} },
         layoutTree,
       ),
     ).toEqual("default");
     expect(
       chooseLayout(
-        { filepath: "build/index.html", html: "", metadata: {} },
+        { filepath: "build/index.html", href: "", html: "", metadata: {} },
         layoutTree,
       ),
     ).toEqual("default");
     expect(
       chooseLayout(
-        { filepath: "build/documentation/index.html", html: "", metadata: {} },
+        {
+          filepath: "build/documentation/index.html",
+          html: "",
+          metadata: {},
+          href: "",
+        },
         testTree,
       ),
     ).toEqual("docs");
+  });
+  it("works when doing what the example fails", () => {
+    const layoutTree = {
+      layoutName: "default",
+      path: "",
+      children: [
+        {
+          layoutName: "docs",
+          path: "docs",
+          children: [],
+        },
+      ],
+    };
+
+    expect(
+      chooseLayout(
+        {
+          filepath: "example/build/docs/index.html",
+          href: "",
+          html: "",
+          metadata: {},
+        },
+        layoutTree,
+        "example/build",
+      ),
+    ).toBe("docs");
   });
 });
