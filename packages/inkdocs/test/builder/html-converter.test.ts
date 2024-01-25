@@ -15,6 +15,7 @@ describe("buildPages", () => {
       {
         filepath: "build/index.html",
         metadata: {},
+        href: "/",
         html: "<p>hello world</p>",
       },
     ];
@@ -93,6 +94,7 @@ describe("getArtifacts", () => {
       {
         filepath: "./content/index.md",
         metadata: {},
+        href: "/content",
         html: "<p>hello world</p>",
       },
     ];
@@ -115,6 +117,7 @@ describe("getRoutes", () => {
       new Map<string, string>([
         ["./content/index.md", "hello world"],
         ["./content/subfolder/index.md", "hello world"],
+        ["./content/subfolder/page.md", "hello world"],
       ]),
     );
 
@@ -131,10 +134,18 @@ describe("getRoutes", () => {
       {
         filepath: "build/index.html",
         metadata: {},
+        href: "/",
         html: "<p>hello world</p>\n",
       },
       {
         filepath: "build/subfolder/index.html",
+        href: "/subfolder",
+        metadata: {},
+        html: "<p>hello world</p>\n",
+      },
+      {
+        filepath: "build/subfolder/page.html",
+        href: "/subfolder/page",
         metadata: {},
         html: "<p>hello world</p>\n",
       },

@@ -64,6 +64,7 @@ export interface Route {
   filepath: string;
   html: JSX.Element;
   metadata: any;
+  href: string;
 }
 
 export interface Artifact {

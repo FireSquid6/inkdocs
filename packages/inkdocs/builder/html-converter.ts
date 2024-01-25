@@ -189,10 +189,32 @@ export function getRoutes(
       filepath: newFilename,
       html: parseResult.html,
       metadata: parseResult.metadata,
+      href: hrefFromFilepath(newFilename, buildFolder),
     });
   }
 
   return routes;
+}
+
+function hrefFromFilepath(filepath: string, buildFolder: string): string {
+  if (filepath.startsWith(buildFolder)) {
+    filepath = filepath.slice(buildFolder.length);
+  }
+
+  const parts = filepath.split("/");
+  while (parts[0] === "." || parts[0] === "") {
+    parts.shift();
+  }
+
+  const lastPart = parts[parts.length - 1].split(".");
+  lastPart.pop();
+  parts[parts.length - 1] = lastPart.join(".");
+
+  if (parts[parts.length - 1] === "index") {
+    parts.pop();
+  }
+
+  return "/" + parts.join("/");
 }
 
 export function getArtifacts(
