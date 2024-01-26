@@ -37,7 +37,6 @@ export function chooseLayout(
   // console.log(route.filepath, " -> ", directory);
 
   const layout = getLayoutFromTree(directory, layoutTree);
-  console.log(route.filepath, " -> ", directory, " -> ", layout);
 
   return layout === "" ? "default" : layout;
 }

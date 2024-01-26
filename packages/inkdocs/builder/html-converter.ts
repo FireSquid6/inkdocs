@@ -58,7 +58,6 @@ export function convertHtmlFiles(
     duringbuildResults,
   );
 
-  // TODO: This should return a map of strings to JSX.Element and map of strings to strings
   const pages = buildPages(
     routes,
     layouts,
@@ -245,14 +244,12 @@ export function buildPages(
     artifacts.map((artifact) => [artifact.name, artifact.data]),
   );
   for (const route of routes) {
-    console.log("\nabout to choose a real layout:");
     const layoutName = chooseLayout(route, layoutTree, buildFolder);
-    console.log(layoutName);
 
     const layout = layouts?.get(layoutName);
     if (!layout) {
       logger.error(
-        `No layout found for ${route.filepath}. Tried to use ${layout}.`,
+        `No layout found for ${route.filepath}. Tried to use ${layoutName}.`,
       );
       continue;
     }

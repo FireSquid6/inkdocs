@@ -32,7 +32,10 @@ const options: InkdocsOptions = {
   buildFolder: "example/build",
   contentFolder: "example/content",
   craftsmen: [],
-  layouts: new Map([["default", defaultLayout]]),
+  layouts: new Map([
+    ["default", defaultLayout],
+    ["docs", defaultLayout],
+  ]),
   baseHtml: baseHtml,
   layoutTree: {
     layoutName: "default",
