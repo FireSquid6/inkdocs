@@ -8,7 +8,6 @@ export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
         const depth = Math.min(route.href.split("/").length - 1, 6);
         return (
           <SwapLink
-            style=""
             target="content"
             className={`ml-${depth}`}
             href={route.href}
