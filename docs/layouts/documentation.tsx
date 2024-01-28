@@ -11,7 +11,6 @@ const DocsLayout: Layout = (
     <Root>
       <>
         {sidebar}
-        <h1>Documentation</h1>
         <article id="content">
           <title>{metadata.title ?? "Untitled"}</title>
           <h1>{metadata.title ?? "Untitled"}</h1>

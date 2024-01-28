@@ -77,27 +77,32 @@ main {
 }
 
 .ml-1 {
-  margin-left: 3px;
+  margin-left: 1rem;
 }
 
 .ml-2 {
-  margin-left: 6px;
+  margin-left: 2rem;
 }
 
 .ml-3 {
-  margin-left: 9px;
+  margin-left: 3rem;
 }
 
 .ml-4 {
-  margin-left: 12px;
+  margin-left: 4rem;
 }
 
 .ml-5 {
-  margin-left: 15px;
+  margin-left: 5rem;
 }
 
 .ml-6 {
-  margin-left: 18px;
+  margin-left: 6rem;
+}
+
+.sidenav {
+  display: flex;
+  flex-direction: column;
 }
 
 title {

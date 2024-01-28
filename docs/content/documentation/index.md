@@ -1,3 +1,8 @@
+---
+title: Documentation
+weight: 100
+---
+
 # What is Inkdocs?
 
 Inkdocs is an incredibly fast static site builder specifically geared towards building documentation sites (although it can be used for more!) just like [docusaurus](https://docusaurus.io/) or [starlight](https://starlight.astro.build/).

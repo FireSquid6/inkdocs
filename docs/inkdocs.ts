@@ -32,8 +32,8 @@ export function getOptions(): InkdocsOptions {
     ]),
     craftsmen: [Sidebar],
     layoutTree: {
-      path: "build",
-      layoutName: "docs",
+      path: "",
+      layoutName: "default",
       children: [
         {
           path: "documentation",
