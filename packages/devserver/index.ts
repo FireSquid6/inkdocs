@@ -64,24 +64,28 @@ export default function devserver(
     log("using port 8008 to watch for changes");
   });
 
-  watch(process.cwd(), { recursive: true }, async (_, filepath) => {
-    if (filepath === null) {
-      // idk how this could happen. Compiler is kinda pissy about it though so we just return
-      return;
-    }
-
-    for (const ignoreFolder of ignoreFolders) {
-      if (filepath.startsWith(ignoreFolder)) {
+  const watcher = watch(
+    process.cwd(),
+    { recursive: true },
+    async (_, filepath) => {
+      if (filepath === null) {
+        // idk how this could happen. Compiler is kinda pissy about it though so we just return
         return;
       }
-    }
 
-    console.log("------------------------------------");
-    log(`detected change in ${filepath}. Restarting...`);
-    console.log("------------------------------------\n");
-    restartServer(buildScript, serveScript);
-    version += 1;
-  });
+      for (const ignoreFolder of ignoreFolders) {
+        if (filepath.startsWith(ignoreFolder)) {
+          return;
+        }
+      }
+
+      console.log("------------------------------------");
+      log(`detected change in ${filepath}. Restarting...`);
+      console.log("------------------------------------\n");
+      restartServer(buildScript, serveScript);
+      version += 1;
+    },
+  );
 
   async function restartServer(buildScript: string, serveScript: string) {
     const buildProcess = Bun.spawn(["bun", "run", buildScript], {
@@ -104,6 +108,8 @@ export default function devserver(
       stdio: ["inherit", "inherit", "inherit"],
     });
   }
+
+  return watcher;
 }
 
 // function getArgs() {
