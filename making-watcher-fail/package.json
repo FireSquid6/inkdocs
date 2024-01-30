@@ -3,9 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "build": "bun run ./scripts/build.ts",
-    "serve": "bun run ./scripts/serve.ts",
-    "dev": "bun run ./scripts/dev.ts"
+    "build": "bun run ./build.ts",
+    "serve": "bun run ./serve.ts",
+    "dev": "bun run ./dev.ts"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
