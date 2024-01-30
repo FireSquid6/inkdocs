@@ -1,0 +1,23 @@
+{
+  "name": "docs",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bun run ./scripts/build.ts",
+    "serve": "bun run ./scripts/serve.ts",
+    "dev": "bun run ./scripts/dev.ts"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "latest",
+    "bun-types": "latest",
+    "inkdocs-devserver": "^2.0.0",
+    "tailwind": "^4.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@kitajs/html": "^3.0.11",
+    "inkdocs": "^0.6.1"
+  }
+}
