@@ -1,9 +1,7 @@
-with (import <nixpkgs> { });
-mkShell {
-  buildInputs = [
-    nodejs_20
-    bun
-    flyctl
-  ];
+let
+  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) { };
+in
+{ nixpkgs ? import <nixpkgs> {} }:
+with nixpkgs; mkShell {
+  buildInputs = [ unstable.bun nodejs_20 flyctl ];
 }
-

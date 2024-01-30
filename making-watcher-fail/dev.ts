@@ -47,6 +47,7 @@ function devserver(
   });
 
   const watcher = watch(".", { recursive: true }, async (_, filepath) => {
+    console.log("I have detected a change in", filepath);
     if (filepath === null) {
       error("filepath is null. Something bad happened with the file watcher.");
       // idk how this could happen. Compiler is kinda pissy about it though so we just return
@@ -109,4 +110,4 @@ function error(text: string) {
   console.error(`❌ \x1b[31;1m DEVSERVER: \x1b[31;0m ${text}`);
 }
 
-devserver("./scripts/build.ts", "./scripts/serve.ts", ["build"]);
+devserver("./build.ts", "./serve.ts", []);
