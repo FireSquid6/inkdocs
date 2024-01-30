@@ -1,6 +1,5 @@
 import Elysia from "elysia";
 import path from "path";
-import { watch } from "fs";
 import { html } from "@elysiajs/html";
 import "@kitajs/html/register";
 import fs from "fs";
@@ -46,7 +45,7 @@ function devserver(
     log("using port 8008 to watch for changes");
   });
 
-  const watcher = watch(".", { recursive: true }, async (_, filepath) => {
+  const watcher = fs.watch(".", { recursive: true }, async (_, filepath) => {
     console.log("I have detected a change in", filepath);
     if (filepath === null) {
       error("filepath is null. Something bad happened with the file watcher.");
