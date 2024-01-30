@@ -49,7 +49,7 @@ Contributing will be kinda a mess until the 1.0. Contact @firesquid6 on discord 
 
 ## Setting Up
 
-If you're on nixos or using the nix package manager, just run `nix-shell` to start using all of the appropriate dependencies. Other users will need to install bun, node js 20, and optionally flyctl.
+If you're on nixos or using the nix package manager, just run `nix-shell` to start using all of the appropriate dependencies. You can also allow the .envrc if you'd like. Other users should read the comments of the `shell.nix` file and install the dependencies however is convienient.
 
 ## Guide to This Repo
 
