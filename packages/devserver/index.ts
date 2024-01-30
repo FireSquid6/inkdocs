@@ -86,12 +86,6 @@ export default function devserver(
   });
 
   watcher.on("change", (filepath) => {
-    if (filepath === null) {
-      error("filepath is null. Something bad happened with the file watcher.");
-      // idk how this could happen. Compiler is kinda pissy about it though so we just return
-      return;
-    }
-
     for (const ignoreFolder of ignoreFolders) {
       if (filepath.startsWith(ignoreFolder)) {
         return;
