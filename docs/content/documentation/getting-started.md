@@ -10,4 +10,4 @@ This CLI will guide you through creating an inkdocs app. It's recommended that y
 
 # Writing content
 
-In your `inkdocs.ts` file you should see
+You can add more content by simply creating more markdown files in the `/content` folder.
