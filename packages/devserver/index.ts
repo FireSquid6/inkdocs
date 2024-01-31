@@ -19,8 +19,8 @@ export default function devserver(
   app.use(cors());
 
   let version = 0;
-
   let serveProcess: Subprocess | undefined = undefined;
+  let failed = false;
 
   if (buildScript === undefined || serveScript === undefined) {
     error("build-script and serve-script are required");
@@ -32,6 +32,11 @@ export default function devserver(
       stdio: ["inherit", "inherit", "inherit"],
     });
     await buildProcess.exited;
+
+    failed = false;
+    if (buildProcess.exitCode !== 0) {
+      failed = true;
+    }
 
     if (serveProcess !== undefined) {
       serveProcess.kill();
@@ -62,7 +67,7 @@ export default function devserver(
     });
   }
   app.get("/version", () => {
-    return { version };
+    return { version, failed };
   });
 
   app.listen(8008, () => {
