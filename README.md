@@ -61,7 +61,7 @@ If you're on nixos or using the nix package manager, just run `nix-shell` to sta
 
 # Deploying
 
-Coming soon. This will be handled using docker and/or vercel.
+Coming soon. This will be handled using docker.
 
 # Acknowledgements
 
