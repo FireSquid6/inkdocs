@@ -1,7 +1,7 @@
 {
   "name": "inkdocs-devserver",
   "module": "index.ts",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "type": "module",
   "bin": {
     "inkdocs-devserver": "index.ts"
