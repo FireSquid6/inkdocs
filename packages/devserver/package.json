@@ -1,7 +1,7 @@
 {
   "name": "inkdocs-devserver",
   "module": "index.ts",
-  "version": "2.1.0",
+  "version": "3.1.0",
   "type": "module",
   "bin": {
     "inkdocs-devserver": "index.ts"
@@ -17,6 +17,7 @@
     "@elysiajs/cors": "^0.8.0",
     "@elysiajs/html": "^0.8.0",
     "@kitajs/html": "^3.0.11",
-    "elysia": "^0.8.9"
+    "elysia": "^0.8.9",
+    "watcher": "^2.3.0"
   }
 }

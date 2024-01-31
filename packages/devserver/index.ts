@@ -1,29 +1,12 @@
 import Elysia from "elysia";
 import path from "path";
-import { watch } from "fs";
 import { html } from "@elysiajs/html";
 import "@kitajs/html/register";
 import fs from "fs";
 import { Subprocess } from "bun";
 import cors from "@elysiajs/cors";
+import Watcher from "watcher";
 
-// function main() {
-//   const argNames = [
-//     "watch-ignore",
-//     "build-script",
-//     "serve-script",
-//     "use-test-html",
-//   ];
-//
-//   const args = getArgs();
-//   const ignoreFolders: string[] = args.get("watch-ignore")?.split(",") ?? [];
-//   const buildScript = args.get("build-script") ?? "";
-//   const serveScript = args.get("serve-script") ?? "";
-//   const useTestHtml = args.get("use-test-html") !== undefined;
-//   devserver(buildScript, serveScript, useTestHtml, ignoreFolders);
-// }
-
-// starts the devserver. Watches for changes in the cwd and rebuild and restarts the server when changes are detected. All commands are run relative to the
 export default function devserver(
   buildScript: string | undefined, // script to run to build the project. Run as `bun run ${buildScript}`
   serveScript: string | undefined, // script to run to serve the project Run as `bun run ${serveScript}`
@@ -36,13 +19,40 @@ export default function devserver(
   app.use(cors());
 
   let version = 0;
-  let success = false;
-
   let serveProcess: Subprocess | undefined = undefined;
+  let failed = false;
 
   if (buildScript === undefined || serveScript === undefined) {
     error("build-script and serve-script are required");
     process.exit(1);
+  }
+
+  async function restartServer(buildScript: string, serveScript: string) {
+    const buildProcess = Bun.spawn(["bun", "run", buildScript], {
+      stdio: ["inherit", "inherit", "inherit"],
+    });
+    await buildProcess.exited;
+
+    failed = false;
+    if (buildProcess.exitCode !== 0) {
+      failed = true;
+    }
+
+    if (serveProcess !== undefined) {
+      serveProcess.kill();
+    }
+    serveProcess = Bun.spawn(["bun", "run", serveScript], {
+      stdio: ["inherit", "inherit", "inherit"],
+    });
+  }
+
+  // commits suicide becuase something is screwed
+  function panicAndDie() {
+    log("Killing myself. Something broke. Read above for more info.");
+    if (serveProcess !== undefined) {
+      serveProcess.kill();
+    }
+    process.exit(0);
   }
 
   restartServer(buildScript, serveScript);
@@ -57,57 +67,51 @@ export default function devserver(
     });
   }
   app.get("/version", () => {
-    return { version, success };
+    return { version, failed };
   });
 
   app.listen(8008, () => {
     log("using port 8008 to watch for changes");
   });
 
-  const watcher = watch(
-    process.cwd(),
-    { recursive: true },
-    async (_, filepath) => {
-      if (filepath === null) {
-        // idk how this could happen. Compiler is kinda pissy about it though so we just return
-        return;
-      }
-
-      for (const ignoreFolder of ignoreFolders) {
-        if (filepath.startsWith(ignoreFolder)) {
-          return;
+  const watcher = new Watcher(".", {
+    recursive: true,
+    ignoreInitial: true,
+    ignore: (targetPath) => {
+      const cwd = process.cwd();
+      for (const ignore of ignoreFolders) {
+        const fullPath = path.join(cwd, ignore);
+        if (targetPath.startsWith(fullPath)) {
+          console.log("ignoring: ", targetPath);
+          return true;
         }
       }
-
-      console.log("------------------------------------");
-      log(`detected change in ${filepath}. Restarting...`);
-      console.log("------------------------------------\n");
-      restartServer(buildScript, serveScript);
-      version += 1;
+      return false;
     },
-  );
+  });
 
-  async function restartServer(buildScript: string, serveScript: string) {
-    const buildProcess = Bun.spawn(["bun", "run", buildScript], {
-      stdio: ["inherit", "inherit", "inherit"],
-    });
-    await buildProcess.exited;
-
-    if (buildProcess.exitCode !== 0) {
-      error("build failed with exit code " + buildProcess.exitCode);
-      success = false;
-      return;
-    }
-    success = true;
-
-    if (serveProcess !== undefined) {
-      serveProcess.kill();
+  watcher.on("change", (filepath) => {
+    for (const ignoreFolder of ignoreFolders) {
+      if (filepath.startsWith(ignoreFolder)) {
+        return;
+      }
     }
 
-    serveProcess = Bun.spawn(["bun", "run", serveScript], {
-      stdio: ["inherit", "inherit", "inherit"],
-    });
-  }
+    console.log("------------------------------------");
+    log(`detected change in ${filepath}. Restarting...`);
+    console.log("------------------------------------\n");
+    restartServer(buildScript, serveScript);
+    version += 1;
+  });
+
+  watcher.on("error", (err) => {
+    error("File watcher is throwing a fit:");
+    console.error(err);
+    panicAndDie();
+  });
+  watcher.on("close", () => {
+    log("file watcher closed");
+  });
 
   return watcher;
 }

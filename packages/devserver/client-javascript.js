@@ -11,9 +11,9 @@ async function main() {
   }
 
   setInterval(async () => {
-    const [newVersion, success] = await getStatus();
+    const [newVersion, failed] = await getStatus();
 
-    if (!success) {
+    if (failed) {
       console.log("build failure");
       document.body.innerHTML = `<div style="font-family: sans-serif; font-size: 24px; color: red; background-color: white; padding: 32px; text-align: center;">Build failed. Check your console for more information.</div>`;
       return;
@@ -35,6 +35,6 @@ async function getStatus() {
     },
   });
   const body = await response.json();
-  return [body.version, body.success];
+  return [body.version, body.failed];
 }
 main();
