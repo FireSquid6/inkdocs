@@ -2,39 +2,50 @@ import { Artifact, InkdocsOptions, Route } from "inkdocs";
 import SwapLink from "inkdocs/components/SwapLink";
 
 export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
-  const sidenav = (
-    <div class="sidenav">
-      {routes.map((route) => {
-        const split = route.href.split("/");
-        while (split[0] === "") {
-          split.shift();
-        }
-        if (split[0] !== "documentation") {
-          return null;
-        }
-
-        const depth = Math.min(split.length - 1, 6);
-        return (
-          <SwapLink
-            target="content"
-            className={`ml-${depth}`}
-            href={route.href}
-          >
-            {route.metadata.title ?? route.href}
-          </SwapLink>
-        );
-      })}
+  const routeTree = makeRouteTree(routes);
+  const sidebar = (
+    <div>
+      <p>Documentation</p>
+      <div class="sidenav">
+        {routeTree.map((tree) => (
+          <SidebarItem tree={tree} />
+        ))}
+      </div>
     </div>
   );
+
   return {
     name: "sidebar",
-    data: sidenav,
+    data: sidebar,
   };
+}
+
+interface SidebarItemProps {
+  tree: RouteTree;
+}
+function SidebarItem(props: SidebarItemProps): JSX.Element {
+  return (
+    <>
+      {props.tree.route === undefined ? (
+        <p>{props.tree.segment}</p>
+      ) : (
+        <SwapLink target="content" className="" href={props.tree.route.href}>
+          {props.tree.route.metadata.title ?? props.tree.route.href}
+        </SwapLink>
+      )}
+
+      <div class="ml-2">
+        {props.tree.children.map((child) => (
+          <SidebarItem tree={child} />
+        ))}
+      </div>
+    </>
+  );
 }
 
 export interface RouteTree {
   segment: string;
-  route: Route;
+  route: Route | undefined;
   children: RouteTree[];
 }
 
@@ -44,15 +55,17 @@ export function makeRouteTree(routes: Route[], depth = 0): RouteTree[] {
 
   for (const [segment, segmentRoutes] of groupedRoutes) {
     // find the route where split[depth] === segment
+    let indexRoute = undefined;
     for (let i = 0; i < segmentRoutes.length; i++) {
       const route = segmentRoutes[i];
       const split = getSplit(route.href);
       if (split[depth] === segment && split.length === depth + 1) {
         // remove this route from segmentRoutes
         segmentRoutes.splice(i, 1);
+        indexRoute = route;
         routeTree.push({
           segment,
-          route,
+          route: indexRoute,
           children: makeRouteTree(segmentRoutes, depth + 1),
         });
       }
