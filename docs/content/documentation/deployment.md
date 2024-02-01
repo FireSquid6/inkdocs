@@ -1,5 +1,6 @@
 ---
 title: Deployment
+weight: -10
 ---
 
 # Getting Docker Working

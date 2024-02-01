@@ -3,6 +3,8 @@ import SwapLink from "inkdocs/components/SwapLink";
 
 export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
   const routeTree = makeRouteTree(routes);
+  sortTree(routeTree);
+
   const sidebar = (
     <div>
       <p>Documentation</p>
@@ -24,6 +26,7 @@ interface SidebarItemProps {
   tree: RouteTree;
 }
 function SidebarItem(props: SidebarItemProps): JSX.Element {
+  sortTree(props.tree.children);
   return (
     <>
       {props.tree.route === undefined ? (
@@ -107,4 +110,18 @@ function getSplit(href: string): string[] {
     split.shift();
   }
   return split;
+}
+
+function sortTree(routeTree: RouteTree[]) {
+  routeTree.sort((a, b) => {
+    if (a.route === undefined && b.route === undefined) {
+      return 0;
+    } else if (a.route === undefined) {
+      return 1;
+    } else if (b.route === undefined) {
+      return -1;
+    } else {
+      return (a.route.metadata.weight ?? 0) - (b.route.metadata.weight ?? 0);
+    }
+  });
 }

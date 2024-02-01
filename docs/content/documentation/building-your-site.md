@@ -1,5 +1,6 @@
 ---
 title: Building Your Site
+weight: 0
 ---
 
 This will contain a guide to building your site in inkdocs
