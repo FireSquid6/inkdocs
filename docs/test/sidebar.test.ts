@@ -24,7 +24,7 @@ describe("makeRouteTree", () => {
           metadata: {},
         },
       ]),
-    ).toBe([
+    ).toEqual([
       {
         segment: "whatever",
         children: [],
@@ -50,6 +50,66 @@ describe("makeRouteTree", () => {
         children: [],
         route: {
           href: "whatever3",
+          filepath: "",
+          html: "",
+          metadata: {},
+        },
+      },
+    ]);
+  });
+  it("deals with nested routes", () => {
+    expect(
+      makeRouteTree(
+        [
+          {
+            href: "whatever",
+            filepath: "",
+            html: "",
+            metadata: {},
+          },
+          {
+            href: "whatever/whatever2",
+            filepath: "",
+            html: "",
+            metadata: {},
+          },
+          {
+            href: "whatever/whatever2/whatever3",
+            filepath: "",
+            html: "",
+            metadata: {},
+          },
+        ],
+        0,
+      ),
+    ).toEqual([
+      {
+        segment: "whatever",
+        children: [
+          {
+            segment: "whatever2",
+            children: [
+              {
+                segment: "whatever3",
+                children: [],
+                route: {
+                  href: "whatever/whatever2/whatever3",
+                  filepath: "",
+                  html: "",
+                  metadata: {},
+                },
+              },
+            ],
+            route: {
+              href: "whatever/whatever2",
+              filepath: "",
+              html: "",
+              metadata: {},
+            },
+          },
+        ],
+        route: {
+          href: "whatever",
           filepath: "",
           html: "",
           metadata: {},

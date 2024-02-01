@@ -67,6 +67,19 @@ export default function swapRouter(): Plugin {
 
       pages.push(...newPages);
     },
+    setupServer: () => {
+      return {
+        apiRoutes: [
+          {
+            route: "/htmx-bundle",
+            verb: "GET",
+            handler: () => {
+              return Bun.file("node_modules/htmx.org/dist/htmx.min.js");
+            },
+          },
+        ],
+      };
+    },
   };
 }
 
@@ -105,6 +118,7 @@ export function getLayoutFromHref(
   for (const filepath of possibleFilepaths) {
     const route: Route = {
       filepath: filepath,
+      href: "",
       html: "",
       metadata: {},
     };
@@ -148,7 +162,10 @@ export function findElement(html: string, id: string): string {
 export function getMarkdownParser(layoutTree: LayoutTree): Parser {
   return (text: string, filepath: string) => {
     const { content, metadata } = spliceMetadata(text);
-    const myLayout = chooseLayout({ filepath, html: "", metadata }, layoutTree);
+    const myLayout = chooseLayout(
+      { filepath, html: "", metadata, href: "" },
+      layoutTree,
+    );
 
     marked.use({
       renderer: {

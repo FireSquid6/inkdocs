@@ -1,3 +1,7 @@
+---
+title: Getting Started
+---
+
 # Creating a Project
 
 Creating an inkdocs project is simple. Just run:
@@ -10,4 +14,4 @@ This CLI will guide you through creating an inkdocs app. It's recommended that y
 
 # Writing content
 
-You can add more content by simply creating more markdown files in the `/content` folder.
+In your `inkdocs.ts` file you should see
