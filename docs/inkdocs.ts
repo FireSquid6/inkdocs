@@ -18,8 +18,7 @@ export function getOptions(): InkdocsOptions {
   {slot}
 </body>
 
-</html>
-`;
+</html>`;
 
   const options: InkdocsOptions = {
     staticFolder: "static",
