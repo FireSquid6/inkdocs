@@ -4,14 +4,14 @@ export interface SwapLinkProps {
   children: JSX.Element;
   href: string;
   target: "content" | "layout";
-  className: string;
+  className?: string;
 }
 
 export default function SwapLink({
   children,
   href,
   target,
-  className,
+  className = "",
 }: SwapLinkProps): JSX.Element {
   const getUrl = path.join(`/@${target}`, href);
   return (

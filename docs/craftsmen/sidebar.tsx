@@ -1,6 +1,5 @@
 import { Artifact, InkdocsOptions, Route } from "inkdocs";
 import SwapLink from "inkdocs/components/SwapLink";
-import util from "util";
 
 export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
   const sidenav = (
