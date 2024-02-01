@@ -5,13 +5,9 @@ export function chooseLayout(
   layoutTree: LayoutTree,
   buildFolder: string = "build",
 ): string {
-  // uses the layout specified in the metadata
-  // if (route.metadata.layout) {
-  //   if (layouts.has(route.metadata.layout)) {
-  //     return route.metadata.layout;
-  //   }
-  //   return "default";
-  // }
+  if (route.metadata.layout) {
+    return route.metadata.layout;
+  }
 
   let filepath = route.filepath;
 
