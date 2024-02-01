@@ -1,5 +1,6 @@
 import { Artifact, InkdocsOptions, Route } from "inkdocs";
 import SwapLink from "inkdocs/components/SwapLink";
+import util from "util";
 
 export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
   const sidenav = (
@@ -39,55 +40,52 @@ export interface RouteTree {
 }
 
 export function makeRouteTree(routes: Route[], depth = 0): RouteTree[] {
-  const tree: RouteTree[] = [];
+  const routeTree: RouteTree[] = [];
+  const groupedRoutes = groupRoutesBySegment(routes, depth);
 
-  const groups = new Map<string, Route[]>();
+  for (const [segment, segmentRoutes] of groupedRoutes) {
+    // find the route where split[depth] === segment
+    for (let i = 0; i < segmentRoutes.length; i++) {
+      const route = segmentRoutes[i];
+      const split = getSplit(route.href);
+      if (split[depth] === segment && split.length === depth + 1) {
+        // remove this route from segmentRoutes
+        segmentRoutes.splice(i, 1);
+        routeTree.push({
+          segment,
+          route,
+          children: makeRouteTree(segmentRoutes, depth + 1),
+        });
+      }
+    }
+  }
+
+  return routeTree;
+}
+
+function groupRoutesBySegment(
+  routes: Route[],
+  depth: number = 0,
+): Map<string, Route[]> {
+  const groupedRoutes = new Map<string, Route[]>();
 
   for (const route of routes) {
-    const split = route.href.split("/");
-    while (split[0] === "") {
-      split.shift();
-    }
+    const split = getSplit(route.href);
+
     const segment = split[depth];
-
-    if (segment === undefined) {
-      console.error(
-        "Route has no segment at depth. This shouldn't be possible",
-        depth,
-        route,
-      );
-      continue;
+    if (!groupedRoutes.has(segment)) {
+      groupedRoutes.set(segment, []);
     }
-
-    if (!groups.has(segment)) {
-      groups.set(segment, [route]);
-    } else {
-      groups.get(segment)!.push(route);
-    }
+    groupedRoutes.get(segment)!.push(route);
   }
 
-  for (const group of groups) {
-    // find the member of the group that's split ends with the segment
-    const [segment, routes] = group;
-    for (const route of routes) {
-      const split = route.href.split("/");
-      while (split[0] === "") {
-        split.shift();
-      }
-      if (split[depth] === segment) {
-        if (depth === 0) {
-          tree.push({
-            segment,
-            route,
-            children: makeRouteTree(routes, depth + 1),
-          });
-        } else {
-          console.log("depth", depth, "segment", segment, "route", route);
-        }
-      }
-    }
-  }
-  console.log(groups);
+  return groupedRoutes;
+}
 
-  return tree;
+function getSplit(href: string): string[] {
+  const split = href.split("/");
+  while (split[0] === "") {
+    split.shift();
+  }
+  return split;
 }
