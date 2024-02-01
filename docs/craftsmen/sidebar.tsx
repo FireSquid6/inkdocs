@@ -52,24 +52,31 @@ export interface RouteTree {
 export function makeRouteTree(routes: Route[], depth = 0): RouteTree[] {
   const routeTree: RouteTree[] = [];
   const groupedRoutes = groupRoutesBySegment(routes, depth);
+  console.log(groupedRoutes);
 
   for (const [segment, segmentRoutes] of groupedRoutes) {
-    // find the route where split[depth] === segment
     let indexRoute = undefined;
+    let longestDepth = 0;
     for (let i = 0; i < segmentRoutes.length; i++) {
       const route = segmentRoutes[i];
       const split = getSplit(route.href);
+
+      if (split.length > longestDepth) {
+        longestDepth = split.length;
+      }
+
       if (split[depth] === segment && split.length === depth + 1) {
-        // remove this route from segmentRoutes
         segmentRoutes.splice(i, 1);
         indexRoute = route;
-        routeTree.push({
-          segment,
-          route: indexRoute,
-          children: makeRouteTree(segmentRoutes, depth + 1),
-        });
       }
     }
+
+    routeTree.push({
+      segment,
+      route: indexRoute,
+      children:
+        depth < longestDepth ? makeRouteTree(segmentRoutes, depth + 1) : [],
+    });
   }
 
   return routeTree;

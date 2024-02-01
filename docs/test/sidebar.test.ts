@@ -117,4 +117,50 @@ describe("makeRouteTree", () => {
       },
     ]);
   });
+  it("deals with a missing index route", () => {
+    expect(
+      makeRouteTree([
+        {
+          href: "whatever",
+          filepath: "",
+          html: "",
+          metadata: {},
+        },
+        {
+          href: "whatever/whatever2/whatever3",
+          filepath: "",
+          html: "",
+          metadata: {},
+        },
+      ]),
+    ).toEqual([
+      {
+        segment: "whatever",
+        route: {
+          href: "whatever",
+          filepath: "",
+          html: "",
+          metadata: {},
+        },
+        children: [
+          {
+            segment: "whatever2",
+            route: undefined,
+            children: [
+              {
+                segment: "whatever3",
+                route: {
+                  href: "whatever/whatever2/whatever3",
+                  filepath: "",
+                  html: "",
+                  metadata: {},
+                },
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+  });
 });
