@@ -77,6 +77,7 @@ export default function devserver(
   const watcher = new Watcher(".", {
     recursive: true,
     ignoreInitial: true,
+    depth: 999,
     ignore: (targetPath) => {
       const cwd = process.cwd();
       for (const ignore of ignoreFolders) {
