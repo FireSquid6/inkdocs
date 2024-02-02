@@ -9,14 +9,15 @@ const DocsLayout: Layout = (
   const sidebar = artifacts.get("sidebar") as JSX.Element;
   return (
     <Root>
-      <>
-        {sidebar}
+      <div class="docs-layout">
+        <div class="docs-sidebar">{sidebar}</div>
+
         <article id="content">
           <title>{metadata.title ?? "Untitled"}</title>
           <h1>{metadata.title ?? "Untitled"}</h1>
           {children}
         </article>
-      </>
+      </div>
     </Root>
   );
 };

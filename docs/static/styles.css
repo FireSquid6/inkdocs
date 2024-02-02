@@ -112,3 +112,13 @@ title {
 a {
   cursor: pointer;
 }
+
+.docs-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.docs-sidebar {
+  margin-right: 2rem;
+}

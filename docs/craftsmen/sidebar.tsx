@@ -7,7 +7,6 @@ export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
 
   const sidebar = (
     <div>
-      <p>Documentation</p>
       <div class="sidenav">
         {routeTree.map((tree) => (
           <SidebarItem tree={tree} />
