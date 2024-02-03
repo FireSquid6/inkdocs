@@ -6,6 +6,7 @@ import { marked } from "marked";
 import { chooseLayout } from "../builder/layout";
 import { defaultOptions } from "../";
 import path from "node:path";
+import yaml from "../parsers/yaml";
 import { parseFromString } from "dom-parser";
 import { fatalError } from "../lib/logger";
 
@@ -20,6 +21,7 @@ export default function swapRouter(): Plugin {
       );
 
       parsers.set("md", markdownParser);
+      parsers.set("yaml", yaml());
 
       return {
         parsers: parsers,

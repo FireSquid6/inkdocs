@@ -6,12 +6,16 @@
 let
   unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) { };
 in
-{ nixpkgs ? import <nixpkgs> {} }:
+{ nixpkgs ? import <nixpkgs> { } }:
 with nixpkgs; mkShell {
-  buildInputs = [ 
-    unstable.bun 
+  buildInputs = [
+    unstable.bun
     nodejs_20
-    flyctl 
+    flyctl
     libgcc
+
+    # optional if you want to make videos
+    asciinema-agg
+    asciinema
   ];
 }

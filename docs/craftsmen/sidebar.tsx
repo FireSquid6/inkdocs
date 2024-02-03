@@ -54,7 +54,6 @@ export interface RouteTree {
 export function makeRouteTree(routes: Route[], depth = 0): RouteTree[] {
   const routeTree: RouteTree[] = [];
   const groupedRoutes = groupRoutesBySegment(routes, depth);
-  console.log(groupedRoutes);
 
   for (const [segment, segmentRoutes] of groupedRoutes) {
     let indexRoute = undefined;
