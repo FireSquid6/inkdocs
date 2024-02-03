@@ -1,5 +1,6 @@
 import fs from "fs";
 
+// allows you to include a script in the page
 export default function InlineScript(props: {
   srcPath: string;
   defer?: boolean;

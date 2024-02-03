@@ -1,0 +1,72 @@
+---
+title: Writing Content
+weight: -200
+---
+
+By default, inkdocs will parse `.md` files and `.yaml` files. If you're using the standard router, inkdocs will also parse `.html` files
+
+# Filesystem
+
+Suppose we have the following filesystem:
+
+```
+/content
+    index.md
+    about.md
+    /docs
+        index.md
+        install.md
+        getting-started.md
+```
+
+Assuming your `contentFolder` is set to `content` in inkdocs options, this will render the following routes:
+
+```
+/ -> index.md
+/about -> about.md
+/docs -> /docs/index.md
+/docs/install -> /docs/install
+/docs/getting-started -> /docs/getting-started
+...
+```
+
+# Choosing Your Layout
+
+Inkdocs uses the following formula to figure out what layout (defined in your options) to use for each page:
+
+1. If the metadata for the page contains a `layout`
+2. Check `layout_tree` in options based on the filepath
+3. Just use whatever layout is marked as default in the options
+
+For more on layouts, see [building your site](/documentation/building-your-site#layouts)
+
+# Markdown
+
+Markdown files are parsed using [marked](https://marked.js.org/) and turned into html strings.
+
+## Swap Router Components
+
+If you're using the swap router (which you probably are), you can create and call custom components. See [building your site](/documentation/building-your-site#swap-router) on how exactly to enable this and define components.
+
+To "call" a component within markdown, do the following:
+
+```md
+this is some normal content
+\`\`\`swap-component
+component: my-cool-component
+props:
+name: firesquid
+date: 03/02/
+\`\`\`
+more normal content
+```
+
+These components are rendered at build time
+
+## Why no mdx?
+
+mdx is not supported by inkdocs because I found it too hard and confusing to deal with. This is probably just because I am lazy and stupid, so if you'd like to add support for it, feel free to do so.
+
+# yaml
+
+Yaml files are just parsed as metadata with no content. This is useful if you have an index file that needs
