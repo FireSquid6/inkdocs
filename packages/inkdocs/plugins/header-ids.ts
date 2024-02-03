@@ -1,5 +1,6 @@
 import { Plugin } from "..";
 import { parseFromString } from "dom-parser";
+import { parse, HTMLElement } from "node-html-parser";
 
 function idFromText(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "-");
@@ -14,7 +15,7 @@ export interface Header {
 export interface HeaderIdsOptions {
   parentId: string;
 }
-const headerNames = ["h1", "h2", "h3", "h4", "h5", "h6"];
+const headerNames = ["H1", "H2", "H3", "H4", "H5", "H6"];
 
 export default function headerIds(options: HeaderIdsOptions): Plugin {
   return {
@@ -35,7 +36,7 @@ export default function headerIds(options: HeaderIdsOptions): Plugin {
 }
 
 export function addIds(html: string, parentId: string): [Header[], string] {
-  const dom = parseFromString(html);
+  const dom = parse(html);
   const parent = dom.getElementById(parentId);
 
   if (!parent) {
@@ -43,15 +44,12 @@ export function addIds(html: string, parentId: string): [Header[], string] {
   }
 
   const headers: Header[] = [];
-  for (const child of parent.childNodes) {
-    if (headerNames.includes(child.nodeName)) {
-      const level = parseInt(child.nodeName[1]);
+  for (const node of parent.childNodes) {
+    const child = node as HTMLElement;
+    if (headerNames.includes(child.tagName)) {
+      const level = parseInt(child.tagName[1]);
       const id = idFromText(child.textContent as string);
-
-      child.attributes.push({
-        name: "id",
-        value: id,
-      });
+      child.setAttribute("id", id);
 
       headers.push({
         text: child.textContent as string,
@@ -61,7 +59,5 @@ export function addIds(html: string, parentId: string): [Header[], string] {
     }
   }
 
-  const newHtml = dom.toString();
-
-  return [headers, newHtml];
+  return [headers, dom.toString()];
 }

@@ -21,6 +21,7 @@
     "elysia": "^0.8.6",
     "htmx.org": "^1.9.10",
     "marked": "^11.1.0",
+    "node-html-parser": "^6.1.12",
     "yaml": "^2.3.4"
   }
 }
