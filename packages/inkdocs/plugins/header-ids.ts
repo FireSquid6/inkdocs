@@ -1,5 +1,4 @@
 import { Plugin } from "..";
-import { parseFromString } from "dom-parser";
 import { parse, HTMLElement } from "node-html-parser";
 
 function idFromText(text: string) {
