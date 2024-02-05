@@ -70,6 +70,16 @@ export default function devserver(
     return { version, failed };
   });
 
+  app.ws("/ws", {
+    message(ws, message) {
+      console.log(message);
+      ws.send(message);
+    },
+    open(ws, message) {
+      console.log("open?");
+    },
+  });
+
   app.listen(8008, () => {
     log("using port 8008 to watch for changes");
   });
@@ -80,6 +90,7 @@ export default function devserver(
     depth: 999,
     ignore: (targetPath) => {
       const cwd = process.cwd();
+
       for (const ignore of ignoreFolders) {
         const fullPath = path.join(cwd, ignore);
         if (targetPath.startsWith(fullPath)) {

@@ -1,4 +1,7 @@
+import { websocket } from "elysia/ws";
+
 async function main() {
+  websocket = new WebSocket("ws://localhost:8008/ws");
   const [version] = await getStatus();
 
   const displayElement = document.getElementById("devserver-version-display");
