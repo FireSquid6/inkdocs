@@ -178,3 +178,5 @@ dist
 
 # inkdocs
 build
+
+.envrc
