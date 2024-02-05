@@ -1,4 +1,4 @@
-import { InkdocsOptions, Page, defaultOptions } from "..";
+import { InkdocsOptions, Layout, Page, defaultOptions } from "..";
 import { convertHtmlFiles } from "./html-converter";
 import {
   Filesystem,
@@ -29,6 +29,8 @@ export function build(
     );
   }
 
+  addPluginThemes(options);
+
   const htmlFiles: Page[] = convertHtmlFiles(options, filesystem, logger);
 
   for (let i = 0; i < htmlFiles.length; i++) {
@@ -37,4 +39,27 @@ export function build(
   }
 
   logger.log("✅ Pages successfully built!");
+}
+
+function addPluginThemes(options: InkdocsOptions) {
+  for (const plugin of options.plugins ?? defaultOptions.plugins) {
+    for (const theme of plugin.themes ?? []) {
+      if (options.craftsmen) {
+        options.craftsmen.push(...theme.craftsmen);
+      } else {
+        options.craftsmen = theme.craftsmen;
+      }
+
+      if (options.layouts) {
+        for (const layoutName of theme.layouts.keys()) {
+          if (!options.layouts.has(layoutName)) {
+            const layout = theme.layouts.get(layoutName) as Layout;
+            options.layouts.set(layoutName, layout);
+          }
+        }
+      } else {
+        options.layouts = theme.layouts;
+      }
+    }
+  }
 }

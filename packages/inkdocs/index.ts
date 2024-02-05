@@ -82,6 +82,7 @@ export type Craftsman = (options: InkdocsOptions, routes: Route[]) => Artifact;
 // plugin interface is not completed yet. Expect breaking changes
 export interface Plugin {
   staticFiles?: Map<string, string>; // a map of filepaths to content of those files. Useful for adding custom css
+  themes?: Theme[];
   beforeBuild?: (options: InkdocsOptions) => PluginPrebuildResult;
   duringBuild?: (
     options: InkdocsOptions,
@@ -89,6 +90,12 @@ export interface Plugin {
   ) => PluginDuringbuildResult;
   afterBuild?: (options: InkdocsOptions, pages: Page[]) => void;
   setupServer?: (options: InkdocsOptions) => PluginServerResult;
+}
+
+// a theme is just a collection of layouts and craftsmen that a plugin can export if nothing complicated is required
+export interface Theme {
+  layouts: Map<string, Layout>;
+  craftsmen: Craftsman[];
 }
 
 export type PluginPrebuildResult = {
