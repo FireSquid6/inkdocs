@@ -15,7 +15,7 @@ with nixpkgs; mkShell {
     libgcc
 
     # optional if you want to make videos
-    asciinema-agg
-    asciinema
+    # asciinema-agg
+    # asciinema
   ];
 }
