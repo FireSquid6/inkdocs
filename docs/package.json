@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "@kitajs/html": "^3.0.11",
-    "inkdocs": "^0.8.0"
+    "inkdocs": "^0.9.0"
   }
 }
