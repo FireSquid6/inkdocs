@@ -4,6 +4,7 @@ import "@kitajs/html/register";
 import DefaultLayout from "./layouts/default";
 import Sidebar from "./craftsmen/sidebar";
 import DocsLayout from "./layouts/documentation";
+import tailwind from "inkdocs/plugins/tailwind";
 
 export function getOptions(): InkdocsOptions {
   const baseHtml = `<html>
@@ -41,7 +42,13 @@ export function getOptions(): InkdocsOptions {
         },
       ],
     },
-    plugins: [swapRouter()],
+    plugins: [
+      swapRouter(),
+      tailwind({
+        inputFile: "styles.css",
+        outputFile: "styles.css",
+      }),
+    ],
     server: {
       port: 3000,
       apiRoutes: [],
