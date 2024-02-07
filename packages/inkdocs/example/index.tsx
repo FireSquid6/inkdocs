@@ -1,6 +1,7 @@
 import { InkdocsOptions, Layout } from "..";
 import "@kitajs/html/register";
 import swapRouter from "../plugins/swap-router";
+import tailwind from "../plugins/tailwind";
 
 const baseHtml = `<html>
 <head>
@@ -18,7 +19,7 @@ const defaultLayout: Layout = (children: JSX.Element, metadata: any) => {
     <main id="layout">
       <div>Pretend I'm some really cool sidebar</div>
 
-      <article id="content">
+      <article class="bg-black" id="content">
         <h1>{metadata.title ?? "Untitled"}</h1>
         {children}
       </article>
@@ -51,7 +52,13 @@ const options: InkdocsOptions = {
   server: {
     port: 3000,
   },
-  plugins: [swapRouter()],
+  plugins: [
+    swapRouter(),
+    tailwind({
+      inputFile: "styles.css",
+      outputFile: "styles.css",
+    }),
+  ],
 };
 
 export default options;
