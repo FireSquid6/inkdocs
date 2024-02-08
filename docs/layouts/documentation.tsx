@@ -12,9 +12,8 @@ const DocsLayout: Layout = (
       <div class="docs-layout">
         <div class="docs-sidebar">{sidebar}</div>
 
-        <article id="content">
+        <article id="content" class="prose prose-invert">
           <title>{metadata.title ?? "Untitled"}</title>
-          <h1>{metadata.title ?? "Untitled"}</h1>
           {children}
         </article>
       </div>

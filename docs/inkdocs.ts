@@ -11,8 +11,7 @@ export function getOptions(): InkdocsOptions {
 
 <head>
   <link rel="stylesheet" href="/styles.css" />
-  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-  <script src="http://localhost:8008/client-javascript"></script>
+  <script src="/htmx-bundle"></script>
 </head>
 
 <body>

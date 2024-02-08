@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@kitajs/html": "^3.0.11",
+    "@tailwindcss/typography": "^0.5.10",
     "inkdocs": "^0.9.0"
   }
 }

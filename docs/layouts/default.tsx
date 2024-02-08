@@ -6,8 +6,7 @@ const defaultLayout: Layout = (children: JSX.Element, metadata: any) => {
     <Root>
       <>
         <title>Inkdocs</title>
-        <article id="content">
-          <h1>{metadata.title ?? "Untitled"}</h1>
+        <article id="content" class="prose prose-invert">
           {children}
         </article>
       </>

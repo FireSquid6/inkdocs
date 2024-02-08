@@ -18,6 +18,10 @@
   --radialSecondaryAccent: radial-gradient(#901d8c, #db499a);
 }
 
+title {
+  display: none;
+}
+
 body {
   background-color: var(--background);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

@@ -1,7 +1,7 @@
 ---
-title: Documentation
+title: Inkdocs
 ---
 
 # What is Inkdocs?
 
-Inkdocs is a
+Inkdocs is a library for building cool stuff.
