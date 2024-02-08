@@ -100,7 +100,7 @@ function DesktopLink({
     <SwapLink
       target="layout"
       href={href}
-      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:text-gray-400 transition-all"
+      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-text hover:text-gray-400 transition-all"
     >
       {children}
     </SwapLink>

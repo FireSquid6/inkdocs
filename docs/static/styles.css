@@ -46,53 +46,10 @@ main {
   width: 100%;
 }
 
-.ml-0 {
-  margin-left: 0;
-}
-
-.ml-1 {
-  margin-left: 1rem;
-}
-
-.ml-2 {
-  margin-left: 2rem;
-}
-
-.ml-3 {
-  margin-left: 3rem;
-}
-
-.ml-4 {
-  margin-left: 4rem;
-}
-
-.ml-5 {
-  margin-left: 5rem;
-}
-
-.ml-6 {
-  margin-left: 6rem;
-}
-
-.sidenav {
-  display: flex;
-  flex-direction: column;
-}
-
 title {
   display: none;
 }
 
 a {
   cursor: pointer;
-}
-
-.docs-layout {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.docs-sidebar {
-  margin-right: 2rem;
 }

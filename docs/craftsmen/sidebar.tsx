@@ -5,13 +5,19 @@ export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
   const routeTree = makeRouteTree(routes);
   sortTree(routeTree);
 
+  // remove all segments that aren't "documentation"
+  for (let i = 0; i < routeTree.length; i++) {
+    if (routeTree[i].segment !== "documentation") {
+      routeTree.splice(i, 1);
+      i--;
+    }
+  }
+
   const sidebar = (
-    <div>
-      <div class="sidenav">
-        {routeTree.map((tree) => (
-          <SidebarItem tree={tree} />
-        ))}
-      </div>
+    <div class="flex flex-col">
+      {routeTree.map((tree) => (
+        <SidebarItem tree={tree} />
+      ))}
     </div>
   );
 
@@ -28,15 +34,22 @@ function SidebarItem(props: SidebarItemProps): JSX.Element {
   sortTree(props.tree.children);
   return (
     <>
-      {props.tree.route === undefined ? (
-        <p>{props.tree.segment}</p>
-      ) : (
-        <SwapLink target="content" className="" href={props.tree.route.href}>
-          {props.tree.route.metadata.title ?? props.tree.route.href}
-        </SwapLink>
-      )}
+      <div class="m-2">
+        {" "}
+        {props.tree.route === undefined ? (
+          <p>{props.tree.segment}</p>
+        ) : (
+          <SwapLink
+            target="content"
+            className="text-primary hover:text-primary-hover transition-all"
+            href={props.tree.route.href}
+          >
+            {props.tree.route.metadata.title ?? props.tree.route.href}
+          </SwapLink>
+        )}
+      </div>
 
-      <div class="ml-2">
+      <div class="ml-4">
         {props.tree.children.map((child) => (
           <SidebarItem tree={child} />
         ))}
