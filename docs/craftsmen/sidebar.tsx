@@ -34,7 +34,7 @@ function SidebarItem(props: SidebarItemProps): JSX.Element {
   sortTree(props.tree.children);
   return (
     <>
-      <div class="m-2">
+      <div class="m-2 text-lg">
         {" "}
         {props.tree.route === undefined ? (
           <p>{props.tree.segment}</p>
