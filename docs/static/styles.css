@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --text: #d7e0f7;
   --background: #050b18;
@@ -21,40 +25,6 @@ body {
   line-height: 1.42857143;
   color: var(--text);
   margin: 0;
-}
-
-header {
-  background-color: var(--background);
-  justify-content: space-between;
-  vertical-align: middle;
-  border-bottom: 1px solid var(--primary);
-}
-
-nav {
-  float: right;
-}
-
-header a {
-  color: var(--background);
-  border-radius: 10px;
-  display: inline-block;
-  margin-right: 1rem;
-  margin-left: 1rem;
-  margin-top: 0.2rem;
-  padding: 0.5em;
-  background-color: var(--primary);
-  margin-bottom: 0.2rem;
-  font-size: 24px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.3s ease-in-out;
-  min-width: 75px;
-  text-align: center;
-}
-
-header a:hover {
-  background-color: var(--primary-hover);
-  cursor: pointer;
 }
 
 main {
