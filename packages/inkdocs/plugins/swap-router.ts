@@ -172,9 +172,13 @@ export function getMarkdownParser(layoutTree: LayoutTree): Parser {
     marked.use({
       renderer: {
         link: (href, title, text) => {
-          const { target, getUrl } = getSwapATag(myLayout, href, layoutTree);
+          if (href.startsWith("/")) {
+            const { target, getUrl } = getSwapATag(myLayout, href, layoutTree);
 
-          return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-push-url=${href} hx-trigger="click" title="${title}">${text}</a>`;
+            return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-push-url=${href} hx-trigger="click" title="${title}">${text}</a>`;
+          }
+
+          return `<a href="${href}" title="${title}">${text}</a>`;
         },
       },
     });

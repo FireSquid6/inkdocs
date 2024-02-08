@@ -5,6 +5,7 @@ import DefaultLayout from "./layouts/default";
 import Sidebar from "./craftsmen/sidebar";
 import DocsLayout from "./layouts/documentation";
 import tailwind from "inkdocs/plugins/tailwind";
+import LandingLayout from "./layouts/landing";
 
 export function getOptions(): InkdocsOptions {
   const baseHtml = `<html>
@@ -28,11 +29,12 @@ export function getOptions(): InkdocsOptions {
     layouts: new Map([
       ["default", DefaultLayout],
       ["docs", DocsLayout],
+      ["landing", LandingLayout],
     ]),
     craftsmen: [Sidebar],
     layoutTree: {
       path: "",
-      layoutName: "default",
+      layoutName: "",
       children: [
         {
           path: "documentation",

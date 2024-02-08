@@ -1,7 +1,4 @@
 ---
 title: Inkdocs
+layout: landing
 ---
-
-# What is Inkdocs?
-
-Inkdocs is a library for building cool stuff.

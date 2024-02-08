@@ -9,14 +9,14 @@ const DocsLayout: Layout = (
   const sidebar = artifacts.get("sidebar") as JSX.Element;
   return (
     <Root>
-      <div class="flex flex-row justify-between">
+      <>
         <div>{sidebar}</div>
 
         <article id="content" class="prose prose-invert mx-auto">
-          <title>{metadata.title ?? "Untitled"}</title>
+          <title>Inkdocs | {metadata.title ?? "Untitled"}</title>
           {children}
         </article>
-      </div>
+      </>
     </Root>
   );
 };
