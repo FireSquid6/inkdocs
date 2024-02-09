@@ -9,6 +9,7 @@ module.exports = {
         "secondary-hover": "#7a1a7e",
         accent: "#db499a",
         text: "#d7e0f7",
+        "text-darker": "#c4d0f0",
         background: "#050b18",
       },
     },
