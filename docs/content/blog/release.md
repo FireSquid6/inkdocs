@@ -1,5 +1,8 @@
 ---
 title: Release 1
+author: firesquid6
+description: Inkdocs version 1 has been released!
+date: 2023/02/09
 ---
 
 # Release v1.0
