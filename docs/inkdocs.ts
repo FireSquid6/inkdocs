@@ -16,11 +16,7 @@ export function getOptions(): InkdocsOptions {
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <script src="/htmx-bundle"></script>
 </head>
-
-<body>
   {slot}
-</body>
-
 </html>`;
 
   const options: InkdocsOptions = {

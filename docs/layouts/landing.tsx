@@ -1,5 +1,6 @@
 import { Layout } from "inkdocs";
 import Root from "../components/Root";
+import SwapLink from "inkdocs/components/SwapLink";
 
 const LandingLayout: Layout = () => {
   return (
@@ -25,15 +26,22 @@ const LandingLayout: Layout = () => {
                   Reject react based SPAs and embrace hypertext
                 </p>
                 <div class="mt-10 flex items-center justify-center gap-x-6">
-                  <a
-                    href="#"
-                    class="transition-all rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  <SwapLink
+                    href="/documentation/getting-started"
+                    target="layout"
+                    className="transition-all rounded-md bg-secondary 600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-secondary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Get started
-                  </a>
-                  <a href="#" class="text-sm font-semibold leading-6 text-text">
-                    Learn more <span aria-hidden="true">→</span>
-                  </a>
+                  </SwapLink>
+                  <SwapLink
+                    href="/documentation"
+                    target="layout"
+                    className="text-sm font-semibold leading-6 text-text"
+                  >
+                    <>
+                      Learn more <span aria-hidden="true">→</span>
+                    </>
+                  </SwapLink>
                 </div>
               </div>
             </div>
@@ -51,7 +59,7 @@ const LandingLayout: Layout = () => {
             <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
               <div class="relative pl-16">
                 <dt class="text-base font-semibold leading-7 text-text">
-                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                     <span class="material-symbols-outlined">HTML</span>
                   </div>
                   Minimal JavaScript
@@ -63,7 +71,7 @@ const LandingLayout: Layout = () => {
               </div>
               <div class="relative pl-16">
                 <dt class="text-base font-semibold leading-7 text-text">
-                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                     <span class="material-symbols-outlined">bolt</span>
                   </div>
                   Fast
@@ -75,7 +83,7 @@ const LandingLayout: Layout = () => {
               </div>
               <div class="relative pl-16">
                 <dt class="text-base font-semibold leading-7 text-text">
-                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                     <span class="material-symbols-outlined">brush</span>
                   </div>
                   Flexible
@@ -87,7 +95,7 @@ const LandingLayout: Layout = () => {
               </div>
               <div class="relative pl-16">
                 <dt class="text-base font-semibold leading-7 text-text">
-                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                  <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
                     <span class="material-symbols-outlined">article</span>
                   </div>
                   Simple

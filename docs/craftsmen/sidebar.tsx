@@ -3,20 +3,20 @@ import SwapLink from "inkdocs/components/SwapLink";
 
 export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
   const routeTree = makeRouteTree(routes);
-  sortTree(routeTree);
 
-  // remove all segments that aren't "documentation"
+  // find the tree that is the segment "documentation"
+  let documentationTree: RouteTree[] = [];
   for (let i = 0; i < routeTree.length; i++) {
-    if (routeTree[i].segment !== "documentation") {
-      routeTree.splice(i, 1);
-      i--;
+    if (routeTree[i].segment === "documentation") {
+      documentationTree = routeTree[i].children;
     }
   }
+  sortTree(documentationTree);
 
   const sidebar = (
     <div class="flex flex-col">
-      {routeTree.map((tree) => (
-        <SidebarItem tree={tree} />
+      {documentationTree.map((tree) => (
+        <SidebarItem depth={0} tree={tree} />
       ))}
     </div>
   );
@@ -29,33 +29,42 @@ export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
 
 interface SidebarItemProps {
   tree: RouteTree;
+  depth: number;
 }
 function SidebarItem(props: SidebarItemProps): JSX.Element {
   sortTree(props.tree.children);
-  return (
-    <>
-      <div class="m-2 text-lg">
-        {" "}
-        {props.tree.route === undefined ? (
-          <p>{props.tree.segment}</p>
-        ) : (
-          <SwapLink
-            target="content"
-            className="text-primary hover:text-primary-hover transition-all"
-            href={props.tree.route.href}
-          >
-            {props.tree.route.metadata.title ?? props.tree.route.href}
-          </SwapLink>
-        )}
-      </div>
+  const myLink =
+    props.tree.route === undefined ? (
+      <span class="cursor-default">{props.tree.segment}</span>
+    ) : (
+      <SwapLink
+        target="content"
+        className="text-primary hover:text-primary-hover transition-all"
+        href={props.tree.route.href}
+      >
+        {props.tree.route.metadata.title ?? props.tree.route.href}
+      </SwapLink>
+    );
 
-      <div class="ml-4">
-        {props.tree.children.map((child) => (
-          <SidebarItem tree={child} />
-        ))}
-      </div>
-    </>
-  );
+  if (props.tree.children.length === 0) {
+    return (
+      <>
+        <div class="m-2 text-lg">{myLink}</div>
+      </>
+    );
+  } else {
+    return (
+      <details open={props.depth === 0}>
+        <summary class="m-2 text-lg">{myLink}</summary>
+
+        <div class="ml-4">
+          {props.tree.children.map((child) => (
+            <SidebarItem tree={child} depth={props.depth + 1} />
+          ))}
+        </div>
+      </details>
+    );
+  }
 }
 
 export interface RouteTree {
