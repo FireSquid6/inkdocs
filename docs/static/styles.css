@@ -53,3 +53,7 @@ title {
 a {
   cursor: pointer;
 }
+
+.showing {
+  display: block;
+}
