@@ -31,6 +31,7 @@ Assuming your `contentFolder` is set to `content` in inkdocs options, this will 
 ```
 
 # Choosing Your Layout
+Inkdocs layouts are how 
 
 Inkdocs uses the following formula to figure out what layout (defined in your options) to use for each page:
 
@@ -46,7 +47,7 @@ Markdown files are parsed using [marked](https://marked.js.org/) and turned into
 
 ## Swap Router Components
 
-If you're using the swap router (which you probably are), you can create and call custom components. See [building your site](/documentation/building-your-site#swap-router) on how exactly to enable this and define components.
+If you're using the swap router (which you probably are), you can create and call custom components. See the [swap router](/documentation/plugins/swap-router) on how exactly to enable this and define components.
 
 To "call" a component within markdown, do the following:
 
@@ -69,4 +70,4 @@ mdx is not supported by inkdocs because I found it too hard and confusing to dea
 
 # yaml
 
-Yaml files are just parsed as metadata with no content. This is useful if you have an index file that needs
+Yaml files are just parsed as metadata with no content. This is useful if you have an index file that just needs metadata but is handled entirely by the layout.
