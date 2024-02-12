@@ -1,3 +1,5 @@
+⚠️ Inkdocs is still in version 0. Pull requests are discouraged until it is in a stable state (release 1)
+
 # Inkdocs
 
 Inkdocs is a static site generator built for documentation. It is currently in early development with an expected 1.0 release at the end of January 2024. It is actively maintained by [firesquid](https://github.com/firesquid6) with help from others from [Hack Club](https://github.com/hackclub).
