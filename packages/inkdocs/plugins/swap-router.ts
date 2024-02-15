@@ -2,7 +2,7 @@ import { Page, Parser, Plugin, Route } from "..";
 import { LayoutTree } from "..";
 import { getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
-import { marked } from "marked";
+import { Renderer, marked } from "marked";
 import { chooseLayout } from "../builder/layout";
 import { defaultOptions } from "../";
 import path from "node:path";
@@ -10,10 +10,15 @@ import yaml from "../parsers/yaml";
 import { parseFromString } from "dom-parser";
 import { fatalError } from "../lib/logger";
 import fs from "node:fs";
+import YAML from "yaml";
 
 // This plugin assumes that the user has installed htmx into the head of their base html.
-// This plugin also can only deal with markdown. Any other file type must have a custom parser written.
-export default function swapRouter(): Plugin {
+// by default, it contains parsers for markdown and yaml. Anything else requires a custom parser.
+interface SwapRouterOptions {
+  customRenderer?: Renderer; // a custom renderer for marked
+  components?: InkComponent[]; // a list of ink components to use
+}
+export default function swapRouter(swapOptions: SwapRouterOptions): Plugin {
   return {
     beforeBuild: (options) => {
       fs.copyFileSync(
@@ -27,6 +32,8 @@ export default function swapRouter(): Plugin {
       const parsers = new Map<string, Parser>();
       const markdownParser = getMarkdownParser(
         options.layoutTree || defaultOptions.layoutTree,
+        swapOptions.components,
+        swapOptions.customRenderer,
       );
 
       parsers.set("md", markdownParser);
@@ -157,13 +164,26 @@ export function findElement(html: string, id: string): string {
   return content.outerHTML;
 }
 
-export function getMarkdownParser(layoutTree: LayoutTree): Parser {
+export interface InkComponent {
+  name: string;
+  component: (props: object) => string;
+}
+
+export function getMarkdownParser(
+  layoutTree: LayoutTree,
+  inkComponents: InkComponent[] = [],
+  customRenderer?: Renderer,
+): Parser {
   return (text: string, filepath: string) => {
     const { content, metadata } = spliceMetadata(text);
     const myLayout = chooseLayout(
       { filepath, html: "", metadata, href: "" },
       layoutTree,
     );
+
+    if (customRenderer) {
+      marked.use({ renderer: customRenderer });
+    }
 
     marked.use({
       renderer: {
@@ -175,6 +195,34 @@ export function getMarkdownParser(layoutTree: LayoutTree): Parser {
           }
 
           return `<a href="${href}" title="${title}">${text}</a>`;
+        },
+        code: (code, infostring) => {
+          const lang = (infostring || "").match(/^\S*/)?.[0];
+
+          code = code.replace(/\n$/, "") + "\n";
+
+          if (!lang) {
+            return "<pre><code>" + code + "</code></pre>\n";
+          }
+
+          if (lang === "ink-component") {
+            const parsedYaml = YAML.parse(code);
+            for (const component of inkComponents) {
+              if (component.name === parsedYaml.name) {
+                const props = parsedYaml.props || {};
+                const output = component.component(props);
+                return output;
+              }
+            }
+          }
+
+          return (
+            '<pre><code class="language-' +
+            lang +
+            '">' +
+            code +
+            "</code></pre>\n"
+          );
         },
       },
     });
