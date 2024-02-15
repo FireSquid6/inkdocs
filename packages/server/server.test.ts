@@ -1,4 +1,4 @@
-import { getPossibleFilepaths } from "../../server";
+import { getPossibleFilepaths } from ".";
 import { describe, it, expect } from "bun:test";
 
 describe("getPossibleFilepaths", () => {

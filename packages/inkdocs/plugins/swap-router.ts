@@ -1,6 +1,5 @@
 import { Page, Parser, Plugin, Route } from "..";
 import { LayoutTree } from "..";
-import { getPossibleFilepaths } from "../server";
 import { spliceMetadata } from "../parsers";
 import { Renderer, marked } from "marked";
 import { chooseLayout } from "../builder/layout";
@@ -233,4 +232,38 @@ export function getMarkdownParser(
       metadata: metadata,
     };
   };
+}
+
+function getPossibleFilepaths(route: string, buildFolder: string): string[] {
+  if (getExtension(route) === "html") {
+    return [path.join(buildFolder, route)];
+  }
+
+  if (route.at(-1) === "/") {
+    route = route.slice(0, -1);
+  }
+
+  if (route === "") {
+    return [path.join(buildFolder, "index.html")];
+  }
+
+  const parts = route.split("/");
+
+  if (parts[parts.length - 1] === "index") {
+    parts.pop();
+  }
+
+  return [
+    path.join(buildFolder, parts.join("/")) + ".html",
+    path.join(buildFolder, parts.join("/"), "index.html"),
+  ];
+}
+
+function getExtension(filepath: string): string {
+  const parts = filepath.split(".");
+  if (parts.length === 1) {
+    return "";
+  }
+
+  return parts[parts.length - 1];
 }
