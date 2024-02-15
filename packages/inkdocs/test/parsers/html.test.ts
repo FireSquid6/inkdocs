@@ -14,7 +14,7 @@ describe("html parser", () => {
       </html>
     `;
     const parser = html();
-    const result = parser(content);
+    const result = parser(content, "");
     expect(result.html).toEqual(content);
   });
   it("should deal with metadata", () => {
@@ -32,7 +32,7 @@ describe("html parser", () => {
         </body>
       </html>
     `;
-    const result = html()(content);
+    const result = html()(content, "");
     expect(result.metadata).toEqual({
       title: "Test",
       layout: "default",
