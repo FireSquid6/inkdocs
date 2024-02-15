@@ -53,7 +53,7 @@ const options: InkdocsOptions = {
     port: 3000,
   },
   plugins: [
-    swapRouter(),
+    swapRouter({}),
     tailwind({
       inputFile: "styles.css",
       outputFile: "styles.css",
