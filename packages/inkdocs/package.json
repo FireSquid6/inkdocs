@@ -1,12 +1,8 @@
 {
   "name": "inkdocs",
   "module": "index.ts",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "type": "module",
-  "bin": {
-    "inkdocs-serve": "bin/serve.ts",
-    "inkdocs-build": "bin/build.ts"
-  },
   "devDependencies": {
     "bun-types": "latest"
   },
