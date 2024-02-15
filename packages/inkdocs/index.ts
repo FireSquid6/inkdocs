@@ -1,5 +1,4 @@
 import "@kitajs/html/register";
-import { ApiRoute } from "./server";
 
 export interface InkdocsOptions {
   staticFolder?: string | undefined;
@@ -16,7 +15,7 @@ export interface InkdocsOptions {
 
 export interface ServerOptions {
   port?: number;
-  apiRoutes?: ApiRoute[];
+  devserverPort?: number;
 }
 
 // this isn't given the type of InkdocsOptions because if it is then the typescript compiler thinks that everything is undefined (which it isn't, because this is a literal)
@@ -89,7 +88,6 @@ export interface Plugin {
     routes: Route[],
   ) => PluginDuringbuildResult;
   afterBuild?: (options: InkdocsOptions, pages: Page[]) => void;
-  setupServer?: (options: InkdocsOptions) => PluginServerResult;
 }
 
 // a theme is just a collection of layouts and craftsmen that a plugin can export if nothing complicated is required
@@ -105,8 +103,4 @@ export type PluginPrebuildResult = {
 
 export type PluginDuringbuildResult = {
   layouts: Map<string, Layout>;
-};
-
-export type PluginServerResult = {
-  apiRoutes: ApiRoute[];
 };

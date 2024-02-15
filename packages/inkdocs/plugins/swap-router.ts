@@ -9,12 +9,21 @@ import path from "node:path";
 import yaml from "../parsers/yaml";
 import { parseFromString } from "dom-parser";
 import { fatalError } from "../lib/logger";
+import fs from "node:fs";
 
 // This plugin assumes that the user has installed htmx into the head of their base html.
 // This plugin also can only deal with markdown. Any other file type must have a custom parser written.
 export default function swapRouter(): Plugin {
   return {
     beforeBuild: (options) => {
+      fs.copyFileSync(
+        "node_modules/htmx.org/dist/htmx.min.js",
+        path.join(
+          options.buildFolder ?? defaultOptions.buildFolder,
+          "htmx.min.js",
+        ),
+      );
+
       const parsers = new Map<string, Parser>();
       const markdownParser = getMarkdownParser(
         options.layoutTree || defaultOptions.layoutTree,
@@ -68,19 +77,6 @@ export default function swapRouter(): Plugin {
       }
 
       pages.push(...newPages);
-    },
-    setupServer: () => {
-      return {
-        apiRoutes: [
-          {
-            route: "/htmx-bundle",
-            verb: "GET",
-            handler: () => {
-              return Bun.file("node_modules/htmx.org/dist/htmx.min.js");
-            },
-          },
-        ],
-      };
     },
   };
 }
