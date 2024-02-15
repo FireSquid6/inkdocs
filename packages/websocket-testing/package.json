@@ -12,6 +12,7 @@
   "dependencies": {
     "@elysiajs/cors": "^0.8.0",
     "@elysiajs/html": "^0.8.0",
+    "@kitajs/html": "^3.1.2",
     "elysia": "^0.8.17",
     "inkdocs": "^0.10.0"
   }
