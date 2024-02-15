@@ -8,33 +8,63 @@ export default function Header() {
         aria-label="Global"
       >
         <div class="flex lg:flex-1">
-          <SwapLink href="/" target="layout" className="-m-1.5 p-1.5">
-            <>
-              <span class="sr-only">Inkdocs</span>
-              <img
-                class="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt=""
-              />
-            </>
+          <SwapLink
+            href="/"
+            target="layout"
+            className="-m-1.5 p-1.5 text-red hover:text-red1 text-lg"
+          >
+            <>{"<<>>"} Inkdocs</>
           </SwapLink>
         </div>
-        <div class="flex gap-x-12">
-          <Link href="/documentation">Docs</Link>
-          <Link href="/blog">Blog</Link>
+        <div class="flex gap-x-12 ">
+          <Link icon="article" href="/documentation">
+            Documentation
+          </Link>
+          <Link icon="extension" href="/documentation/plugins">
+            Plugins
+          </Link>
+          <Link icon="description" href="/Blog">
+            Blog
+          </Link>
         </div>
       </nav>
     </header>
   );
 }
-function Link({ href, children }: { href: string; children: JSX.Element }) {
+function Link({
+  href,
+  children,
+  icon,
+}: {
+  href: string;
+  icon: string;
+  children: JSX.Element;
+}) {
+  const className =
+    "-mx-3 rounded-lg px-1 md:px-2 py-2 text-base font-semibold leading-7 transition-all text-center align-middle z-10 text-green1 hover:text-green2 flex flex-row";
+
+  const inner = (
+    <>
+      <span class="mr-1 md:mr-2 material-symbols-outlined">{icon}</span>
+      <span class="hidden md:block">{children}</span>
+    </>
+  );
+
+  if (href.startsWith("http")) {
+    return (
+      <a
+        href={href}
+        class={className}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {inner}
+      </a>
+    );
+  }
   return (
-    <SwapLink
-      target="layout"
-      href={href}
-      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-text hover:text-gray-400 transition-all text-center align-middle z-10"
-    >
-      {children}
+    <SwapLink target="layout" href={href} className={className}>
+      {inner}
     </SwapLink>
   );
 }

@@ -48,7 +48,7 @@ export function getOptions(): InkdocsOptions {
       ],
     },
     plugins: [
-      swapRouter(),
+      swapRouter({}),
       tailwind({
         inputFile: "styles.css",
         outputFile: "styles.css",
@@ -56,7 +56,6 @@ export function getOptions(): InkdocsOptions {
     ],
     server: {
       port: 3000,
-      apiRoutes: [],
     },
   };
 
