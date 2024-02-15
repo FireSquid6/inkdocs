@@ -82,12 +82,13 @@ export type Craftsman = (options: InkdocsOptions, routes: Route[]) => Artifact;
 export interface Plugin {
   staticFiles?: Map<string, string>; // a map of filepaths to content of those files. Useful for adding custom css
   themes?: Theme[];
-  beforeBuild?: (options: InkdocsOptions) => PluginPrebuildResult;
+  beforeBuild?: (options: InkdocsOptions) => PluginPrebuildResult; // runs in production
   duringBuild?: (
     options: InkdocsOptions,
     routes: Route[],
-  ) => PluginDuringbuildResult;
-  afterBuild?: (options: InkdocsOptions, pages: Page[]) => void;
+  ) => PluginDuringbuildResult; // runs in production
+  afterBuild?: (options: InkdocsOptions, pages: Page[]) => void; // runs in production
+  devserver?: (options: InkdocsOptions) => void; // only runs in development
 }
 
 // a theme is just a collection of layouts and craftsmen that a plugin can export if nothing complicated is required
