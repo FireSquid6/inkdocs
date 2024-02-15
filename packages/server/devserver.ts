@@ -9,6 +9,7 @@ import path from "node:path";
 // Design:
 // 1. the inkdocs server serves all of the files in the build folder
 // 2. client side javascript and a websocket connect
+// 3. a file watcher rebuilds every time a change in the cwd is detected
 
 export async function startDevserver(options: InkdocsOptions) {
   const app = new Elysia();
