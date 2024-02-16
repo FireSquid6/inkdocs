@@ -3,11 +3,9 @@ layout: default
 title: Home
 ---
 
-# Hello World
+# Big Heading
 
-Hello world! This is the default index markdown file in the content/ folder. It has a title of home. [I'm a link](/blog)
-
-This is a change
+This is the default index markdown file in the content/ folder. It has a title of home. [I'm a link](/blog)
 
 ## A Subheading
 
@@ -28,7 +26,8 @@ This is a change
 
 ### A deeper subheading
 
-```js
+```ts
+// code exaples can be inserted as well
 export default function main(foo) {
   console.log("Hello world!");
 
