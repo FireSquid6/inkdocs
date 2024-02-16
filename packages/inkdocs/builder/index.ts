@@ -12,14 +12,14 @@ export function build(
   options: InkdocsOptions,
   filesystem: Filesystem = realFilesystem(),
   logger: Logger = realLogger(),
-): void {
+): string {
   logger.log("🏗 Building Pages...");
   resetDirectory(options.buildFolder ?? defaultOptions.buildFolder);
 
   if (
     !filesystem.exists(options.contentFolder ?? defaultOptions.contentFolder)
   ) {
-    fatalError("❌ Content folder does not exist!");
+    return "❌ Content folder does not exist!";
   }
 
   if (options.staticFolder !== undefined) {
@@ -39,6 +39,8 @@ export function build(
   }
 
   logger.log("✅ Pages successfully built!");
+
+  return "success";
 }
 
 function addPluginThemes(options: InkdocsOptions) {
