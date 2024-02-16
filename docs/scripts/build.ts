@@ -1,4 +1,10 @@
-import options from "../inkdocs";
 import { build } from "inkdocs/builder";
+import options from "../inkdocs";
 
-build(options);
+const result = build(options);
+
+if (result === "success") {
+  process.exit(0);
+}
+
+process.exit(1);

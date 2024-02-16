@@ -1,7 +1,4 @@
-import devserver from "inkdocs-devserver";
+import { devserver } from "inkdocs-server";
 import options from "../inkdocs";
 
-devserver("./scripts/build.ts", "./scripts/serve.ts", [
-  options.buildFolder ?? "build",
-  "node_modules",
-]);
+devserver(options, "scripts/build.ts");

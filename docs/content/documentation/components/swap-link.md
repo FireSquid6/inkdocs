@@ -1,13 +1,15 @@
 ---
-Title: Swap Link
+title: Swap Link
 ---
+
 The swap link is built to be used in conjunction with [the swap router](/documentation/plugins/swap-router)
 
 Props:
+
 ```ts
 export interface SwapLinkProps {
   children: JSX.Element;
-  href: string;  // the url to find
+  href: string; // the url to find
   target: "content" | "layout"; // what to swap on the page
   className?: string; // in case you'd like to extend the class
 }
