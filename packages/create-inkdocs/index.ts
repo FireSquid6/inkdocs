@@ -40,6 +40,10 @@ const templates: Template[] = [
   //   description: "A template using the swap router and tailwind",
   //   directory: "tailwind",
   // },
+  // {
+  //   name: "Barbones",
+  //   description: "just a basic inkdocs.ts and the scripts to run it"
+  // }
 ];
 
 export async function getInstructions(): Promise<Instructions> {
