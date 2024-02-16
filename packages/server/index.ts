@@ -35,7 +35,7 @@ export function devserver(options: InkdocsOptions) {
     },
   });
 
-  Bun.serve<{ authToken: string }>({
+  const server = Bun.serve<{ authToken: string }>({
     fetch(req, server) {
       const success = server.upgrade(req);
       if (success) {
@@ -51,6 +51,7 @@ export function devserver(options: InkdocsOptions) {
         console.log(`Received ${message}`);
 
         watcher.once("", (filepath) => {
+          console.log("Change detected", filepath);
           ws.send(JSON.stringify(status));
         });
       },
