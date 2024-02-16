@@ -4,16 +4,26 @@ import path from "path";
 import { html } from "@elysiajs/html";
 import fs from "fs";
 import Watcher from "watcher";
+import { build } from "inkdocs/builder";
+import cors from "@elysiajs/cors";
 
 export function devserver(options: InkdocsOptions) {
-  const app = serve(options);
+  // initial build and serve
+  build(options);
+  serve(options);
+
   let status: Status = {
     version: 0,
     buildResult: "ONGOING",
   };
 
+  const app = new Elysia();
+  app.use(cors());
   app.get("/client-javascript", () => {
     return Bun.file(path.join(__dirname, "client-javascript.js"));
+  });
+  app.listen(8009, () => {
+    log("Serving devserver client javascript on port 8009");
   });
 
   const cwd = process.cwd();
@@ -36,6 +46,7 @@ export function devserver(options: InkdocsOptions) {
   });
 
   const server = Bun.serve<{ authToken: string }>({
+    port: 8008,
     fetch(req, server) {
       const success = server.upgrade(req);
       if (success) {
@@ -48,17 +59,28 @@ export function devserver(options: InkdocsOptions) {
     },
     websocket: {
       async message(ws, message) {
-        console.log(`Received ${message}`);
-
-        watcher.once("", (filepath) => {
-          console.log("Change detected", filepath);
+        if (message === "status") {
+          log(`Received client status request`);
+          await waitThreeSeconds();
           ws.send(JSON.stringify(status));
-        });
+          log(`Sent status to client`);
+
+          // watcher.once("change", (filepath) => {
+          //   log(`Change detected ${filepath}`);
+          //   ws.send(JSON.stringify(status));
+          // });
+        }
       },
     },
   });
 
-  console.log(`Listening on ${server.hostname}:${server.port}`);
+  log(`Listening on ${server.hostname}:${server.port}`);
+}
+
+async function waitThreeSeconds() {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 3000);
+  });
 }
 
 interface Status {
@@ -158,4 +180,12 @@ export function getPossibleFilepaths(
     path.join(buildFolder, parts.join("/")) + ".html",
     path.join(buildFolder, parts.join("/"), "index.html"),
   ];
+}
+
+function log(text: string) {
+  console.log(`💻 \x1b[34mDEVSERVER: \x1b[0m${text}`);
+}
+
+function error(text: string) {
+  console.error(`❌ \x1b[31;1m DEVSERVER: \x1b[31;0m ${text}`);
 }

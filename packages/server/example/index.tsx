@@ -7,9 +7,10 @@ const baseHtml = `<html>
   <title>Example Inkdocs</title>
   <link rel="stylesheet" href="/styles.css" />
   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-  <script defer src="http://localhost:8008/client-javascript"></script>
+  <script defer src="http://localhost:8009/client-javascript"></script>
 </head>
 <body>
+please work
 {slot}
 </body>
 </html>`;

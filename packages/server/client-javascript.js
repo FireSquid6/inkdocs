@@ -1,12 +1,12 @@
 async function main() {
-  const socket = new WebSocket("ws://localhost:3000");
-  socket.addEventListener("open", () => {
+  const socket = new WebSocket("ws://localhost:8008");
+  socket.onopen = () => {
     console.log("Connected to server");
+    socket.send("status");
+  };
 
-    socket.send("give me stuff");
-    socket.on("message", (data) => {
-      console.log(data);
-    });
-  });
+  socket.onmessage = (event) => {
+    console.log("Message from server ", event.data);
+  };
 }
 main();
