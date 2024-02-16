@@ -23,6 +23,7 @@ export function devserver(options: InkdocsOptions, buildScript: string) {
   const cwd = process.cwd();
   const ignoreFolders = [
     path.join(cwd, "node_modules"),
+    path.join(cwd, "git"),
     path.join(cwd, options.buildFolder ?? defaultOptions.buildFolder),
   ];
 
