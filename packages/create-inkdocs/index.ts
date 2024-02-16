@@ -1,7 +1,16 @@
 #!/usr/bin/env bun
-import { createSelection, createPrompt } from "bun-promptx";
 import fs from "node:fs";
 import path from "node:path";
+import {
+  text,
+  confirm,
+  intro,
+  isCancel,
+  cancel,
+  select,
+  outro,
+  spinner,
+} from "@clack/prompts";
 
 interface Instructions {
   directory: string;
@@ -33,58 +42,70 @@ const templates: Template[] = [
   // },
 ];
 
-export function getInstructions(): Instructions {
+export async function getInstructions(): Promise<Instructions> {
   console.log(
     "⚠ create-inkdocs is still under development. You'll only be able to use the recommended template for now.",
   );
+  intro("Create a new inkdocs project");
   const instructions: Instructions = {
     directory: "inkdocs-project",
     template: templates[0],
   };
 
-  const { value } = createPrompt("Project Directory: ");
+  const directory = await text({
+    message: "Where should the project be created?",
+    placeholder: "./inkdocs-project",
+  });
 
-  if (value !== null) {
-    instructions.directory = value;
+  if (directory !== null) {
+    instructions.directory = directory as string;
   }
 
   // check if directory exists
   // if it does, ask if it should be overwritten
   if (fs.existsSync(instructions.directory)) {
-    const { value } = createPrompt(
-      "Directory already exists. Overwrite conflicting files? (y/n): ",
-    );
-    if (value !== "y") {
+    const overwrite = await confirm({
+      message: "The directory already exists. Do you want to overwrite it?",
+    });
+    if (isCancel(overwrite)) {
+      cancel("Operation aborted");
       process.exit(0);
     }
   }
 
-  const selections = [];
-  for (let i = 0; i < templates.length; i++) {
-    const template = templates[i];
-    selections.push({
-      text: template.name,
-      description: template.description,
-    });
-  }
-
-  const result = createSelection(selections, {
-    headerText: "Select a template: ",
-    perPage: 5,
+  const template = await select({
+    message: "Which template would you like to use?",
+    options: templates.map((template) => {
+      return {
+        value: template,
+        label: template.name,
+        hint: template.description,
+      };
+    }),
   });
 
-  if (result.error === null && result.selectedIndex !== null) {
-    instructions.template = templates[result.selectedIndex];
+  if (isCancel(template)) {
+    cancel("Operation aborted");
+    process.exit(0);
   }
+  instructions.template = template as Template;
 
   return instructions;
 }
 
 function createProject(instructions: Instructions) {
   copyFiles(
-    path.join(__dirname, "../templates", instructions.template.directory),
+    path.join(__dirname, "./templates", instructions.template.directory),
     instructions.directory,
   );
+
+  process.chdir(instructions.directory);
+  const s = spinner();
+  s.start("Installing dependencies");
+  Bun.spawnSync(["bun", "install"]);
+  s.stop("Dependencies installed");
+
+  outro("Project created!");
 }
 
 function copyFiles(from: string, to: string): void {
@@ -123,6 +144,5 @@ function recursivelyReadDir(dir: string): string[] {
   return files;
 }
 
-const instructions = getInstructions();
+const instructions = await getInstructions();
 createProject(instructions);
-console.log(instructions);

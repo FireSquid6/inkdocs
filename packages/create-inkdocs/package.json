@@ -8,7 +8,5 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "dependencies": {
-    "bun-promptx": "^0.2.0"
-  }
+  "dependencies": { "@clack/prompts": "^0.7.0" }
 }
