@@ -10,7 +10,6 @@ const baseHtml = `<html>
   <script defer src="http://localhost:8009/client-javascript"></script>
 </head>
 <body>
-please work
 {slot}
 </body>
 </html>`;

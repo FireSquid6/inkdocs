@@ -6,7 +6,9 @@ async function main() {
   };
 
   socket.onmessage = (event) => {
-    console.log("Message from server ", event.data);
+    if (event.data === "success") {
+      window.location.reload();
+    }
   };
 }
 main();

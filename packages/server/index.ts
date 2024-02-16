@@ -4,18 +4,12 @@ import path from "path";
 import { html } from "@elysiajs/html";
 import fs from "fs";
 import Watcher from "watcher";
-import { build } from "inkdocs/builder";
 import cors from "@elysiajs/cors";
 
-export function devserver(options: InkdocsOptions) {
+export function devserver(options: InkdocsOptions, buildScript: string) {
   // initial build and serve
-  build(options);
+  rebuild(buildScript);
   serve(options);
-
-  let status: Status = {
-    version: 0,
-    buildResult: "ONGOING",
-  };
 
   const app = new Elysia();
   app.use(cors());
@@ -61,14 +55,14 @@ export function devserver(options: InkdocsOptions) {
       async message(ws, message) {
         if (message === "status") {
           log(`Received client status request`);
-          await waitThreeSeconds();
-          ws.send(JSON.stringify(status));
-          log(`Sent status to client`);
 
-          // watcher.once("change", (filepath) => {
-          //   log(`Change detected ${filepath}`);
-          //   ws.send(JSON.stringify(status));
-          // });
+          // TODO: also listen to create and delete events
+          watcher.once("change", async (filepath) => {
+            log(`Change detected ${filepath}`);
+            const status = rebuild(buildScript);
+            ws.send(status ? "success" : "failure");
+            log(`Sent status to client`);
+          });
         }
       },
     },
@@ -77,15 +71,13 @@ export function devserver(options: InkdocsOptions) {
   log(`Listening on ${server.hostname}:${server.port}`);
 }
 
-async function waitThreeSeconds() {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 3000);
+function rebuild(buildScript: string): boolean {
+  log("Rebuilding...");
+  const process = Bun.spawnSync(["bun", "run", buildScript], {
+    stdio: ["inherit", "inherit", "inherit"],
   });
-}
 
-interface Status {
-  version: number;
-  buildResult: "SUCCESS" | "FAILED" | "ONGOING";
+  return process.exitCode === 0;
 }
 
 export function serve(options: InkdocsOptions): Elysia {

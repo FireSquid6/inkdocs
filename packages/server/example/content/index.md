@@ -7,6 +7,8 @@ title: Home
 
 Hello world! This is the default index markdown file in the content/ folder. It has a title of home. [I'm a link](/blog)
 
+This is a change
+
 ## A Subheading
 
 - Lists
