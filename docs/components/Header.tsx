@@ -23,7 +23,7 @@ export default function Header() {
           <Link icon="extension" href="/documentation/plugins">
             Plugins
           </Link>
-          <Link icon="description" href="/Blog">
+          <Link icon="description" href="/blog">
             Blog
           </Link>
         </div>

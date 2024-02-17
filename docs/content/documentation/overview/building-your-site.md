@@ -2,17 +2,41 @@
 title: Building Your Site
 weight: 0
 ---
+
 # How Inkdocs Builds Your Site
+
 1. Everything in the `static` folder is copied over to the build folder
-2. For each file in the `content` folder, a `Parser` is run to generate the html and metadata from it 
+2. For each file in the `content` folder, a `Parser` is run to generate the html and metadata from it
 3. Those routes are then passed to all of the [Craftsmen](#craftsmen-and-artifacts) which create Artifacts
 4. Those artifacts are then passed to the [Layouts](#layouts) which build the `Pages`.
 5. Those pages are then written to the `build` folder.
+
 # Options
+
 ## The baseHtml
-Everything starts in the baseHtml. It is where most of your 
+
+Everything starts in the baseHtml. It should look something like:
+
+```html
+<html>
+  <head>
+    <!-- put stuff for your head here -->
+  </head>
+  <body>
+    {slot}
+  </body>
+</html>
+```
+
+Two important things:
+
+1. It's important that your `head` is in the baseHtml. If it isn't, some plugins and the devserver won't work
+2. Inkdocs will swap the result of the layout into the {slot}
+
 ## Server options
+
 Server options should look like:
+
 ```ts
 const options = {
   ...
@@ -29,16 +53,22 @@ const options = {
   ...
 }
 ```
+
 You can defined the port to use as well as any extra ApiRoutes that your application may need
+
 ## The Layout Tree
+
 Each file chooses a layout using the steps shown [here](/documentation/writing-content#choosing-your-layout)
 
 The route tree is a part of how inkdocs looks at layouts.
 
 # Routers
+
 Routers are special plugins that will handle all of the parsing for you. There are two you can choose from by default:
- - [Swap Router](/documentation/plugins/swap-router) (recommended)
- - [Standard Router](/documentation/plugins/standard-router)
+
+- [Swap Router](/documentation/plugins/swap-router) (recommended)
+- [Standard Router](/documentation/plugins/standard-router)
+
 # Layouts
 
 # Craftsmen and Artifacts
