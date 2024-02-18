@@ -31,7 +31,6 @@ this is some standard text. it is multiline
     const component: Component = {
       name: "MyComponent",
       generator: (children) => {
-        console.log("generator was called");
         return <article>{children}</article>;
       },
     };
