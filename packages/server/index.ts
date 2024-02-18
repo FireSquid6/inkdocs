@@ -147,6 +147,7 @@ function getExtension(filepath: string): string {
   return parts[parts.length - 1];
 }
 
+// this exists from the days when a route such as /about could be located at /build/about.html or /build/about/index.html. All routes are always index files, so this function seems kind of uesless.
 export function getPossibleFilepaths(
   route: string,
   buildFolder: string,
