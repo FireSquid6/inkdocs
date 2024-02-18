@@ -49,7 +49,7 @@ export default function parse(
           } else {
             // TODO: print diagnostic because no component was found
             newSrc += childrenToParse + "\n";
-            console.log("no component found");
+            console.log(`❌ Inkdown: Component ${name} was not found`);
           }
 
           state = ParserState.Normal;
