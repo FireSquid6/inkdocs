@@ -1,4 +1,4 @@
-import marked, { type MarkedExtension } from "marked";
+import { marked, type MarkedExtension } from "marked";
 import "@kitajs/html/register";
 
 export interface Component {
@@ -32,7 +32,7 @@ export default function parse(
     switch (state) {
       case ParserState.Normal:
         if (line.trim().startsWith("%%%")) {
-          name = line.trim().slice(3);
+          name = line.trim().slice(4);
           state = ParserState.Component;
           args = new Map();
         } else {
@@ -49,6 +49,7 @@ export default function parse(
           } else {
             // TODO: print diagnostic because no component was found
             newSrc += childrenToParse + "\n";
+            console.log("no component found");
           }
 
           state = ParserState.Normal;
