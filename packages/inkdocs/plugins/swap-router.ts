@@ -1,7 +1,7 @@
 import { Page, Parser, Plugin, Route } from "..";
 import { LayoutTree } from "..";
 import { spliceMetadata } from "../parsers";
-import { Renderer, marked } from "marked";
+import { Renderer, MarkedExtension } from "marked";
 import { chooseLayout } from "../builder/layout";
 import { defaultOptions } from "../";
 import path from "node:path";
@@ -11,12 +11,13 @@ import { fatalError } from "../lib/logger";
 import fs from "node:fs";
 import YAML from "yaml";
 import { addToHead } from "../lib/add-to-head";
+import parse, { Component } from "inkdown";
 
 // This plugin assumes that the user has installed htmx into the head of their base html.
 // by default, it contains parsers for markdown and yaml. Anything else requires a custom parser.
 interface SwapRouterOptions {
   customRenderer?: Renderer; // a custom renderer for marked
-  components?: InkComponent[]; // a list of ink components to use
+  components?: Component[]; // a list of ink components to use
 }
 export default function swapRouter(swapOptions: SwapRouterOptions): Plugin {
   return {
@@ -173,7 +174,7 @@ export interface InkComponent {
 
 export function getMarkdownParser(
   layoutTree: LayoutTree,
-  inkComponents: InkComponent[] = [],
+  inkComponents: Component[] = [],
   customRenderer?: Renderer,
 ): Parser {
   return (text: string, filepath: string) => {
@@ -182,53 +183,31 @@ export function getMarkdownParser(
       { filepath, html: "", metadata, href: "" },
       layoutTree,
     );
+    const extensions: MarkedExtension[] = [
+      {
+        renderer: {
+          link: (href, title, text) => {
+            if (href.startsWith("/")) {
+              const { target, getUrl } = getSwapATag(
+                myLayout,
+                href,
+                layoutTree,
+              );
 
-    if (customRenderer) {
-      marked.use({ renderer: customRenderer });
-    }
-
-    marked.use({
-      renderer: {
-        link: (href, title, text) => {
-          if (href.startsWith("/")) {
-            const { target, getUrl } = getSwapATag(myLayout, href, layoutTree);
-
-            return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-push-url=${href} hx-trigger="click" title="${title}">${text}</a>`;
-          }
-
-          return `<a href="${href}" title="${title}">${text}</a>`;
-        },
-        code: (code, infostring) => {
-          const lang = (infostring || "").match(/^\S*/)?.[0];
-
-          code = code.replace(/\n$/, "") + "\n";
-
-          if (!lang) {
-            return "<pre><code>" + code + "</code></pre>\n";
-          }
-
-          if (lang === "ink-component") {
-            const parsedYaml = YAML.parse(code);
-            for (const component of inkComponents) {
-              if (component.name === parsedYaml.name) {
-                const props = parsedYaml.props || {};
-                const output = component.component(props);
-                return output;
-              }
+              return `<a hx-get="${getUrl}" hx-swap="outerHTML" hx-target=${target} hx-push-url=${href} hx-trigger="click" title="${title}">${text}</a>`;
             }
-          }
 
-          return (
-            '<pre><code class="language-' +
-            lang +
-            '">' +
-            code +
-            "</code></pre>\n"
-          );
+            return `<a href="${href}" title="${title}">${text}</a>`;
+          },
         },
       },
-    });
-    const html = marked(content);
+    ];
+
+    if (customRenderer) {
+      extensions.push({ renderer: customRenderer });
+    }
+
+    const html = parse(content, inkComponents, extensions);
 
     return {
       html: html,

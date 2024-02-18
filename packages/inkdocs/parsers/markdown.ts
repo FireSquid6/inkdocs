@@ -1,11 +1,11 @@
 import { Parser } from "../index";
-import { marked } from "marked";
 import { spliceMetadata } from ".";
+import parse, { Component } from "inkdown";
 
-function markdown(): Parser {
+function markdown(components: Component[]): Parser {
   return (text: string) => {
     const { content, metadata } = spliceMetadata(text);
-    const html = marked(content);
+    const html = parse(content, components);
 
     return {
       html: html,

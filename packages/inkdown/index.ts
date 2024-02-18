@@ -47,7 +47,6 @@ export default function parse(
           if (component) {
             newSrc += component.generator(innerJsx, args) + "\n";
           } else {
-            // TODO: print diagnostic because no component was found
             newSrc += childrenToParse + "\n";
             console.log(`❌ Inkdown: Component ${name} was not found`);
           }
