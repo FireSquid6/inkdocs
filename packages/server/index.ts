@@ -1,24 +1,12 @@
-import { Elysia, NotFoundError } from "elysia";
 import { InkdocsOptions, defaultOptions } from "inkdocs";
 import path from "path";
-import { html } from "@elysiajs/html";
 import fs from "fs";
 import Watcher from "watcher";
-import cors from "@elysiajs/cors";
 
 export function devserver(options: InkdocsOptions, buildScript: string) {
-  // initial build and serve
-  rebuild(buildScript);
+  // initial build
+  rebuild(buildScript, options.buildFolder ?? defaultOptions.buildFolder);
   serve(options);
-
-  const app = new Elysia();
-  app.use(cors());
-  app.get("/client-javascript", () => {
-    return Bun.file(path.join(__dirname, "client-javascript.js"));
-  });
-  app.listen(8009, () => {
-    log("Serving devserver client javascript on port 8009");
-  });
 
   const cwd = process.cwd();
   const ignoreFolders = [
@@ -40,6 +28,10 @@ export function devserver(options: InkdocsOptions, buildScript: string) {
     },
   });
 
+  watcher.on("error", (error) => {
+    devserverError(`Watcher error: ${error}`);
+  });
+
   const server = Bun.serve<{ authToken: string }>({
     port: 8008,
     fetch(req, server) {
@@ -55,87 +47,67 @@ export function devserver(options: InkdocsOptions, buildScript: string) {
     websocket: {
       async message(ws, message) {
         if (message === "status") {
-          log(`Received client status request`);
+          devserverLog(`Received client status request`);
 
           // TODO: also listen to create and delete events
           watcher.once("change", async (filepath) => {
-            log(`Change detected ${filepath}`);
-            const status = rebuild(buildScript);
+            devserverLog(`Change detected ${filepath}`);
+            const status = rebuild(
+              buildScript,
+              options.buildFolder ?? defaultOptions.buildFolder,
+            );
             ws.send(status ? "success" : "failure");
-            log(`Sent status to client`);
+            devserverLog(`Sent status to client`);
           });
         }
       },
     },
   });
 
-  log(`Listening on ${server.hostname}:${server.port}`);
+  devserverLog(`Listening on ${server.hostname}:${server.port}`);
 }
 
-function rebuild(buildScript: string): boolean {
-  log("Rebuilding...");
+function rebuild(buildScript: string, buildFolder: string): boolean {
+  devserverLog("Rebuilding...");
   const process = Bun.spawnSync(["bun", "run", buildScript], {
     stdio: ["inherit", "inherit", "inherit"],
   });
 
+  const clientJavascriptFilepath = path.join(__dirname, "client-javascript.js");
+  fs.copyFileSync(
+    clientJavascriptFilepath,
+    path.join(buildFolder, "client-javascript.js"),
+  );
+
   return process.exitCode === 0;
 }
 
-export function serve(options: InkdocsOptions): Elysia {
+export function serve(options: InkdocsOptions) {
   const serverOptions = options.server ?? defaultOptions.server;
-  const app = new Elysia();
-  app.onError(({ code, error, set }) => {
-    if (code === "NOT_FOUND") {
-      set.status = 404;
+  const buildFolder = options.buildFolder ?? defaultOptions.buildFolder;
+  const port = serverOptions.port ?? defaultOptions.server.port;
 
-      return "Not found :(";
-    }
+  Bun.serve({
+    port: port,
+    async fetch(req) {
+      const url = new URL(req.url);
 
-    return error;
+      let filePath = path.join(buildFolder, url.pathname);
+
+      // add a /index.html to the end of the path if it has no extension
+      if (getExtension(filePath) === "") {
+        filePath = path.join(filePath, "index.html");
+      }
+
+      console.log(`📦 ${url.pathname} -> ${filePath}`);
+
+      const file = Bun.file(filePath);
+      return new Response(file);
+    },
+    error() {
+      return new Response(null, { status: 404 });
+    },
   });
-
-  app.use(html());
-
-  app.get("*", ({ params }) => {
-    const route = params["*"];
-    const filepath = path.join(
-      options.buildFolder ?? defaultOptions.buildFolder,
-      route,
-    );
-
-    switch (getExtension(filepath)) {
-      case "html":
-      case "":
-        const possibleFilepaths = getPossibleFilepaths(
-          route,
-          options.buildFolder ?? defaultOptions.buildFolder,
-        );
-
-        for (const possibleFilepath of possibleFilepaths) {
-          if (fs.existsSync(possibleFilepath)) {
-            console.log(`📄 /${route} -> ${possibleFilepath}`);
-            const html = fs.readFileSync(
-              possibleFilepath,
-              "utf-8",
-            ) as JSX.Element;
-            return html;
-          }
-        }
-        throw new NotFoundError();
-      default:
-        console.log(`📦 ${filepath}`);
-        if (fs.existsSync(filepath)) {
-          return Bun.file(filepath);
-        }
-        throw new NotFoundError();
-    }
-  });
-
-  app.listen(serverOptions.port ?? defaultOptions.server.port, (server) => {
-    console.log(`\n🚀 Started Server on port ${server.port}`);
-  });
-
-  return app;
 }
 
 function getExtension(filepath: string): string {
@@ -147,39 +119,10 @@ function getExtension(filepath: string): string {
   return parts[parts.length - 1];
 }
 
-// this exists from the days when a route such as /about could be located at /build/about.html or /build/about/index.html. All routes are always index files, so this function seems kind of uesless.
-export function getPossibleFilepaths(
-  route: string,
-  buildFolder: string,
-): string[] {
-  if (getExtension(route) === "html") {
-    return [path.join(buildFolder, route)];
-  }
-
-  if (route.at(-1) === "/") {
-    route = route.slice(0, -1);
-  }
-
-  if (route === "") {
-    return [path.join(buildFolder, "index.html")];
-  }
-
-  const parts = route.split("/");
-
-  if (parts[parts.length - 1] === "index") {
-    parts.pop();
-  }
-
-  return [
-    path.join(buildFolder, parts.join("/")) + ".html",
-    path.join(buildFolder, parts.join("/"), "index.html"),
-  ];
-}
-
-function log(text: string) {
+function devserverLog(text: string) {
   console.log(`💻 \x1b[34mDEVSERVER: \x1b[0m${text}`);
 }
 
-function error(text: string) {
+function devserverError(text: string) {
   console.error(`❌ \x1b[31;1m DEVSERVER: \x1b[31;0m ${text}`);
 }
