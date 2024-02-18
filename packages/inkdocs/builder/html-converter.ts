@@ -133,10 +133,7 @@ export function getNewFilepath(
     parts.shift();
   }
 
-  parts[parts.length - 1] = parts[parts.length - 1].replace(
-    /\.[^/.]+$/,
-    ".html",
-  );
+  parts[parts.length - 1] = parts[parts.length - 1].replace(/\.[^/.]+$/, "");
 
   const contentFolderParts = contentFolder.split("/");
   if (contentFolderParts[0] === "." || contentFolderParts[0] === "") {
@@ -147,13 +144,18 @@ export function getNewFilepath(
       parts.shift();
     }
   }
+
+  if (parts[parts.length - 1] !== "index") {
+    parts.push("index");
+  }
+
   const buildFolderParts = buildFolder.split("/");
   if (buildFolderParts[0] === "." || buildFolderParts[0] === "") {
     buildFolderParts.shift();
   }
   const newFilepath = [...buildFolderParts, ...parts].join("/");
 
-  return newFilepath;
+  return newFilepath + ".html";
 }
 
 function stripSlashesAndDots(str: string): string {

@@ -71,6 +71,13 @@ describe("getNewFilepath", () => {
     const result = getNewFilepath(filepath, contentFolder, buildFolder);
     expect(result).toEqual("build/index.html");
   });
+  it("turns paths into index.htmls", () => {
+    const filepath = "content/hello.md";
+    const contentFolder = "content";
+    const buildFolder = "build";
+    const result = getNewFilepath(filepath, contentFolder, buildFolder);
+    expect(result).toEqual("build/hello/index.html");
+  });
 });
 
 describe("getArtifacts", () => {
@@ -145,7 +152,7 @@ describe("getRoutes", () => {
         html: "<p>hello world</p>\n",
       },
       {
-        filepath: "build/subfolder/page.html",
+        filepath: "build/subfolder/page/index.html",
         href: "/subfolder/page",
         metadata: {},
         html: "<p>hello world</p>\n",

@@ -6,7 +6,7 @@ import {
   realFilesystem,
   resetDirectory,
 } from "../lib/filesystem";
-import { Logger, fatalError, realLogger } from "../lib/logger";
+import { Logger, realLogger } from "../lib/logger";
 
 export function build(
   options: InkdocsOptions,
