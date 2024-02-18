@@ -26,6 +26,7 @@ export default function parse(
   let state = ParserState.Normal;
   let name = "";
   let childrenToParse = "";
+  let args = new Map<string, string>();
 
   for (const line of lines) {
     switch (state) {
@@ -33,6 +34,7 @@ export default function parse(
         if (line.trim().startsWith("%%%")) {
           name = line.trim().slice(3);
           state = ParserState.Component;
+          args = new Map();
         } else {
           newSrc += line + "\n";
         }
@@ -43,7 +45,7 @@ export default function parse(
           const innerJsx = marked.parse(childrenToParse) as JSX.Element;
           const component = components.find((c) => c.name === name);
           if (component) {
-            newSrc += component.generator(innerJsx, new Map()) + "\n";
+            newSrc += component.generator(innerJsx, args) + "\n";
           } else {
             // TODO: print diagnostic because no component was found
             newSrc += childrenToParse + "\n";
@@ -51,6 +53,13 @@ export default function parse(
 
           state = ParserState.Normal;
         } else {
+          if (line.trim().startsWith("@inkparam")) {
+            // param lines should look like:
+            // @param key value
+            const [_, key, value] = line.trim().split(" ");
+            args.set(key, value);
+          }
+
           childrenToParse += line + "\n";
         }
         break;
