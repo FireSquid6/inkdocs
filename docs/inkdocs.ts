@@ -15,7 +15,7 @@ export function getOptions(): InkdocsOptions {
   <link rel="stylesheet" href="/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <script src="/htmx.min.js"></script>
-  <script defer src="http://localhost:8009/client-javascript"></script>
+  <script defer src="/client-javascript.js"></script>
 </head>
   {slot}
 </html>`;
