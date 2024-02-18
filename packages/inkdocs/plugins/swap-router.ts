@@ -10,6 +10,7 @@ import { parseFromString } from "dom-parser";
 import { fatalError } from "../lib/logger";
 import fs from "node:fs";
 import YAML from "yaml";
+import { addToHead } from "../lib/add-to-head";
 
 // This plugin assumes that the user has installed htmx into the head of their base html.
 // by default, it contains parsers for markdown and yaml. Anything else requires a custom parser.
@@ -27,6 +28,8 @@ export default function swapRouter(swapOptions: SwapRouterOptions): Plugin {
           "htmx.min.js",
         ),
       );
+
+      addToHead("<script defer src='/htmx.min.js'></script>", options);
 
       const parsers = new Map<string, Parser>();
       const markdownParser = getMarkdownParser(

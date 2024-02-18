@@ -7,7 +7,6 @@ const baseHtml = `<html>
 <head>
   <title>Example Inkdocs</title>
   <link rel="stylesheet" href="/styles.css" />
-  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
 {slot}
@@ -54,10 +53,10 @@ const options: InkdocsOptions = {
   },
   plugins: [
     swapRouter({}),
-    tailwind({
-      inputFile: "styles.css",
-      outputFile: "styles.css",
-    }),
+    // tailwind({
+    //   inputFile: "styles.css",
+    //   outputFile: "styles.css",
+    // }),
   ],
 };
 
