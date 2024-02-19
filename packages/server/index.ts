@@ -1,7 +1,29 @@
-import { InkdocsOptions, defaultOptions } from "inkdocs";
+import { InkdocsOptions, Plugin, defaultOptions } from "inkdocs";
+import { addToHead } from "inkdocs/lib/add-to-head";
 import path from "path";
 import fs from "fs";
 import Watcher from "watcher";
+
+// detects if the devmode flag is present and adds the neccessary client script to the head of so
+export function devserverPlugin(): Plugin {
+  return {
+    beforeBuild: (options) => {
+      for (const arg of process.argv) {
+        if (arg === "--devmode") {
+          addToHead(
+            `<script defer src="/client-javascript.js"></script>`,
+            options,
+          );
+        }
+      }
+
+      return {
+        craftsmen: [],
+        parsers: new Map(),
+      };
+    },
+  };
+}
 
 export function devserver(options: InkdocsOptions, buildScript: string) {
   // initial build
@@ -69,7 +91,7 @@ export function devserver(options: InkdocsOptions, buildScript: string) {
 
 function rebuild(buildScript: string, buildFolder: string): boolean {
   devserverLog("Rebuilding...");
-  const process = Bun.spawnSync(["bun", "run", buildScript], {
+  const process = Bun.spawnSync(["bun", "run", buildScript, "--devmode"], {
     stdio: ["inherit", "inherit", "inherit"],
   });
 

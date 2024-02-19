@@ -10,7 +10,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "inkdocs": "^0.10.1",
+    "inkdocs": "latest",
     "watcher": "^2.3.0"
   }
 }

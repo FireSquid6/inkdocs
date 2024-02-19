@@ -1,13 +1,13 @@
 import { InkdocsOptions, Layout } from "inkdocs";
 import swapRouter from "inkdocs/plugins/swap-router";
 import "@kitajs/html/register";
+import { devserverPlugin } from "..";
 
 const baseHtml = `<html>
 <head>
   <title>Example Inkdocs</title>
   <link rel="stylesheet" href="/styles.css" />
   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-  <script defer src="/client-javascript.js"></script>
 </head>
 <body>
 {slot}
@@ -51,7 +51,7 @@ const options: InkdocsOptions = {
   server: {
     port: 3000,
   },
-  plugins: [swapRouter({})],
+  plugins: [swapRouter({}), devserverPlugin()],
 };
 
 export default options;
