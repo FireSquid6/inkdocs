@@ -7,6 +7,7 @@ import DocsLayout from "./layouts/documentation";
 import tailwind from "inkdocs/plugins/tailwind";
 import LandingLayout from "./layouts/landing";
 import BlogLayout from "./layouts/blog";
+import { devserverPlugin } from "inkdocs-server";
 
 export function getOptions(): InkdocsOptions {
   const baseHtml = `<html>
@@ -14,8 +15,6 @@ export function getOptions(): InkdocsOptions {
 <head>
   <link rel="stylesheet" href="/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <script src="/htmx.min.js"></script>
-  <script defer src="/client-javascript.js"></script>
 </head>
   {slot}
 </html>`;
@@ -54,6 +53,7 @@ export function getOptions(): InkdocsOptions {
         inputFile: "styles.css",
         outputFile: "styles.css",
       }),
+      devserverPlugin(),
     ],
     server: {
       port: 3000,
