@@ -16,7 +16,9 @@ const options: InkdocsOptions = {
 }
 ```
 
-3. use [swap link](/documentation/components/swap-link) for all of your `<a>` tags
+## Swap Link
+
+To take advantage of the swap router, you'll need to use [swap link](/documentation/components/swap-link) for all of your local (meaning to the same site) `<a>` tags in layouts. Swap Links are used by default in
 
 # Explanation
 
