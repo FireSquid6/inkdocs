@@ -6,8 +6,6 @@ title: Swap Router
 
 The swap router is a paradigm shift in how you build your website
 
-1. add the swap router to your plugins:
-
 ```ts
 import swapRouter from "inkdocs/plugins/swap-router"
 // inkdocs.ts
@@ -16,19 +14,6 @@ const options: InkdocsOptions = {
   plugins: [swapRouter()]
   ...
 }
-```
-
-2.  Add htmx to your base html:
-
-```html
-<html>
-  <head>
-    ...
-    <script src="/htmx-bundle"></script>
-  </head>
-  ...
-  <html></html>
-</html>
 ```
 
 3. use [swap link](/documentation/components/swap-link) for all of your `<a>` tags

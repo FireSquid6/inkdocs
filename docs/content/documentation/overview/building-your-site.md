@@ -116,4 +116,84 @@ You can define all of your layouts in separate files or put everything in the `i
 
 # Craftsmen and Artifacts
 
-While layouts can build single pages, sometimes you need large components for a layout that
+While layouts can build single pages, sometimes you need large components in your layout that need to look at every single route. That's where Craftsmen come in. This site uses a craftsman for the sidebar that looks like:
+
+```tsx
+export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
+  const routeTree = makeRouteTree(routes); // other function defined later in the file that I'm not including
+
+  // find the tree that is the segment "documentation"
+  let documentationTree: RouteTree[] = [];
+  for (let i = 0; i < routeTree.length; i++) {
+    if (routeTree[i].segment === "documentation") {
+      documentationTree = routeTree[i].children;
+    }
+  }
+  sortTree(documentationTree);
+
+  const sidebar = (
+    <div class="flex flex-col bg-background">
+      <h1 class="m-2 text-2xl">
+        <label
+          for="drawer-toggle"
+          class="lg:hidden drawer-button inline btn btn-primary"
+        >
+          Close Drawer
+        </label>
+        Documentation
+      </h1>
+      {documentationTree.map((tree) => (
+        <SidebarItem depth={0} tree={tree} />
+      ))}
+    </div>
+  );
+
+  return {
+    name: "sidebar",
+    data: sidebar,
+  };
+}
+```
+
+It is then defined in the options with:
+
+```ts
+craftsmen: [Sidebar],
+```
+
+That artifact is precomputed before all of tha layouts and can then be used by then:
+
+```tsx
+const DocsLayout: Layout = (
+  children: JSX.Element,
+  metadata: any,
+  artifacts,
+) => {
+  const sidebar = artifacts.get("sidebar") as JSX.Element; // here
+  return (
+    <Root>
+      <div class="drawer lg:drawer-open">
+        <input type="checkbox" id="drawer-toggle" class=" drawer-toggle" />
+
+        <div class="drawer-content">
+          <label
+            for="drawer-toggle"
+            class="drawer-button inline lg:hidden btn btn-primary"
+          >
+            Open Drawer
+          </label>
+
+          <article id="content" class="prose prose-invert mx-auto">
+            <title>Inkdocs | {metadata.title ?? "Untitled"}</title>
+            {children}
+          </article>
+        </div>
+
+        <div class="drawer-side h-full">{sidebar}</div>
+      </div>
+    </Root>
+  );
+};
+```
+
+The main disadvantage of artifacts is that they are not typed properly. This is because I am stupid. One day I will figure out how to make then typed properly.

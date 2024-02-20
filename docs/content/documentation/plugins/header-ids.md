@@ -4,8 +4,6 @@ title: Header Ids
 
 # Usage
 
-1. Add it to your plugins:
-
 ```ts
 import headerIds from "inkdocs/plugins/header-ids"
 // inkdocs.ts
