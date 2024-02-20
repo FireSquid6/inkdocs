@@ -31,7 +31,8 @@ Assuming your `contentFolder` is set to `content` in inkdocs options, this will 
 ```
 
 # Choosing Your Layout
-Inkdocs layouts are how 
+
+Inkdocs layouts are how
 
 Inkdocs uses the following formula to figure out what layout (defined in your options) to use for each page:
 
@@ -43,26 +44,24 @@ For more on layouts, see [building your site](/documentation/building-your-site#
 
 # Markdown
 
-Markdown files are parsed using [marked](https://marked.js.org/) and turned into html strings.
+Markdown files are parsed using inkdown, an internal library built on top of [marked](https://marked.js.org/) and turned into html strings.
+
+To add metadata to markdown, use yaml at the top:
+
+```md
+---
+title: hello world
+layout: MyLayout
+---
+
+some standard markdown text
+
+# A Big header
+```
 
 ## Swap Router Components
 
-If you're using the swap router (which you probably are), you can create and call custom components. See the [swap router](/documentation/plugins/swap-router) on how exactly to enable this and define components.
-
-To "call" a component within markdown, do the following:
-
-```md
-this is some normal content
-\`\`\`swap-component
-component: my-cool-component
-props:
-name: firesquid
-date: 03/02/
-\`\`\`
-more normal content
-```
-
-These components are rendered at build time
+If you're using the swap router, you can add custom components to your markdown. See [Recpies](/documentation/recpies) for more information.
 
 ## Why no mdx?
 
