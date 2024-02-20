@@ -5,25 +5,21 @@ export interface SwapLinkProps {
   href: string;
   target: "content" | "layout";
   className?: string;
+  class: string;
 }
 
-export default function SwapLink({
-  children,
-  href,
-  target,
-  className = "",
-}: SwapLinkProps): JSX.Element {
-  const getUrl = path.join(`/@${target}`, href);
+export default function SwapLink(props: SwapLinkProps) {
+  const getUrl = path.join(`/@${props.target}`, props.href);
   return (
     <a
       hx-get={getUrl}
       hx-swap="outerHTML"
-      hx-target={`#${target}`}
+      hx-target={`#${props.target}`}
       hx-trigger="click"
-      hx-push-url={href}
-      class={className}
+      hx-push-url={props.href}
+      class={props.className + " " + props.class}
     >
-      {children}
+      {props.children}
     </a>
   );
 }
