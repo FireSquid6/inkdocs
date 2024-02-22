@@ -10,14 +10,14 @@ const DocsLayout: Layout = (
   return (
     <Root>
       <div class="drawer lg:drawer-open">
-        <input type="checkbox" id="drawer-toggle" class=" drawer-toggle" />
+        <input type="checkbox" id="drawer-toggle" class="drawer-toggle" />
 
         <div class="drawer-content">
           <label
             for="drawer-toggle"
-            class="drawer-button inline lg:hidden btn btn-primary"
+            class="drawer-button inline hover:cursor-pointer lg:hidden"
           >
-            Open Drawer
+            <span class="material-symbols-outlined">menu</span>
           </label>
 
           <article id="content" class="prose prose-invert mx-auto">
@@ -26,7 +26,9 @@ const DocsLayout: Layout = (
           </article>
         </div>
 
-        <div class="drawer-side h-full">{sidebar}</div>
+        <div class="drawer-side min-h-[100vh] lg:border-none lg:h-full">
+          {sidebar}
+        </div>
       </div>
     </Root>
   );
