@@ -4,6 +4,7 @@ import Header from "./Header";
 export default function Root({
   children,
 }: {
+  nextToTitle?: JSX.Element;
   children: JSX.Element;
 }): JSX.Element {
   return (

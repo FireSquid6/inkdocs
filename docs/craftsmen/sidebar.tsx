@@ -18,9 +18,11 @@ export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
       <h1 class="m-2 text-2xl">
         <label
           for="drawer-toggle"
-          class="lg:hidden drawer-button inline btn btn-primary"
+          class="lg:hidden drawer-button inline hover:cursor-pointer"
         >
-          Close Drawer
+          <span class="my-auto align-middle material-symbols-outlined">
+            menu
+          </span>
         </label>
         Documentation
       </h1>
