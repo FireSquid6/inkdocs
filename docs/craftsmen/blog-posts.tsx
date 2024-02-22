@@ -1,6 +1,9 @@
 import { InkdocsOptions, Route, Artifact } from "inkdocs";
 
-export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
+export default function BlogPosts(
+  _: InkdocsOptions,
+  routes: Route[],
+): Artifact {
   const blogRoutes: Route[] = [];
   for (const route of routes) {
     if (route.href.startsWith("/blog/") && route.href !== "/blog/") {

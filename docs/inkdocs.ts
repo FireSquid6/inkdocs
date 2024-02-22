@@ -6,8 +6,10 @@ import Sidebar from "./craftsmen/sidebar";
 import DocsLayout from "./layouts/documentation";
 import tailwind from "inkdocs/plugins/tailwind";
 import LandingLayout from "./layouts/landing";
+import BlogPosts from "./craftsmen/blog-posts";
 import BlogLayout from "./layouts/blog";
 import { devserverPlugin } from "inkdocs-server";
+import BlogLandingLayout from "./layouts/blog-landing";
 
 export function getOptions(): InkdocsOptions {
   const baseHtml = `<html>
@@ -34,8 +36,9 @@ export function getOptions(): InkdocsOptions {
       ["docs", DocsLayout],
       ["landing", LandingLayout],
       ["blogpost", BlogLayout],
+      ["bloglanding", BlogLandingLayout],
     ]),
-    craftsmen: [Sidebar],
+    craftsmen: [Sidebar, BlogPosts],
     layoutTree: {
       path: "",
       layoutName: "",
