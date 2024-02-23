@@ -1,5 +1,6 @@
 ---
 title: Getting Started
+weight: -300
 ---
 
 # Creating a Project

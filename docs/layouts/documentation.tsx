@@ -15,20 +15,20 @@ const DocsLayout: Layout = (
         <div class="drawer-content">
           <label
             for="drawer-toggle"
-            class="drawer-button inline hover:cursor-pointer lg:hidden"
+            class="drawer-button fixed z-20 right-5 hover:cursor-pointer lg:hidden"
           >
             <span class="material-symbols-outlined">menu</span>
           </label>
 
           <article id="content" class="prose prose-invert mx-auto">
             <title>Inkdocs | {metadata.title ?? "Untitled"}</title>
+            <h1>{metadata.title ?? "Untitled"}</h1>
+            <hr />
             {children}
           </article>
         </div>
 
-        <div class="drawer-side min-h-[100vh] lg:border-none lg:h-full">
-          {sidebar}
-        </div>
+        <div class="drawer-side absolute lg:h-full">{sidebar}</div>
       </div>
     </Root>
   );

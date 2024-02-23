@@ -17,11 +17,14 @@ export function getOptions(): InkdocsOptions {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inkdocs</title>
+
   <meta name="description" content="Inkdocs is a documentation generator for the web" />
   <meta name="author" content="firesquid6" />
   <meta name="keywords" content="documentation, generator, inkdocs, html, css, htmx,inkdocs, ink, docs, best, documentation, generator" />
   <link rel="stylesheet" href="/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script src="/prism.js" defer></script>
+  <link rel="stylesheet" type="text/css" href="/prism.css" />
 </head>
   {slot}
 </html>`;
