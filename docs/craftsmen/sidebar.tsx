@@ -14,7 +14,7 @@ export default function Sidebar(_: InkdocsOptions, routes: Route[]): Artifact {
   sortTree(documentationTree);
 
   const sidebar = (
-    <div class="flex flex-col bg-background border rounded-md lg:border-none">
+    <div class="flex flex-col fixed h-[calc(100vh-16rem)] top-2 left-2 lg:h-auto z-20 bg-background border rounded-md lg:border-none">
       <h1 class="m-2 text-2xl">Documentation</h1>
       {documentationTree.map((tree) => (
         <SidebarItem depth={0} tree={tree} />

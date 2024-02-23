@@ -28,7 +28,7 @@ const DocsLayout: Layout = (
           </article>
         </div>
 
-        <div class="drawer-side absolute lg:h-full">{sidebar}</div>
+        <div class="drawer-side">{sidebar}</div>
       </div>
     </Root>
   );
