@@ -23,7 +23,6 @@ export function getOptions(): InkdocsOptions {
   <meta name="keywords" content="documentation, generator, inkdocs, html, css, htmx,inkdocs, ink, docs, best, documentation, generator" />
   <link rel="stylesheet" href="/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <script src="/prism.js" defer></script>
 </head>
   {slot}
 </html>`;
