@@ -24,7 +24,7 @@ export function getOptions(): InkdocsOptions {
   <link rel="stylesheet" href="/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <script src="/prism.js" defer></script>
-  <link rel="stylesheet" href="/prism.css" />
+  <link rel="stylesheet" type="text/css" href="/prism.css" />
 </head>
   {slot}
 </html>`;

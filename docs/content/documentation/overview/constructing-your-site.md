@@ -30,6 +30,8 @@ Everything starts in the baseHtml. It should look something like:
 
 Whenever inkdocs builds a page, it swaps the result of the layout into the `{slot}` tag. Additionally, some plugins will add custom scripts to the head, so it's important that your `<head>` be defined in the baseHtml.
 
+Also, the head should not contain a `<!DOCTYPE html>`. This causes inkdocs builds to fail.
+
 ## Server options
 
 Server options should look like:

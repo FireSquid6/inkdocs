@@ -7,7 +7,7 @@ Welcome to Inkdocs! This overview section should give you an understanding of th
 
 1. [Getting Started](/documentation/overview/getting-started)
 2. [Writing Content](/documentation/overview/writing-content)
-3. [Building Your Site](/documentation/overview/building-your-site)
+3. [Building Your Site](/documentation/overview/constructing-your-site)
 4. [Deployment](/documentation/overview/deployment)
 5. [Advanced](/documentation/overview/advanced)
 
