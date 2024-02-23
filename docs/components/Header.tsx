@@ -2,7 +2,7 @@ import SwapLink from "inkdocs/components/SwapLink";
 
 export default function Header() {
   return (
-    <header>
+    <header class="sticky top-0 z-50 bg-background bg-opacity-90">
       <nav
         class="flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
