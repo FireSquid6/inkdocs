@@ -1,6 +1,6 @@
 ---
 title: Building Your Site
-weight: 0
+weight: -100
 ---
 
 # How Inkdocs Builds Your Site

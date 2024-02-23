@@ -22,6 +22,8 @@ const DocsLayout: Layout = (
 
           <article id="content" class="prose prose-invert mx-auto">
             <title>Inkdocs | {metadata.title ?? "Untitled"}</title>
+            <h1>{metadata.title ?? "Untitled"}</h1>
+            <hr />
             {children}
           </article>
         </div>
