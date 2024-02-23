@@ -24,17 +24,17 @@ interface Template {
 }
 
 const templates: Template[] = [
-  {
-    name: "Recommended",
-    description:
-      "The recommended template using the swap router and tailwind with some boilerplate",
-    directory: "recommended",
-  },
   // {
-  //   name: "Swap Rotuer Minimal",
-  //   description: "A minimal template using the swap router",
-  //   directory: "minimal",
+  //   name: "Recommended",
+  //   description:
+  //     "The recommended template using the swap router and tailwind with some boilerplate",
+  //   directory: "recommended",
   // },
+  {
+    name: "Swap Rotuer Minimal",
+    description: "A minimal template using the swap router",
+    directory: "minimal",
+  },
   // {
   //   name: "Tailwind + Swap Router Minimal",
   //   description: "A template using the swap router and tailwind",
