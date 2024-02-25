@@ -35,7 +35,7 @@ export function build(
 
   for (let i = 0; i < htmlFiles.length; i++) {
     const file = htmlFiles[i];
-    filesystem.writeFile(file.filepath, file.page);
+    filesystem.writeFile(file.filepath, "<!DOCTYPE html>\n" + file.page);
   }
 
   logger.log("✅ Pages successfully built!");

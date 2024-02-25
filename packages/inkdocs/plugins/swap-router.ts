@@ -9,7 +9,6 @@ import yaml from "../parsers/yaml";
 import { parseFromString } from "dom-parser";
 import { fatalError } from "../lib/logger";
 import fs from "node:fs";
-import YAML from "yaml";
 import { addToHead } from "../lib/add-to-head";
 import parse, { Component } from "inkdown";
 
