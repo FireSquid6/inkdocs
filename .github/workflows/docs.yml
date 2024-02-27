@@ -15,9 +15,11 @@ jobs:
       - uses: oven-sh/setup-bun@v1
 
       # run any `bun` or `bunx` command
-      - run: cd docs
-      - run: bun install
-      - run: bun test
+      - name: "Test"
+        run: |
+          cd docs
+          bun install 
+          bun test
   build:
     name: build docs
     runs-on: ubuntu-latest
@@ -26,6 +28,8 @@ jobs:
       - uses: oven-sh/setup-bun@v1
 
       # run any `bun` or `bunx` command
-      - run: cd docs
-      - run: bun install
-      - run: bun run build
+      - name: "Build"
+        run: |
+          cd docs
+          bun install
+          bun run build
