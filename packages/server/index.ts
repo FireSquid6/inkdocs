@@ -2,7 +2,6 @@ import { InkdocsOptions, Plugin, defaultOptions } from "inkdocs";
 import { addToHead } from "inkdocs/lib/add-to-head";
 import path from "path";
 import fs from "fs";
-import Watcher from "watcher";
 
 // detects if the devmode flag is present and adds the neccessary client script to the head of so
 export function devserverPlugin(): Plugin {
@@ -31,28 +30,27 @@ export function devserver(options: InkdocsOptions, buildScript: string) {
   serve(options);
 
   const cwd = process.cwd();
-  const ignoreFolders = [
-    path.join(cwd, "node_modules"),
-    path.join(cwd, ".git"),
-    path.join(cwd, options.buildFolder ?? defaultOptions.buildFolder),
-  ];
 
-  const watcher = new Watcher(cwd, {
-    recursive: true,
-    ignoreInitial: true,
-    ignore: (targetPath) => {
-      for (const ignoreFolder of ignoreFolders) {
-        if (targetPath.startsWith(ignoreFolder)) {
-          return true;
-        }
-      }
-      return false;
-    },
-  });
+  // const watcher = new Watcher(cwd, {
+  //   recursive: true,
+  //   ignoreInitial: true,
+  //   ignore: (targetPath) => {
+  //     for (const ignoreFolder of ignoreFolders) {
+  //       if (targetPath.startsWith(ignoreFolder)) {
+  //         return true;
+  //       }
+  //     }
+  //     return false;
+  //   },
+  // });
+  //
+  // watcher.on("error", (error) => {
+  //   devserverError(`Watcher error: ${error}`);
+  // });
 
-  watcher.on("error", (error) => {
-    devserverError(`Watcher error: ${error}`);
-  });
+  const watcher = fs.watch(cwd, { recursive: true }, (event, filename) => {
+  
+  })
 
   const server = Bun.serve<{ authToken: string }>({
     port: 8008,
@@ -86,7 +84,7 @@ export function devserver(options: InkdocsOptions, buildScript: string) {
     },
   });
 
-  devserverLog(`Listening on ${server.hostname}:${server.port}`);
+  devserverLog(`Devserver is using ${server.hostname}:${server.port}`);
 }
 
 function rebuild(buildScript: string, buildFolder: string): boolean {
@@ -130,6 +128,8 @@ export function serve(options: InkdocsOptions) {
       return new Response(null, { status: 404 });
     },
   });
+
+  console.log(`🚀 Server is running on http://localhost:${port}`);
 }
 
 function getExtension(filepath: string): string {
