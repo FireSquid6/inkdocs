@@ -22,7 +22,11 @@ with nixpkgs; mkShell {
     nodejs_20
     flyctl
     libgcc
-
+    typescript-language-server
+    typescript
+    nodePackages.typescript-language-server
+    tailwindcss
+    tailwindcss-language-server
     # optional if you want to make videos
     # asciinema-agg
     # asciinema
