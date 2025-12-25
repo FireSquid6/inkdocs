@@ -1,8 +1,8 @@
 import "@kitajs/html/register";
 
 export interface InkdocsOptions {
-  staticFolder?: string | undefined;
-  buildFolder?: string | undefined;
+  staticFolder?: string;
+  buildFolder?: string;
   contentFolder?: string;
   craftsmen?: Craftsman[];
   layouts?: Map<string, Layout>;
